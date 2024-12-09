@@ -23,6 +23,8 @@ services:
     env_file:
       - ./.envs/.production/.django
       - ./.envs/.production/.postgres
+       - ./.envs/.production/.media
+      
     command: /start
 
   nginx:
