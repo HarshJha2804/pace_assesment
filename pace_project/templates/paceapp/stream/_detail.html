@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %} {% load static %}
+{% block title %} {{ object }} {% endblock title %}
+
+{% block main %}
+<div class="row py-3">
+  <div class="col-md-12 m-auto">
+    <div class="card shadow">
+      <div class="card-header d-flex justify-content-between">
+        <h3 class="card-title fw-semibold"><a href="{{ object.get_list_url }}" class="btn btn-outline-dark">Go Back</a>
+        </h3>
+        <a href="{% url 'paceapp:update_stream' pk=object.pk %}" class="btn btn-dark">Edit</a>
+      </div>
+      <div class="card-body">
+        <div class="datagrid">
+          <div class="datagrid-item">
+            <div class="datagrid-title">Name</div>
+            <div class="datagrid-content">{{ object }}</div>
+          </div>
+          <div class="datagrid-item">
+            <div class="datagrid-title">Last modified</div>
+            <div class="datagrid-content">{{ object.modified }}</div>
+          </div>
+          <div class="datagrid-item">
+            <div class="datagrid-title">Created At</div>
+            <div class="datagrid-content">{{ object.created }}</div>
+          </div>
+
+          <div class="datagrid-item">
+            <div class="datagrid-title">Status</div>
+            <div class="datagrid-content">
+              {% if object.is_active %}
+              <span class="status status-green">Active</span>
+              {% else %}
+              <span class="status">Inactive</span>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-12 m-auto">
+    <div class="card mt-1 shadow">
+      <div class="card-header">
+        <h3 class="datagrid-title">Sub-Stream</h3>
+      </div>
+      <div class="list-group list-group-bordered">
+        {% for item in object.sub_stream.all %}
+        <div class="list-group-item">{{ item }}</div>
+        {% empty %}
+        <div class="list-group-item">-</div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+

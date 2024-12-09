@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %} {% load static %}
+{% block title %} Update Application {% endblock title %}
+
+{% block main %}
+  <div class="row py-6">
+    <div class="col-md-12 m-auto">
+      <div class="card shadow">
+        <div class="card-header">
+          <h3 class="card-title fw-semibold">
+            {% if object %}
+              Update Application
+            {% else %}
+            {% endif %}
+          </h3>
+        </div>
+        <div class="card-body">
+          <form action="{% url 'paceapp:update_application_manager_application' object.pk %}" method="post">
+            {% csrf_token %}
+            {% crispy form %}
+            <div class="float-end">
+              <button type="submit" class="btn btn-success">Save</button>
+            </div>
+          </form>
+        </div>
+        <div class="card-footer"></div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

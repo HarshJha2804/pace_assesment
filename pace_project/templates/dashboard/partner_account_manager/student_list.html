@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %} {% load static %}
+{% block title %} Students {% endblock title %}
+
+{% block main %}
+  <div class="row py-3">
+    <div class="col-md-12 m-auto">
+      <div class="card shadow">
+        <div class="card-header d-flex justify-content-between">
+          <h3 class="card-title fw-semibold">All Students</h3>
+          {#          <a href="{% url 'partner:create_student' %}" class="btn btn-dark">Add Student</a>#}
+        </div>
+        <div class=" p-2 m-2 border-bottom">
+          <form action="" method="get" up-autosubmit up-follow up-keep
+                up-target="#student_list">
+            <div class="row">
+              <div class="col-sm-6 col-md-2">
+                <div class="mb-3">
+                  <input type="text" class="form-control" name="name"
+                         autocomplete="off" placeholder="Name">
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-2">
+                <div class="mb-3">
+                  <input type="text" class="form-control" name="email"
+                         autocomplete="off" placeholder="Email">
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-2">
+                <div class="mb-3">
+                  <input type="text" class="form-control" name="mobile_number"
+                         autocomplete="off" placeholder="Mobile Number">
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-2">
+                <div class="mb-3">
+                  <input type="text" class="form-control" name="passport_number"
+                         autocomplete="off" placeholder="Passport Number">
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-2">
+                <div class="mb-3">
+                  <select type="text" class="form-select" name="study_country" data-searchable="true">
+                    <option value="" selected>Filter By Study Country</option>
+                    {% for item in countries %}
+                      <option value="{{ item.id }}">{{ item }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-2">
+                <div class="mb-3">
+                  <select type="text" class="form-select" name="study_level" data-searchable="true">
+                    <option value="" selected>Filter By Study Level</option>
+                    {% for item in levels %}
+                      <option value="{{ item.id }}">{{ item }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+
+              <div class="col-sm-6 col-md-2">
+                <div class="mb-3">
+                  <select type="text" name="status" class="form-select" required>
+                    <option disabled selected>Status</option>
+                    <option value="True">Active</option>
+                    <option value="False">Inactive</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-1">
+                <div class="mb-3 d-flex justify-content-between">
+                  <a href="{% url 'partner:account_manager_students_list' %}"
+                     class="btn btn-outline-blue">
+                    Clear Filters
+                  </a>
+                  {#                  <a id="export_user_data" class="btn btn-purple ms-1">Export CSV</a>#}
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class=" m-2 table-responsive">
+          <table class="table card-table table-vcenter text-nowrap datatable table-striped" id="student_list">
+            <thead>
+            <tr>
+              <th class="w-1">S.N.
+              </th>
+              <th>Name</th>
+              <th>Passport Number</th>
+              <th>DOB</th>
+              <th>mobile number</th>
+              <th>Email</th>
+              <th>study country</th>
+              <th>study level</th>
+              <th>Added on</th>
+              {#              <th>Action</th>#}
+            </tr>
+            </thead>
+            <tbody>
+            {% for object in object_list %}
+              <tr>
+                <td>
+                  <span class="text-secondary">{{ forloop.counter0|add:page_obj.start_index }}</span>.
+                </td>
+                <td><a href="{{ object.get_absolute_url }}">{{ object|title }}</a></td>
+                <td>
+                  {% if object.passport_number == '0' %}
+                    -
+                  {% else %}
+                    {{ object.passport_number|default_if_none:'-' }}
+                  {% endif %}
+                </td>
+                <td>{{ object.date_of_birth|default_if_none:'-' }}</td>
+                <td>{{ object.mobile_number|default_if_none:'-' }}</td>
+                <td>{{ object.email|default_if_none:'-' }}</td>
+
+                <td>{{ object.study_country|default_if_none:'-' }}</td>
+                <td>{{ object.study_level|default_if_none:'-' }}</td>
+                <td>
+                  {{ object.created }}
+                </td>
+                {#                <td>#}
+                {#                  <a href="{% url 'partner:update_student' pk=object.pk %}" class="btn btn-blue btn-sm">Update</a>#}
+                {#                </td>#}
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <div class="card-footer d-flex align-items-center" up-hungry>
+          {% include 'utils/pagination.html' %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

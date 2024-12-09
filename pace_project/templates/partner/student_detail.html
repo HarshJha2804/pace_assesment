@@ -1,0 +1,536 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %} {% load static %}
+{% block title %} {{ object|title }} {% endblock title %}
+{% block main %}
+  <div class="row py-3">
+    <div class="col-md-12 m-auto">
+      <div class="card shadow">
+        <div class="card-header justify-content-between">
+          <h3 class="card-title">{{ object|title }}</h3>
+          <a href="{% url 'partner:list_student' %}" class="btn btn-dark">Go Back</a>
+        </div>
+        <div class="card-body">
+          <div class="datagrid">
+            <div class="datagrid-item">
+              <div class="datagrid-title">Name</div>
+              <div class="datagrid-content">{{ object.get_full_name|title }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Date of Birth</div>
+              <div class="datagrid-content">{{ object.date_of_birth|default_if_none:'-' }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Passport Number</div>
+              <div class="datagrid-content">
+                {% if object.passport_number ==  '0' %}
+                  -
+                {% else %}
+                  {{ object.passport_number|default_if_none:'-' }}
+                {% endif %}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Email</div>
+              <div class="datagrid-content">{{ object.email|default_if_none:'-' }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Mobile Number</div>
+              <div class="datagrid-content">{{ object.mobile_number|default_if_none:'-' }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Student Type</div>
+              <div class="datagrid-content">{{ object.get_type_display|default_if_none:'-' }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Level</div>
+              <div class="datagrid-content">{{ object.study_level|default_if_none:'-' }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Study country</div>
+              <div class="datagrid-content">{{ object.study_country|default_if_none:'-' }}</div>
+            </div>
+            {% if not request.user.partner %}
+              <div class="datagrid-item">
+                <div class="datagrid-title">Partner</div>
+                <div class="datagrid-content">
+                  <a href="{{ object.partner.get_absolute_url }}" target="_blank">
+                    {{ object.partner|default_if_none:'-' }}
+                  </a>
+                </div>
+              </div>
+            {% endif %}
+            <div class="datagrid-item">
+              <div class="datagrid-title">Created At</div>
+              <div class="datagrid-content">{{ object.created|default_if_none:'-' }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Last updated</div>
+              <div class="datagrid-content">{{ object.modified|default_if_none:'-' }}</div>
+            </div>
+
+            <div class="datagrid-item">
+              <div class="datagrid-title">Status</div>
+              <div class="datagrid-content">
+                {% if object.is_active %}
+                  <span class="status status-green">Active</span>
+                {% else %}
+                  <span class="status">Inactive</span>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <div class="datagrid-item">
+            <div class="datagrid-title">assessment requested For Universities</div>
+            <div class="datagrid-content">
+              {% for university in object.get_assessment_university_url %}
+                <b>{{ forloop.counter }}- </b>{{ university|default_if_none:'-' }} {% if not forloop.last %},
+              {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          {% if object.assessment_status.name == 'Assessment Rejected' %}
+            <button class="btn btn-danger" disabled> Student Rejected</button>
+          {% else %}
+            {% if not object.get_academic_object %}
+              <a class="btn btn-indigo" href="{{ object.get_add_academic_url }}" target="_blank">Add Academic</a>
+            {% endif %}
+
+            {% if student.assessment_requested %}
+              <a href="#" class="btn btn-success">Assessment requested</a>
+            {% else %}
+              <a class="btn btn-cyan" href="#" data-bs-toggle="modal"
+                 data-bs-target="#modal-simple">Request Assessment</a>
+            {% endif %}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    {% include "components/partner_documents.html" %}
+    {#  application#}
+    <div class="col-lg-12">
+      <div class="card mt-2 shadow">
+        <div class="card-header justify-content-between">
+          <h3 class="card-title">Assessments</h3>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-vcenter card-table text-nowrap">
+            <thead>
+            <tr>
+              <th>S.N.</th>
+              <th>Action</th>
+              <th>Course</th>
+              <th>Country</th>
+              <th>University</th>
+              <th>Stream</th>
+              <th>Intake</th>
+              <th>Campus</th>
+              <th>tuition fees</th>
+              <th>scholarship</th>
+              <th>Course Link</th>
+              <th>Created on</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in assessments %}
+              <tr>
+                <td>{{ forloop.counter }}.</td>
+                <td>
+                  {% if item.is_processed %}
+                    <span class="btn btn-green btn">Applied</span>
+                  {% else %}
+                    <a href="{{ item.get_partner_apply_application_url }}" class="btn btn-blue btn">Apply</a>
+                  {% endif %}
+                </td>
+                <td>{{ item.course }}</td>
+                <td>
+                  {{ item.course.country|default_if_none:'-' }}
+                </td>
+                <td>
+                  {{ item.course.university|default_if_none:'-' }}
+                </td>
+                <td>{{ item.course.stream|default_if_none:'-' }}</td>
+                <td>
+                  {{ item.intake }} - {{ item.year }}
+                </td>
+                <td>
+                  {% for campus in item.course.campus.all %}
+                    {{ campus|default_if_none:"-" }}
+                  {% endfor %}
+                </td>
+                <td>{{ item.course.tuition_fees|default_if_none:'-' }}</td>
+                <td>{{ item.course.scholarship|default_if_none:'-' }}</td>
+                <td>
+                  {% if item.course.link %}
+                    <a href="{{ item.course.link }}" target="_blank">{{ item.course }}</a>
+                  {% else %}
+                    -
+                  {% endif %}
+                </td>
+                <td>{{ object.created|date:"Y-m-d" }}
+                </td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <div class="card-footer"></div>
+      </div>
+    </div>
+    {#  Applications#}
+    <div class="col-lg-12">
+      <div class="card mt-2 shadow">
+        <div class="card-header justify-content-between">
+          <h3 class="card-title">Applications</h3>
+          <a href="#" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#applicationModal">Apply Direct
+            Application</a>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-vcenter card-table text-nowrap">
+            <thead>
+            <tr>
+              <th>S.N.</th>
+              <th>Course Name</th>
+              <th>University</th>
+              <th>Country</th>
+              <th>Stream</th>
+              <th>Intake</th>
+              <th>Campus</th>
+              <th>Current Status</th>
+              <th>Created On</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in applications %}
+              <tr>
+                <td><span class="text-secondary">{{ forloop.counter }}.</span>
+                </td>
+                <td>
+                  <a href="{{ item.get_partner_absolute_url }}">{{ item.course }}</a>
+                </td>
+                <td>{{ item.course.university|default_if_none:'-' }}</td>
+                <td>
+                  {{ item.course.country|default_if_none:'-' }}
+                </td>
+                <td>{{ item.course.stream|default_if_none:'-' }}</td>
+                <td>
+                  {{ item.intake }} - {{ item.year }}
+                </td>
+                <td>
+                  {% for campus in item.course.campus.all %}
+                    {{ campus|default_if_none:"-" }}
+                  {% endfor %}
+                </td>
+                <td>
+                  {{ item.current_status }}
+                </td>
+                <td>{{ object.created|date:"Y-m-d" }}
+                </td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <div class="card-footer"></div>
+      </div>
+    </div>
+    {% if object.get_remarks %}
+      <div class="col-lg-12">
+        <div class="card mt-2 shadow">
+          <div class="card-header">
+            <h3 class="card-title">Remarks</h3>
+          </div>
+          <div class="list-group list-group-flush list-group-hoverable">
+            {% for remark in object.get_remarks %}
+              <div class="list-group-item">
+                <div class="row align-items-center">
+                  <div class="col-auto">
+                    {% if remark.is_active %}
+                      <span class="badge bg-success"></span>
+                    {% else %}
+                      <span class="badge bg-red"></span>
+                    {% endif %}
+                  </div>
+                  <div class="col-auto">
+                    <a href="#">
+                      {% with remark.created_by as user %}
+                        <span class="avatar" style="background-image: url({{ user.get_avatar_url }})">
+                        {% if not user.get_avatar_url %}
+                          {{ user.get_initials }}
+                        {% endif %}
+                      </span>
+                      {% endwith %}
+                    </a>
+                  </div>
+                  <div class="col text-truncate">
+                    <a href="#" class="text-reset d-block">{{ remark.created_by.name }}
+                      ({{ remark.created_by.role|default_if_none:'Role Not Assigned' }})</a>
+                    <div class="d-block text-purple text-truncate mt-n1">{{ remark.remark }}
+                    </div>
+                    <small class="text-muted">Created on: {{ remark.created }}</small>
+                  </div>
+                  <div class="col-auto">
+                    <a href="#" class="list-group-item-actions">
+                      <i class="ti ti-star"></i>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+  {#  this is application modal #}
+  <div class="modal fade" id="applicationModal" tabindex="-1" aria-labelledby="applicationModalLabel"
+       aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" id="applicationModalLabel">
+            <span class="text-primary h4 fw-bold">Application &nbsp;</span>
+          </h4>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="tab-pane" id="lead-applications" role="tabpanel">
+            <div class="mb-2 p-3 border border-2">
+              <form method="post" action="{% url 'partner:create_student_application' pk=student.pk %}"
+                    enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="hidden" id="application_level_id" value="{{ level.level.id }}">
+                <div id="application_selectcourseplaceholder">
+                  <div class="row application-course-row">
+                    <div class="col-md-3">
+                      <div class="mb-3">
+                        <label class="form-label required">&nbsp;University</label>
+                        <select id="application_university" name="university" class="form-select university"
+                                placeholder="Select University" required>
+                          <option value="" selected disabled>Select University</option>
+                          {% if universities %}
+                            {% for university in universities %}
+                              <option value="{{ university.id }}">{{ university.name }}</option>
+                            {% endfor %}
+                          {% else %}
+                            <option value="">No universities available</option>
+                          {% endif %}
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="mb-3">
+                        <label class="form-label required">Course</label>
+                        <select name="course" id="application_course" class="form-control course" required>
+                          <option value="" selected disabled>Select Course</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="mb-3">
+                        <label class="form-label required">Intake</label>
+                        <select name="intake" id="application_intake" class="form-select intake" required>
+                          <option value="" selected disabled>Select Intake</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-md-3">
+                      <div class="mb-3">
+                        <label class="form-label required">Year</label>
+                        <select name="year" id="application_year" class="form-select year" required>
+                          <option selected disabled>Select Year</option>
+                          {% for year in years %}
+                            <option value="{{ year.id }}">{{ year.intake_year }}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-12 col-md-12">
+                    <div class="mb-3" style="text-align: center !important;">
+                      <button type="button" id="application_addcourse" class="btn btn-info btn-sm">Add More</button>
+                      <button type="button" id="application_removecourse" class="btn btn-warning btn-sm"
+                              style="display: none;">Remove
+                      </button>
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <div class="mb-3">
+                      <label class="form-label required">&nbsp;Remarks</label>
+                      <textarea name="remark" id="application_remark" class="form-control required" required></textarea>
+                    </div>
+                  </div>
+                  <div class="container">
+                    <div class="row">
+                      <div class="col-6 d-flex justify-content-start">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" aria-label="Close">
+                          Cancel
+                        </button>
+                      </div>
+                      <div class="col-6 d-flex justify-content-end">
+                        <button type="submit" class="btn btn-green">Save</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {#  application javascripts #}
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const addCourseButton = document.getElementById('application_addcourse');
+      const removeCourseButton = document.getElementById('application_removecourse');
+      const selectCoursePlaceholder = document.getElementById('application_selectcourseplaceholder');
+      const csrf_token = "{{ csrf_token }}";
+
+      async function fetchCourses(universityId, levelId, courseSelect) {
+        try {
+          const levelId = "{{ object.study_level_id }}"
+          const response = await fetch('{% url "paceapp:course_list_filter" %}', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': csrf_token,
+            },
+            body: JSON.stringify({
+              university_id: universityId,
+              level_id: levelId,
+            }),
+          });
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          const data = await response.json();
+          let options = '<option value="">Select Course</option>';
+          data.forEach(course => {
+            options += `<option value="${course.id}">${course.name}</option>`;
+          });
+          courseSelect.innerHTML = options;
+          courseSelect.disabled = false;
+        } catch (error) {
+          console.error('Error fetching courses:', error);
+        }
+      }
+
+      async function fetchIntakes(universityId, intakeSelect) {
+        try {
+          const response = await fetch(`/api/intakes/${universityId}/`);
+          if (!response.ok) throw new Error('Network response was not ok');
+          const data = await response.json();
+          let options = '<option value="">Select Intake</option>';
+          data.forEach(universityIntake => {
+            if (universityIntake.intakes && Array.isArray(universityIntake.intakes)) {
+              universityIntake.intakes.forEach(intake => {
+                options += `<option value="${intake.id}">${intake.intake_month}</option>`;
+              });
+            } else {
+              console.error("intakes is undefined or not an array for universityIntake:", universityIntake);
+            }
+          });
+          intakeSelect.innerHTML = options;
+          intakeSelect.disabled = false;
+        } catch (error) {
+          console.error('Error fetching intakes:', error);
+        }
+      }
+
+      function bindUniversityChange(universitySelect, levelId) {
+        universitySelect.addEventListener('change', async () => {
+          const universityId = universitySelect.value;
+          const courseSelect = universitySelect.closest('.application-course-row').querySelector('#application_course');
+          const intakeSelect = universitySelect.closest('.application-course-row').querySelector('#application_intake');
+          courseSelect.innerHTML = '<option value="">Select Course</option>';
+          intakeSelect.innerHTML = '<option value="">Select Intake</option>';
+          if (universityId) {
+            await fetchCourses(universityId, levelId, courseSelect);
+            await fetchIntakes(universityId, intakeSelect);
+          }
+        });
+      }
+
+      const initialUniversitySelect = document.querySelector('#application_university');
+      const levelId = document.querySelector('#application_level_id').value;
+      if (initialUniversitySelect) {
+        bindUniversityChange(initialUniversitySelect, levelId);
+      }
+
+      addCourseButton.addEventListener('click', () => {
+        const courseRow = document.querySelector('.application-course-row');
+        if (courseRow) {
+          const newRow = courseRow.cloneNode(true);
+          newRow.querySelector('#application_university').value = '';
+          newRow.querySelector('#application_course').innerHTML = '<option value="">Select Course</option>';
+          newRow.querySelector('#application_intake').innerHTML = '<option value="">Select Intake</option>';
+          selectCoursePlaceholder.appendChild(newRow);
+          bindUniversityChange(newRow.querySelector('#application_university'), levelId);
+          removeCourseButton.style.display = 'inline-block';
+        } else {
+          console.error('No element with class "application-course-row" found.');
+        }
+      });
+
+      removeCourseButton.addEventListener('click', () => {
+        const courseRows = document.querySelectorAll('.application-course-row');
+        if (courseRows.length > 1) {
+          selectCoursePlaceholder.removeChild(courseRows[courseRows.length - 1]);
+        }
+        if (courseRows.length <= 2) {
+          removeCourseButton.style.display = 'none';
+        }
+      });
+    });
+  </script>
+{% endblock %}
+
+{% block modal %}
+  <div class="modal modal-blur fade" id="modal-simple" tabindex="-1" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog modal-dialog-centered modal-full-width" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Assessment Request</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form action="{% url 'partner:request_assessment' pk=student.pk %}" method="post" id="assessment-form">
+            {% csrf_token %}
+            <div class="form-selectgroup form-selectgroup-boxes row">
+              <h3 class="pb-2 text-indigo">Please select any five universities for assessment.</h3>
+              {% for university in universities %}
+                <div class="col-md-3">
+                  <label class="form-selectgroup-item flex-fill">
+                    <input type="checkbox" name="university" value="{{ university.id }}"
+                           class="form-selectgroup-input">
+                    <div class="form-selectgroup-label d-flex align-items-center p-3">
+                      <div class="me-3">
+                        <span class="form-selectgroup-check"></span>
+                      </div>
+                      <div class="form-selectgroup-label-content d-flex align-items-center">
+                        <div>
+                          <div class="font-weight-medium">{{ university.name }}</div>
+                        </div>
+                      </div>
+                    </div>
+                  </label>
+                </div>
+              {% endfor %}
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn me-auto btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary" form="assessment-form">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+

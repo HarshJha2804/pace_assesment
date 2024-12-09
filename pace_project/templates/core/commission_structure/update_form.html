@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %} {% load static %}
+{% block title %} Commission Structure {% endblock title %}
+
+{% block main %}
+  <div class="row py-3">
+    <div class="col-md-7 m-auto">
+      <div class="card shadow">
+        <div class="card-header">
+          <h3 class="card-title fw-semibold">Add Commission Structure</h3>
+        </div>
+        <div class="card-body">
+          <form action="" method="post" id="add_commission_form" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% crispy form %}
+          </form>
+        </div>
+        <div class="card-footer">
+          <button type="submit" class="btn btn-green float-end" form="add_commission_form">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

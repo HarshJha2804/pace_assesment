@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %} {% load static %}
+{% block title %} {{ student }} {% endblock title %}
+{% block main %}
+  <div class="row py-3">
+    <div class="col-lg-12">
+      <div class="card mt-2 shadow">
+        <div class="card-header justify-content-between">
+          <h3 class="card-title">{{ student|title }}</h3>
+          <h3 class="card-title">Partner: {{ student.partner }}</h3>
+          <div>
+            <button id="copyButton" class="btn btn-green" onclick="copyToClipboard()">Copy Assessment</button>
+            {% if request.user.role.name == "Partner" %}
+              <a class="btn btn-outline-dark" href="{{ student.get_student_absolute_url }}">Go To Profile</a>
+            {% else %}
+              <a class="btn btn-outline-dark" href="{{ student.get_absolute_url }}">Go To Profile</a>
+            {% endif %}
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="list-group" id="assessmentsData">
+            {% for item in student.get_assessments %}
+              <div class="list-group-item">
+                <div class="row align-items-center">
+                  <div class="col text-truncate" style="font-size: 1.1em; line-height: 1.3;">
+                    <div class="d-block text-bold text-truncate mt-2">
+                      <h5 class="card-title">
+                        University: {{ item.course.university|default_if_none:'-' }}
+                      </h5>
+                      Course: {{ item.course.name }}
+                    </div>
+                    <div class="d-block text-bold text-truncate mt-2">
+                      Intake: {{ item.intake|default_if_none:"-" }} {{ item.year|default_if_none:'-' }}
+                    </div>
+                    <div class="d-block text-bold text-truncate mt-2">
+                      Campus:
+                      {% for campus in item.course.campus.all %}
+                        {{ campus|default_if_none:"-" }}{% if not forloop.last %}, {% endif %}
+                      {% endfor %}
+                    </div>
+                    <div class="d-block text-bold text-truncate mt-2">
+                      Tuition Fee: {{ item.course.tuition_fees|default_if_none:"-" }}
+                    </div>
+                    <div class="d-block text-bold text-truncate mt-2">
+                      Scholarship: {{ item.course.scholarship|default_if_none:"-" }}
+                    </div>
+                    <div class="d-block text-bold text-truncate mt-2">
+                      Course Link: {{ item.course.link|default_if_none:"-" }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <br>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="card-footer"></div>
+      </div>
+    </div>
+  </div>
+  <script>
+    function copyToClipboard() {
+      var assessmentsData = document.getElementById('assessmentsData');
+      var range = document.createRange();
+      range.selectNode(assessmentsData);
+      window.getSelection().removeAllRanges();
+      window.getSelection().addRange(range);
+      try {
+        var successful = document.execCommand('copy');
+        var msg = successful ? 'Copied to clipboard!' : 'Failed to copy!';
+        alert(msg);
+      } catch (err) {
+        alert('Oops, unable to copy');
+      }
+      window.getSelection().removeAllRanges();
+    }
+  </script>
+
+{% endblock %}
+

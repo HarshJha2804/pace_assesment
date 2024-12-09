@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}Upload Avatar{% endblock title %}
+
+{% block content %}
+  <div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card shadow-sm">
+          <div class="card-header bg-primary text-white text-center">
+            <h2 class="h5 mb-0">Upload Profile Picture</h2>
+          </div>
+          <div class="card-body">
+            <form method="post" enctype="multipart/form-data">
+              {% csrf_token %}
+              <div class="form-group mb-3">
+                {{ form.avatar.label_tag }}
+                {{ form.avatar }}
+                {% if form.avatar.errors %}
+                  <div class="text-danger">
+                    {{ form.avatar.errors|join:", " }}
+                  </div>
+                {% endif %}
+              </div>
+              <div class="d-flex justify-content-left">
+                <button type="submit" class="btn btn-primary w-30">Upload</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}

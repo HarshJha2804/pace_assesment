@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load allauth %}
+{% load i18n %}
+{% block title %}
+  {% trans "Confirm Access" %}
+{% endblock title %}
+{% block content %}
+  <div class="row mt-3">
+    <div class="col-md-6 m-auto">
+      <div class="card shadow">
+        <div class="card-header">{% element h1 %}
+          {% trans "Confirm Access" %}
+        {% endelement %}
+        </div>
+        <div class="card-body">
+          <p>{% blocktranslate %}Please reauthenticate to safeguard your account.{% endblocktranslate %}</p>
+          {% block reauthenticate_content %}{% endblock %}
+          {% if reauthentication_alternatives %}
+            {% element hr %}
+            {% endelement %}
+            {% element h2 %}
+              {% translate "Alternative options" %}
+            {% endelement %}
+            <ul>
+              {% for alt in reauthentication_alternatives %}
+                <li>
+                  <a href="{{ alt.url }}">{{ alt.description }}</a>
+                </li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}

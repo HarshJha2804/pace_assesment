@@ -1,0 +1,151 @@
+<div class="col-md-12 m-auto mt-2">
+  <div class="card shadow">
+    <div class="card-header justify-content-between">
+      <h3 class="card-title">Academic Details</h3>
+      <div>
+{#        <a href="{{ object.get_discover_assessment_url }}?student_id={{ object.id }}" class="btn btn-dark">#}
+{#          Course Search#}
+{#        </a>#}
+        <a href="{% url 'paceapp:update_student_academic' pk=object.id %}" class="btn btn-primary">Edit</a>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="datagrid">
+        <div class="datagrid-item">
+          <div class="datagrid-title">Country of Citizenship</div>
+          <div class="datagrid-content">{{ academic.country }}</div>
+        </div>
+        <div class="datagrid-item">
+          <div class="datagrid-title">Board</div>
+          <div class="datagrid-content">{{ academic.board|default_if_none:'-' }}</div>
+        </div>
+        <div class="datagrid-item">
+          <div class="datagrid-title">State</div>
+          <div class="datagrid-content">{{ academic.state|default_if_none:'-' }}</div>
+        </div>
+        <div class="datagrid-item">
+          <div class="datagrid-title">Stream</div>
+          <div class="datagrid-content">{{ academic.stream|default_if_none:'-' }}</div>
+        </div>
+        <div class="datagrid-item">
+          <div class="datagrid-title">Passing Month</div>
+          <div class="datagrid-content">{{ academic.passing_month|default_if_none:'-' }}</div>
+        </div>
+        <div class="datagrid-item">
+          <div class="datagrid-title">Passing Year</div>
+          <div class="datagrid-content">{{ academic.passing_year|default_if_none:'-' }}</div>
+        </div>
+        <div class="datagrid-item">
+          <div class="datagrid-title">Tenth Marks</div>
+          <div class="datagrid-content">{{ academic.tenth_marks|default_if_none:'-' }}</div>
+        </div>
+        <div class="datagrid-item">
+          <div class="datagrid-title">Work Experience</div>
+          <div class="datagrid-content">{{ academic.work_experience|default_if_none:'-' }}</div>
+        </div>
+
+        <div class="datagrid-item">
+          <div class="datagrid-title">Academic Pathway</div>
+          <div class="datagrid-content">{{ academic.academic_pathway|default_if_none:"-"|title }}</div>
+        </div>
+        {% if object.study_level.level == 'Undergraduate' %}
+          {% if academic.academic_pathway == "intermediate" %}
+            <div class="datagrid-item">
+              <div class="datagrid-title">Twelfth Overall</div>
+              <div class="datagrid-content">{{ academic.overall_marks|default_if_none:'-' }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Twelfth Math Marks</div>
+              <div class="datagrid-content">{{ academic.twelfth_math_marks|default_if_none:'-' }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Twelfth Best Four Marks</div>
+              <div class="datagrid-content">{{ academic.twelfth_best_four_marks|default_if_none:'-' }}</div>
+            </div>
+          {% else %}
+            <div class="datagrid-item">
+              <div class="datagrid-title">Diploma Overall</div>
+              <div class="datagrid-content">{{ academic.overall_marks|default_if_none:'-' }}</div>
+            </div>
+          {% endif %}
+        {% elif object.study_level.level == 'Postgraduate' %}
+
+          {% if academic.academic_pathway == "level_diploma" %}
+            <div class="datagrid-item">
+              <div class="datagrid-title">Level Diploma Overall</div>
+              <div class="datagrid-content">{{ academic.level_diploma_marks|default_if_none:'-' }}</div>
+            </div>
+          {% else %}
+            <div class="datagrid-item">
+              <div class="datagrid-title">
+                {% if academic.academic_pathway == "intermediate_ug" %}
+                  Twelfth Overall %
+                {% else %}
+                  Diploma Overall %
+                {% endif %}
+              </div>
+              <div class="datagrid-content">{{ academic.ug_overall_marks|default_if_none:'-' }}</div>
+            </div>
+
+            {% if academic.academic_pathway == "intermediate_ug" %}
+              <div class="datagrid-item">
+                <div class="datagrid-title">Twelfth English Marks</div>
+                <div class="datagrid-content">{{ academic.twelfth_english_marks|default_if_none:'-' }}</div>
+              </div>
+            {% endif %}
+
+            <div class="datagrid-item">
+              <div class="datagrid-title">Ug Overall %</div>
+              <div class="datagrid-content">{{ academic.ug_overall_marks|default_if_none:'-' }}</div>
+            </div>
+          {% endif %}
+
+        {% endif %}
+
+        <div class="datagrid-item">
+          <div class="datagrid-title">English Test</div>
+          <div class="datagrid-content">{{ academic.english_test_type|default_if_none:'-' }}</div>
+        </div>
+        <div class="datagrid-item">
+          <div class="datagrid-title">English Overall</div>
+          <div class="datagrid-content">{{ academic.english_overall|default_if_none:'-' }}</div>
+        </div>
+        <div class="datagrid-item">
+          <div class="datagrid-title">Speaking</div>
+          <div class="datagrid-content">{{ academic.speaking|default_if_none:'-' }}</div>
+        </div>
+        <div class="datagrid-item">
+          <div class="datagrid-title">Writing</div>
+          <div class="datagrid-content">{{ academic.writing|default_if_none:'-' }}</div>
+        </div>
+        <div class="datagrid-item">
+          <div class="datagrid-title">Reading</div>
+          <div class="datagrid-content">{{ academic.reading|default_if_none:'-' }}</div>
+        </div>
+        <div class="datagrid-item">
+          <div class="datagrid-title">Listening</div>
+          <div class="datagrid-content">{{ academic.listening|default_if_none:'-' }}</div>
+        </div>
+        <div class="datagrid-item">
+          <div class="datagrid-title">Last updated</div>
+          <div class="datagrid-content">{{ academic.modified|default_if_none:'-' }}</div>
+        </div>
+        <div class="datagrid-item">
+          <div class="datagrid-title">Created At</div>
+          <div class="datagrid-content">{{ academic.created|default_if_none:'-' }}</div>
+        </div>
+        <div class="datagrid-item">
+          <div class="datagrid-title">Status</div>
+          <div class="datagrid-content">
+            {% if academic.is_active %}
+              <span class="status status-green">Active</span>
+            {% else %}
+              <span class="status">Inactive</span>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-footer"></div>
+  </div>
+</div>

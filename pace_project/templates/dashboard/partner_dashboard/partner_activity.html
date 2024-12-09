@@ -1,0 +1,28 @@
+<div class="card shadow shadow-sm" style="background-color: #b0f1f3!important;">
+  <div class="col-md-12 mb-3">
+    <div class="card-header fw-bold">Last 3 Day Activity</div>
+    <div class="table-responsive">
+      <table class="table table-vcenter card-table table-striped">
+        <thead class="sticky-top">
+        <tr>
+          <th class="border-end ">Date</th>
+          {% for status in status_list %}
+            <th class="border-end">{{ status }}</th>
+          {% endfor %}
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in activities %}
+          <tr>
+            <td class="border-end text-nowrap">{{ item.date|date }}</td>
+            {% for status_count in item.status_counts %}
+              <td class="border-end text-center">{{ status_count }}</td>
+            {% endfor %}
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="card-footer"></div>
+  </div>
+</div>

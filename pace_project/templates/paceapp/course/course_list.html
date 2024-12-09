@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %} {% load static %}
+{% block title %} Courses {% endblock title %}
+
+{% block main %}
+<div class="row py-3">
+  <div class="col-md-12 m-auto">
+    <div class="card shadow">
+      <div class="card-header justify-content-between">
+        <h3 class="card-title fw-semibold">Courses</h3>
+        <a href="{% url 'paceapp:add_course' %}" class="btn btn-dark">Add Course</a>
+      </div>
+      <div class="card-body border-bottom">
+        <form action="" method="get" up-autosubmit up-follow up-keep up-target="#course_list">
+          <div class="row">
+            <div class="col-sm-6 col-md-2">
+              <div class="mb-3">
+                <input type="text" class="form-control" name="name"
+                       autocomplete="off" placeholder=" Course Name">
+              </div>
+            </div>
+
+            <div class="col-sm-6 col-md-2">
+              <div class="mb-3">
+                <select type="text" class="form-select" name="country_id" data-searchable="true">
+                  <option value="" selected>Filter By Country</option>
+                  {% for item in countries %}
+                  <option value="{{ item.id }}">{{ item }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+            <div class="col-sm-6 col-md-2">
+              <div class="mb-3">
+                <select type="text" class="form-select" name="university" data-searchable="true">
+                  <option value="" selected>Filter By University</option>
+                  {% for item in universities %}
+                  <option value="{{ item.id }}">{{ item.name }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+            <div class="col-sm-6 col-md-2">
+              <div class="mb-3">
+                <select type="text" class="form-select" name="level" data-searchable="true">
+                  <option value="" selected>Filter By Level</option>
+                  {% for item in levels %}
+                  <option value="{{ item.id }}">{{ item }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+            <div class="col-sm-6 col-md-2">
+              <div class="mb-3">
+                <select type="text" class="form-select" name="stream" data-searchable="true">
+                  <option value="" selected>Filter By Stream</option>
+                  {% for item in streams %}
+                  <option value="{{ item.id }}">{{ item }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+            <div class="col-sm-6 col-md-2">
+              <div class="mb-3">
+                <select type="text" name="status" class="form-select" data-searchable="true" required>
+                  <option value="" disabled selected>Status</option>
+                  <option value="True">Active</option>
+                  <option value="False">Inactive</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-sm-6 col-md-1">
+              <div class="mb-3 d-flex justify-content-between">
+                <a href="{% url 'paceapp:course_list' %}"
+                   class="btn btn-outline-blue">
+                  Clear Filters
+                </a>
+{#                <a id="export_user_data" class="btn btn-purple ms-1">Export CSV</a>#}
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="table-responsive">
+        <table class="table table-vcenter card-table table-striped text-nowrap" id="course_list">
+          <thead>
+          <tr>
+            <th>S.N.</th>
+            <th>Course</th>
+            <th>Country</th>
+            <th>University</th>
+            <th>Level</th>
+            <th>Stream</th>
+{#            <th>Substream</th>#}
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+          </thead>
+          <tbody>
+          {% for object in object_list %}
+          <tr>
+            <td>{{ forloop.counter0|add:page_obj.start_index }}.</td>
+            <td><a href="{{ object.get_absolute_url }}">{{ object }}</a></td>
+            <td>{{ object.country }}</td>
+            <td>{{ object.university }}</td>
+            <td>{{ object.level }}</td>
+            <td>{{ object.stream }}</td>
+{#            <td>{{ object.substream }}</td>#}
+            <td>
+              {% if object.is_active %}
+              <span class="status status-green">Active</span>
+              {% else %}
+              <span class="status status-secondary">Inactive</span>
+              {% endif %}
+            </td>
+            <td>
+              <a href="{% url 'paceapp:update_course' pk=object.pk %}"  class="btn btn-sm btn-primary">Update</a>
+            </td>
+          </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div class="card-footer d-flex align-items-center" up-hungry>
+        {% include 'utils/pagination.html' %}
+      </div>
+      <div class="card-footer">
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

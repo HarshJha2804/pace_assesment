@@ -1,0 +1,53 @@
+<div class="page">
+  <div class="page-wrapper">
+    <div class="page-body ">
+      <div class=" m-0 p-0">
+        <div class=" ">
+          <div class="col-12 ">
+            <div class="card border-0 box-sh">
+              <div class="card-header d-flex justify-content-left">
+                <h2 class="card-title h4 fw-bold primary">Last 3 Day Activity</h2>
+              </div>
+              <div class="table-responsive ">
+                <table class="table text-center card-table table-vcenter text-nowrap table-striped">
+                  <thead>
+                  <tr class="bg-color">
+                    <th style="text-align:left" class="bg-primary font-weight-medium fs-4 fw-bold">Date</th>
+                    <th class="bg-primary font-weight-medium fs-4">Total Applications</th>
+                    {% for status_info in status_with_application %}
+                      <th class="bg-primary font-weight-medium fs-4">{{ status_info.status.name }}</th>
+                    {% endfor %}
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr>
+                    <td class="border-end text-nowrap">{{ today }}</td>
+                    <td class="border-end text-center">{{ today_total_application_count }}</td>
+                    {% for status_count in activities.0.status_counts %}
+                      <td class="border-end text-center">{{ status_count }}</td>
+                    {% endfor %}
+                  </tr>
+                  <tr>
+                    <td class="border-end text-nowrap">{{ yesterday }}</td>
+                    <td class="border-end text-center">{{ yesterday_total_application_count }}</td>
+                    {% for status_count in activities.1.status_counts %}
+                      <td class="border-end text-center">{{ status_count }}</td>
+                    {% endfor %}
+                  </tr>
+                  <tr>
+                    <td class="border-end text-nowrap">{{ yesterday_2 }}</td>
+                    <td class="border-end text-center">{{ yesterday_2_total_application_count }}</td>
+                    {% for status_count in activities.2.status_counts %}
+                      <td class="border-end text-center">{{ status_count }}</td>
+                    {% endfor %}
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

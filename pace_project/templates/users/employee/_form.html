@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %} {% load static %}
+{% block title %} {% if object %} Update {{ object }}'s details {% else %}Add Team Member {% endif %}{% endblock title %}
+
+{% block main %}
+  <div class="row py-3">
+    <div class="col-md-12 m-auto">
+      <form class="card shadow" action="" method="post" enctype="multipart/form-data">
+        <div class="card-header justify-content-between">
+          <h3 class="card-title fw-semibold">
+            {% if object %}
+              Update Team Member
+            {% else %}
+              Add Team Member
+            {% endif %}
+          </h3>
+          <a class="btn btn-dark" href="{% url 'users:employee_list' %}">View Team</a>
+        </div>
+        <div class="card-body">
+          {% csrf_token %}
+          {% crispy form %}
+        </div>
+        <div class="card-footer">
+          <button type="submit" class="btn btn-green float-end">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const countrySelect = document.getElementById('id_assigned_country');
+      const universitySelect = document.getElementById('id_assigned_universities');
+
+      const universitySelectInstance = new TomSelect(universitySelect, { /* your options here */});
+
+      const universities = {{ universities|safe }};
+
+      countrySelect.addEventListener('change', function () {
+        const selectedCountryId = parseInt(this.value, 10);
+        universitySelectInstance.clearOptions();
+        universitySelectInstance.clear();  // Clear selected values
+        universitySelectInstance.addOption({value: '', text: 'Select a university', disabled: true});
+
+        const filteredUniversities = universities.filter(university => university.country_id === selectedCountryId);
+        filteredUniversities.forEach(university => {
+          universitySelectInstance.addOption({value: university.id, text: university.name});
+        });
+        universitySelectInstance.refreshOptions();
+      });
+    });
+  </script>
+{% endblock %}

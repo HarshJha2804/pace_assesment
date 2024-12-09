@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %} {% load static %}
+{% block title %} Condition Form {% endblock title %}
+
+{% block main %}
+  <div class="row py-3">
+    <div class="col-md-10 m-auto">
+      <div class="card shadow">
+        <div class="card-header">
+          <h3 class="card-title fw-semibold">
+            {% if object %}
+              Update Condition
+            {% else %}
+              Add Condition
+            {% endif %}
+          </h3>
+        </div>
+        <div class="card-body">
+          <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div>
+              {% crispy form %}
+            </div>
+            <div class="">
+              <button type="submit" class="btn btn-green float-end">Save</button>
+            </div>
+          </form>
+        </div>
+        <div class="card-footer"></div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

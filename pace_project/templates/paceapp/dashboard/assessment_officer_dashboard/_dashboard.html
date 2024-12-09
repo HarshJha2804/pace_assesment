@@ -1,0 +1,154 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %} {% load static %}
+{% block title %} Assessment Officer DashBoard {% endblock title %}
+{% block main %}
+  <div class="row rounded  mb-5  py-3">
+    <div class="col-md-12 mb-4">
+      <div class="card shadow shadow-sm" style="background-color: #170fd5!important;">
+        <div class="card-header">
+          <h3 class="card-title fw-semibold text-light">Assessment officer Dashboard</h3>
+        </div>
+        <div class="card-body">
+          <div class="row mb-2 gy-3">
+            <div class="col-sm-6 col-lg-3 ">
+              <div style="border-width: 6px; border-radius: 10px"
+                   class="card shadow shadow-sm card-sm border-3 border-start-5 border-top-0 border-end-0 border-bottom-0 border-cyan">
+                <div class="py-3 px-3 rounded-5">
+                  <div class="row m-0">
+                    <div class="col d-flex flex-column gap-2">
+                      <div class="d-flex flex-row justify-content-between align-items-center">
+                        <div class="d-flex flex-column gap-2">
+                          <div class="fw-bold" style="font-size: .8rem !important;">
+                            Total Assessments
+                          </div>
+                          <div class="text-primary-emphasis fs-1 fw-semibold">
+                            <a href="{% url 'paceapp:assessment_list' %}?filter=total">{{ total_assessments }}</a>
+                          </div>
+                        </div>
+                        <div class="p-3 bg-cyan rounded-5">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                               fill="none"
+                               stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                               class="icon icon-tabler icons-tabler-outline icon-tabler-users">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"></path>
+                            <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                            <path d="M21 21v-2a4 4 0 0 0 -3 -3.85"></path>
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6 col-lg-3 ">
+              <div style="border-width: 6px; border-radius: 10px"
+                   class="card shadow shadow-sm card-sm border-3 border-start-5 border-top-0 border-end-0 border-bottom-0 border-green">
+                <div class="py-3 px-3 rounded-5">
+                  <div class="row m-0">
+                    <div class="col d-flex flex-column gap-2">
+                      <div class="d-flex flex-row justify-content-between align-items-center">
+                        <div class="d-flex flex-column gap-2">
+                          <div class="fw-bold" style="font-size: .8rem !important;">
+                            Sent Assessments
+                          </div>
+                          <div class="text-primary-emphasis fs-1 fw-semibold">
+                            <a href="{% url 'paceapp:assessment_list' %}?filter=sent"
+                               class="text-success">{{ total_sent_assessments }}</a>
+                          </div>
+                        </div>
+                        <div class="p-3 bg-green rounded-5">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                               fill="none"
+                               stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                               class="icon icon-tabler icons-tabler-outline icon-tabler-users">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"></path>
+                            <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                            <path d="M21 21v-2a4 4 0 0 0 -3 -3.85"></path>
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6 col-lg-3 ">
+              <div style="border-width: 6px; border-radius: 10px"
+                   class="card shadow shadow-sm card-sm border-3 border-start-5 border-top-0 border-end-0 border-bottom-0 border-rss">
+                <div class="py-3 px-3 rounded-5">
+                  <div class="row m-0">
+                    <div class="col d-flex flex-column gap-2">
+                      <div class="d-flex flex-row justify-content-between align-items-center">
+                        <div class="d-flex flex-column gap-2">
+                          <div class="fw-bold" style="font-size: .8rem !important;">
+                            Pending Assessments
+                          </div>
+                          <div class="text-primary-emphasis fs-1 fw-semibold">
+                            <a href="{% url 'paceapp:requested_assessment_list' %}"
+                               class="text-rss">{{ total_pending_assessments }}</a>
+                          </div>
+                        </div>
+                        <div class="p-3 bg-rss rounded-5">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                               fill="none"
+                               stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                               class="icon icon-tabler icons-tabler-outline icon-tabler-users">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"></path>
+                            <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                            <path d="M21 21v-2a4 4 0 0 0 -3 -3.85"></path>
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6 col-lg-3 ">
+              <div style="border-width: 6px; border-radius: 10px"
+                   class="card shadow shadow-sm card-sm border-3 border-start-5 border-top-0 border-end-0 border-bottom-0 border-github">
+                <div class="py-3 px-3 rounded-5">
+                  <div class="row m-0">
+                    <div class="col d-flex flex-column gap-2">
+                      <div class="d-flex flex-row justify-content-between align-items-center">
+                        <div class="d-flex flex-column gap-2">
+                          <div class="fw-bold" style="font-size: .8rem !important;">
+                            Rejected Assessments
+                          </div>
+                          <div class="text-primary-emphasis fs-1 fw-semibold">
+                            <a class="text-github"
+                               href="{% url 'paceapp:assessment_list' %}?filter=rejected">{{ total_rejected_assessments }}</a>
+                          </div>
+                        </div>
+                        <div class="p-3 bg-github rounded-5">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                               fill="none"
+                               stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                               class="icon icon-tabler icons-tabler-outline icon-tabler-users">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"></path>
+                            <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                            <path d="M21 21v-2a4 4 0 0 0 -3 -3.85"></path>
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% include 'paceapp/services/all_activity_stream.html' %}
+  </div>
+{% endblock %}

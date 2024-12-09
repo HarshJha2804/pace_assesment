@@ -1,0 +1,144 @@
+{% extends "base.html" %} {% load crispy_forms_tags %} {% load static %}
+{% load allauth i18n %}
+{% block title %}
+  {% trans "Become Partner" %}
+{% endblock title %}
+{% block main %}
+  <div class="row py-3">
+    <div class="col-md-10 m-auto">
+      <form class="card shadow" action="{% url 'partner:register' %}" method="post" enctype="multipart/form-data">
+        <div class="card-header">
+          <h3 class="card-title fw-bolder fs-3">
+            Register Now
+          </h3>
+        </div>
+        <div class="card-body">
+          {% csrf_token %}
+          <div>
+            {% crispy form %}
+          </div>
+          <div class="row">
+            <div class="g-recaptcha" data-sitekey="{{ RECAPTCHA_PUBLIC_KEY }}"></div>
+            {% if form.captcha.errors %}
+              <div class="alert alert-danger col-md-4">
+                {% for error in form.captcha.errors %}
+                  <p>{{ error }}</p>
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+          {% if SOCIALACCOUNT_ENABLED %}
+            {% include "socialaccount/snippets/login.html" with page_layout="entrance" %}
+          {% endif %}
+        </div>
+        <div class="card-footer">
+          <button type="submit" class="btn btn-blue float-end">Register</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <script>
+    let countryEl = document.getElementById("id_country");
+    let stateEl = document.getElementById("id_state");  // Assuming your state field has this ID
+
+    stateEl.innerHTML = '';
+    countryEl.addEventListener('change', (event) => {
+      let countryId = event.target.value;
+      if (countryId) {
+        fetchStates(countryId);
+      }
+    });
+
+    function fetchStates(countryId) {
+      let endPoint = `{% url 'partner:ajax_state_by_country' %}?country_id=${countryId}`;
+
+      fetch(endPoint)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error ${response.status}`);
+          }
+          return response.json();
+        })
+        .then(data => {
+          stateEl.innerHTML = '';
+
+          if (data.status === 'success') {
+            let defaultOption = document.createElement("option");
+            defaultOption.value = "";
+            defaultOption.text = "Select a state";
+
+            stateEl.appendChild(defaultOption);
+            data.states.forEach(state => {
+              let option = document.createElement("option");
+              option.value = state.pk;
+              option.text = state.fields.name;
+              stateEl.appendChild(option);
+            });
+          } else if (data.status === 'no_states') {
+            // Append "No states available" option if no states are found
+            let noOption = document.createElement("option");
+            noOption.value = "";
+            noOption.text = "No states available";
+            stateEl.appendChild(noOption);
+
+          } else if (data.status === 'error') {
+            let errorOption = document.createElement("option");
+            errorOption.value = "";
+            errorOption.text = "Error: " + data.message;
+            stateEl.appendChild(errorOption);
+          }
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    }
+  </script>
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+{% endblock %}
+
+
+{% block test %}
+  <div class="row mt-4">
+    <div class="col-md-5 m-auto">
+      <div class="card shadow">
+        <div class="card-header">
+          <h3 class="card-title">
+            {% element h1 %}
+              {% trans "Sign Up" %}
+            {% endelement %}</h3>
+        </div>
+        <div class="card-body">
+
+          {% setvar link %}
+            <a href="{{ login_url }}">
+          {% endsetvar %}
+          {% setvar end_link %}
+            </a>
+          {% endsetvar %}
+          <p class="fw-semibold text-purple">{% blocktranslate %}Already have an account? Then please {{ link }}sign in
+            {{ end_link }}
+            .{% endblocktranslate %}</p>
+          {% if not SOCIALACCOUNT_ONLY %}
+            {% url 'account_signup' as action_url %}
+            {% element form form=form method="post" action=action_url tags="entrance,signup" %}
+              {% slot body %}
+                {% csrf_token %}
+                {% element fields form=form unlabeled=True %}
+                {% endelement %}
+                {{ redirect_field }}
+              {% endslot %}
+              {% slot actions %}
+                {% element button tags="prominent,signup" type="submit" %}
+                  {% trans "Sign Up" %}
+                {% endelement %}
+              {% endslot %}
+            {% endelement %}
+          {% endif %}
+          {% if SOCIALACCOUNT_ENABLED %}
+            {% include "socialaccount/snippets/login.html" with page_layout="entrance" %}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock test %}

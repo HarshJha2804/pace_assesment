@@ -1,0 +1,165 @@
+{% load static i18n %}<!DOCTYPE html>{% load notifications_tags %} {% load menu_generator %}
+{% get_current_language as LANGUAGE_CODE %}
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+  <meta charset="utf-8"/>
+  <meta http-equiv="x-ua-compatible" content="ie=edge"/>
+  <title>
+    {% block title %}
+      Pace
+    {% endblock title %}
+  </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description"
+        content="Infinite Group course search project."/>
+  <meta name="author"
+        content="Infinite Group"/>
+  <link rel="icon" href="{% static 'images/favicons/favicon.ico' %}"/>
+  {% block css %}
+    <!-- Third-party CSS libraries go here -->
+    <link href="{% static 'css/tabler/tabler-min.css' %}" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/css/tabler-flags.min.css">
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/css/tabler-payments.min.css">
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/css/tabler-vendors.min.css">
+
+    <!--  =======BOX ICONS=====-->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/icons/boxicon.min.css' %}">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+    <!--  =======Unpoly Js=====-->
+    <link rel="stylesheet" href="https://unpkg.com/unpoly@2.7.2/unpoly.min.css">
+
+    <!--  =======Tom Select=====-->
+    <link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.css" rel="stylesheet">
+    <!-- This file stores project-specific CSS -->
+    <!-- =============Alpine Js=======-->
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+
+    <link href="{% static 'css/project.css' %}" rel="stylesheet"/>
+
+  {% endblock css %}
+  <!-- Le javascript
+      ================================================== -->
+  {# Placed at the top of the document so pages load faster with defer #}
+  {% block javascript %}
+
+    <!-- Third-party javascript libraries go here -->
+    <script src="https://unpkg.com/unpoly@2.7.2/unpoly.min.js"></script>
+
+    <script src="{% static 'js/tabler-min.js' %}" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
+    <!-- place project specific Javascript in this file -->
+
+  {% endblock javascript %}
+</head>
+<body class="{% block bodyclass %}{% endblock bodyclass %}">
+{% block body %}
+  <div class="">
+    <nav style="background: linear-gradient(45deg, #063a9b,  #3735ff);" class="navbar navbar-expand-lg navbar-dark shadow">
+      <div class="container d-flex justify-content-between align-items-center">
+        <a class="navbar-brand" href="{% url 'paceapp:home' %}">
+          <img src="{% static 'logo/infiniteLogo.png' %}" class="img-fluid me-3"
+               alt="Infinite Group" style="height: 2.5rem;">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse fw-semibold fs-4" id="navbarNav">
+          <ul class="navbar-nav m-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" href="https://infinitegroup.org/">
+                 Home
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="https://infinitegroup.org/about-us">
+                 About Us
+              </a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link active" href="https://infinitegroup.org/education-providers">
+                Education Providers
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="https://infinitegroup.org/recruitment-partners">
+                Recruitment Partners
+              </a>
+            </li>
+
+                 <li class="nav-item">
+              <a class="nav-link active" href="https://infinitegroup.org/contact-us">
+                Contact Us
+              </a>
+            </li>
+          </ul>
+       <div class="d-flex gap-2">
+            <div class="navbar-nav flex-row order-md-last">
+              <a href="{% url 'paceapp:home' %}"  target='_blank' class="nav-link text-light px-4 py-1 fw-bold bg-transparent btn btn-outline border-1 border-white rounded-3 shadow navButton ">
+                 Login
+              </a>
+          </div>
+           <div class="navbar-nav flex-row order-md-last">
+              <a href="" class="nav-link text-light px-4 py-1 fw-bold bg-transparent btn btn-outline border-1 border-white rounded-3 shadow navButton">
+                 Register
+              </a>
+          </div>
+       </div>
+        </div>
+      </div>
+    </nav>
+  </div>
+  <div>
+    {% if messages %}
+      {% for message in messages %}
+        <div class="position-fixed bottom-0 mt-5  end-0" style="z-index: 999;" id="alert-box">
+          <div class="alert alert-dismissible {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+            {{ message }}
+            <button type="button"
+                    class="btn-close"
+                    data-bs-dismiss="alert"
+                    aria-label="Close"></button>
+          </div>
+        </div>
+      {% endfor %}
+    {% endif %}
+    {% block main %}
+      {% block content %}
+        <p>Welcome to Infinite Pace</p>
+      {% endblock content %}
+    {% endblock main %}
+  </div>
+{% endblock body %}
+<!-- /container -->
+{% block modal %}
+{% endblock modal %}
+{% block inline_javascript %}
+  {% comment %}
+    Script tags with only code, no src (defer by default). To run
+    with a "defer" so that you run inline code:
+    <script>
+      window.addEventListener('DOMContentLoaded', () => {
+        /* Run whatever you want */
+      });
+    </script>
+    {% endcomment %}
+{% endblock inline_javascript %}
+<script>
+  let notification_mark_all_as_read = "{% url 'users:notification_mark_all_as_read' %}";
+  let notificationReadUnreadListUrl = "{% url 'users:notifications_read_and_unread_list' %}";
+</script>
+<script src="{% static 'js/common.js' %}"></script>
+<script defer src="{% static 'js/project.js' %}"></script>
+
+<script src="{% static 'notifications/notify.js' %}" type="text/javascript"></script>
+{% if request.user.is_authenticated %}
+  {% register_notify_callbacks callbacks='fill_notification_list,fill_notification_badge,fetchNotificationsReadAndUnreadList' %}
+{% endif %}
+</body>
+</html>

@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block title %} Application accepting from countries{% endblock title %}
+{% block main %}
+  <div class="row py-3">
+    <div class="col-md-10 m-auto">
+      <div class="card shadow mb-4">
+        <div class="card-header justify-content-between">
+          <a href="{% url 'paceapp:university_detail' pk=object.pk %}" class="btn btn-dark">Go Back</a>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-vcenter card-table shadow-sm">
+            <thead>
+            <tr>
+              <th>S.N.</th>
+              <th>Country</th>
+              <th>Status</th>
+            </tr>
+            </thead>
+            <tbody>
+           {% for country in object.application_accepting_from.all %}
+              <tr>
+                <td>{{ forloop.counter }}.</td>
+                <td>{{ country }}</td>
+                <td>
+                  {% if object.is_active %}
+                    <span class="status status-green">Active</span>
+                  {% else %}
+                    <span class="status status-red">Inactive</span>
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+          <div class="card-footer"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+

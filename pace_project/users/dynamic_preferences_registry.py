@@ -1,0 +1,17 @@
+from dynamic_preferences.types import BooleanPreference, StringPreference
+from dynamic_preferences.preferences import Section
+from dynamic_preferences.registries import global_preferences_registry
+
+# we create some section objects to link related preferences together
+
+general = Section('general')
+discussion = Section('discussion')
+
+
+# We start with a global preference
+@global_preferences_registry.register
+class SiteTitle(StringPreference):
+    section = general
+    name = 'title'
+    default = 'My site'
+    required = False

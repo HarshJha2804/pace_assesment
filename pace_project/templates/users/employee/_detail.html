@@ -1,0 +1,165 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %} {% load static %}
+{% block title %} {{ object }} {% endblock title %}
+
+{% block main %}
+  <div class="row py-3">
+    <div class="col-md-12 m-auto">
+      <div class="card shadow">
+        <div class="card-header d-flex justify-content-between">
+          <h3 class="card-title fw-semibold">
+            {% if request.META.HTTP_REFERER %}
+              <a href="{{ request.META.HTTP_REFERER }}" class="btn btn-outline-dark">Go Back</a>
+            {% else %}
+              <a href="#" class="btn btn-outline-dark">Go Back</a>
+            {% endif %}
+          </h3>
+          <a href="{% url 'users:update_employee' pk=object.pk %}" class="btn btn-dark">Edit</a>
+        </div>
+        <div class="card-body">
+          <div class="datagrid">
+            <div class="datagrid-item">
+              <div class="datagrid-title">Name</div>
+              <div class="datagrid-content">{{ object }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Role</div>
+              <div class="datagrid-content">
+                {{ object.user.role|default_if_none:'-' }}
+              </div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Is Head</div>
+              <div class="datagrid-content">
+                {% if object.is_head %}
+                  <span class="status status-success">Yes</span>
+                {% else %}
+                  <span class="status">No</span>
+                {% endif %}
+              </div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Mobile Number</div>
+              <div class="datagrid-content">
+                {{ object.get_mobile_number|default_if_none:'-' }}
+              </div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Whatsapp Number</div>
+              <div class="datagrid-content">
+                {{ object.get_whatsapp_number|default_if_none:'-' }}
+              </div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Emergency Mobile Number</div>
+              <div class="datagrid-content">
+                {{ object.emergency_mobile_number|default_if_none:'-' }}
+              </div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Emergency Contact Relation</div>
+              <div class="datagrid-content">
+                {% if  object.emergency_contact_relation %}
+                  {{ object.emergency_contact_relation|title }}
+                {% else %}
+                  -
+                {% endif %}
+              </div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Assigned Country</div>
+              <div class="datagrid-content">
+                {{ object.assigned_country }}
+              </div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Assigned Universities</div>
+              <div class="datagrid-content">
+                {% for university in object.assigned_universities.all %}
+                  {{ university.name }}{% if not forloop.last %}, {% endif %}
+                {% empty %}
+                  -
+                {% endfor %}
+              </div>
+            </div>
+            {% if object.get_assigned_regions %}
+              <div class="datagrid-item">
+                <div class="datagrid-title">Assigned Regions</div>
+                <div class="datagrid-content">
+                  {% for region in object.get_assigned_regions %}
+                    {{ region }}{% if not forloop.last %}, {% endif %}
+                  {% empty %}
+                    -
+                  {% endfor %}
+                </div>
+              </div>
+            {% endif %}
+            <div class="datagrid-item">
+              <div class="datagrid-title">Last modified</div>
+              <div class="datagrid-content">{{ object.modified }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Created At</div>
+              <div class="datagrid-content">{{ object.created }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">On Leave</div>
+              <form method="post" action="{% url 'users:employee_detail' object.pk %}">
+                {% csrf_token %}
+                {% if object.is_on_leave %}
+                  <button type="submit" name="leave" class="btn btn-danger">
+                    Off On Leave
+                  </button>
+                {% else %}
+                  <button type="submit" name="leave" class="btn btn-success">
+                    Set On Leave
+                  </button>
+                {% endif %}
+              </form>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          {% if object.get_assign_region_url %}
+            <a class="btn btn-primary" href="{{ object.get_assign_region_url }}">Assign Region</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+  {% if object.is_regional_marketing_head %}
+    <div class="col-lg-12">
+      <div class="card mt-2 shadow">
+        <div class="card-header justify-content-between">
+          <h3 class="card-title">University Intake</h3>
+          <a href="{% url 'users:set_rm_university_intake' pk=object.pk %}" class="btn btn-dark">Set University
+            Intake</a>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-vcenter card-table">
+            <thead>
+            <tr>
+              <th>S.N.</th>
+              <th>University</th>
+              <th>Intake</th>
+              <th>Year</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in university_intake_data %}
+              <tr>
+                <td>{{ forloop.counter }}.</td>
+                <td>{{ item.university.name|default_if_none:'-' }}</td>
+                <td>{{ item.intake.intake_month|default_if_none:'-' }}</td>
+                <td>{{ item.year.intake_year|default_if_none:'-' }}</td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <div class="card-footer"></div>
+      </div>
+    </div>
+  {% endif %}
+{% endblock %}
+

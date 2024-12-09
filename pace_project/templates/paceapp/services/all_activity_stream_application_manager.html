@@ -1,0 +1,53 @@
+<div class="page">
+  <div class="page-wrapper">
+    <div class="page-body ">
+      <div class=" m-0 p-0">
+        <div class=" ">
+          <div class="col-12 ">
+            <div class="card border-0 box-sh">
+              <div class="card-header d-flex justify-content-left">
+                <h2 class="card-title h4 fw-bold primary">Last 3 Day Activity</h2>
+              </div>
+              <div class="table-responsive ">
+                <table class="table text-center card-table table-vcenter text-nowrap table-striped">
+                  <thead>
+                  <tr class="bg-color">
+                    <th style="text-align:left" class="bg-transparent font-weight-medium fs-4 fw-bold">Date</th>
+                    <th class="bg-transparent font-weight-medium fs-4"> Total Applications</th>
+                    <th class="bg-transparent  fs-4 font-weight-medium">Pending From IG</th>
+                    <th class="bg-transparent font-weight-medium fs-4 font-weight-medium">Pending From Partner</th>
+                    <th class="bg-transparent font-weight-medium fs-4 font-weight-medium">Application Processed to University</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr>
+                    <td style="text-align:left">{{ today_1 }}</td>
+                    <td>{{ today_total_application }}</td>
+                    <td>{{ today_application_pending_from_ioa }}</td>
+                    <td>{{ today_application_pending_from_agent }}</td>
+                    <td>{{ today_application_submitted }}</td>
+                  </tr>
+                  <tr>
+                    <td style="text-align:left">{{ yesterday_1 }}</td>
+                    <td>{{ yesterday_total_application }}</td>
+                    <td>{{ yesterday_application_pending_from_ioa }}</td>
+                    <td>{{ yesterday_application_pending_from_agent }}</td>
+                    <td>{{ yesterday_application_submitted }}</td>
+                  </tr>
+                  <tr>
+                    <td style="text-align:left">{{ yesterday_2 }}</td>
+                    <td>{{ yesterday_2_total_application }}</td>
+                    <td>{{ yesterday_2_application_pending_from_ioa }}</td>
+                    <td>{{ yesterday_2_application_pending_from_agent }}</td>
+                    <td>{{ yesterday_2_application_submitted }}</td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

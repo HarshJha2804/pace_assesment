@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Forbidden (403){% endblock title %}
+{% block main %}
+  <div class="row">
+    <div class="col-md-5 m-auto mt-2">
+      <div class="card shadow text-yellow">
+        <div class="card-header">
+          <h1 class="card-title">Access Denied - Forbidden (403)</h1>
+        </div>
+        <div class="card-body">
+          <p class="py-3"> {% if exception %}
+            {{ exception }}
+          {% else %}
+            You're not allowed to access this page.
+          {% endif %}
+          </p>
+        </div>
+        <div class="card-footer d-flex justify-content-between">
+          {% if request.META.HTTP_REFERER %}
+          <a href="{{ request.META.HTTP_REFERER }}" class="btn btn-dark">Go to Back</a>
+          {% else %}
+            <a href="/" class="btn btn-dark">Go to Home</a>
+          {% endif %}
+          <span class="fs-3">Contact to <a
+          href="mailto:helpdesk@infinitegroup.org">helpdesk@infinitegroup.org</a></span>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock main %}

@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %} {% load static %}
+{% block title %} State Form {% endblock title %}
+
+{% block main %}
+<div class="row py-3">
+  <div class="col-md-10 m-auto">
+    <div class="card shadow">
+    <div class="card-header justify-content-between">
+          <a href="{% url 'paceapp:state_list' %}" class="btn btn-dark">Go Back</a>
+          <h3 class="card-title">Add State</h3>
+        </div>
+        <h3 class="card-title fw-semibold">
+          {% if object %}
+          Update State
+          {% else %}
+          {% endif %}
+        </h3>
+      <div class="card-body">
+        <form action="" method="post">
+          {% csrf_token %}
+          <div>
+            {% crispy form %}
+          </div>
+          <div class="">
+            <button type="submit" class="btn btn-green float-end">Save</button>
+          </div>
+        </form>
+      </div>
+      <div class="card-footer"></div>
+    </div>
+  </div>
+</div>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const countrySelect = document.getElementById('id_country');
+    const regionSelect = document.getElementById('id_region');
+
+    countrySelect.addEventListener('change', function () {
+      const countryId = this.value;
+      const url = "{% url 'paceapp:add_state' %}?country_id=" + countryId;
+
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          regionSelect.innerHTML = '';  // clear the existing options in region dropdown
+          regionSelect.innerHTML += '<option value="">Select a region</option>';
+          data.forEach(region => {
+            regionSelect.innerHTML += `<option value="${region.id}">${region.name}</option>`;
+          });
+        })
+        .catch(error => {
+          console.error('Error fetching regions:', error);
+        });
+    });
+  });
+</script>
+{% endblock %}

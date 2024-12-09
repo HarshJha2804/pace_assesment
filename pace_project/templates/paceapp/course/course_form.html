@@ -1,0 +1,163 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %} {% load static %}
+{% block title %} Course Form {% endblock title %}
+
+{% block main %}
+  <div class="row py-3">
+    <div class="col-md-12 m-auto">
+      <div class="card shadow">
+        <div class="card-header">
+          <h3 class="card-title fw-semibold">
+            {% if object %}
+              Update Course
+            {% else %}
+              Add Course
+            {% endif %}
+          </h3>
+        </div>
+        <div class="card-body">
+          <form action="" method="post">
+            {% csrf_token %}
+            {% crispy form %}
+            <div class="">
+              <button type="submit" class="btn btn-primary float-end">Save</button>
+            </div>
+          </form>
+        </div>
+        <div class="card-footer"></div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+{% block inline_javascript %}
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const countrySelect = document.getElementById('id_country');
+      const universitySelect = document.getElementById('id_university');
+      const levelSelect = document.getElementById('id_level');
+      const selectStream = document.getElementById("id_stream");
+      const selectSubStream = document.getElementById("id_substream");
+      const selectUniversityIntake = document.getElementById("id_intake");
+      const selectCampus = document.getElementById("id_campus");
+
+      function fetchOptions(url, params, selectElement) {
+        fetch(`${url}?${new URLSearchParams(params)}`)
+          .then(response => response.json())
+          .then(responseData => {
+            if (responseData.intakes) {
+              appendOptions(responseData.intakes, selectElement);
+            } else if (responseData.universities) {
+              appendOptions(responseData.universities, selectElement);
+            } else if (responseData.sub_stream) {
+              appendOptions(responseData.sub_stream, selectElement);
+            } else {
+              appendOptions(responseData.campus, selectCampus);
+              appendOptions(responseData.streams, selectStream);
+            }
+          })
+          .catch(error => console.error('Error fetching options:', error));
+      }
+
+      function appendOptions(optionsData, selectElement) {
+        selectElement.innerHTML = '';
+        if (optionsData.length > 0) {
+          let optionEl = document.createElement('option');
+          optionEl.text = "Select";
+          optionEl.value = "";
+          selectElement.appendChild(optionEl);
+          optionsData.forEach(option => {
+            let optionEl = document.createElement('option');
+            optionEl.value = option.id;
+            optionEl.text = option.name;
+            selectElement.appendChild(optionEl);
+          });
+        } else {
+          let optionEl = document.createElement('option');
+          optionEl.text = "No options available";
+          selectElement.appendChild(optionEl);
+        }
+      }
+
+      function updateUniversity() {
+        const countryId = countrySelect.value;
+        if (countryId) {
+          const universityUrl = "{% url 'paceapp:ajax_get_universities' %}";
+          fetchOptions(universityUrl, {country_id: countryId}, universitySelect);
+        } else {
+          universitySelect.innerHTML = '';
+        }
+      }
+
+      function updateIntakes() {
+        const universityId = universitySelect.value;
+        if (universityId) {
+          const url = "{% url 'paceapp:ajax_get_university_intakes' %}";
+          fetchOptions(url, {university_id: universityId}, selectUniversityIntake);
+        } else {
+          selectUniversityIntake.innerHTML = '';
+        }
+      }
+
+
+      function updateCampusAndStream() {
+        const universityId = universitySelect.value;
+        if (universityId) {
+          const url = "{% url 'paceapp:ajax_get_or_streams_camp' %}";
+          fetchOptions(url, {university_id: universityId}, selectStream);
+          fetchOptions(url, {university_id: universityId}, selectCampus);
+        } else {
+          selectStream.innerHTML = '';
+          selectCampus.innerHTML = '';
+        }
+      }
+
+      function updateSubstream() {
+        const streamId = selectStream.value;
+        if (streamId) {
+          const url = "{% url 'paceapp:ajax_get_substream' %}";
+          fetchOptions(url, {'stream_id': streamId}, selectSubStream);
+        } else {
+          selectSubStream.innerHTML = '';
+        }
+      }
+
+      countrySelect.addEventListener('change', updateUniversity);
+      universitySelect.addEventListener('change', function () {
+        updateIntakes();
+        updateCampusAndStream();
+      });
+
+      levelSelect.addEventListener('change', function () {
+        const levelId = levelSelect.value;
+        const universityId = universitySelect.value;
+        const param = {
+          'university': universityId,
+          'level': levelId,
+        }
+        fetchStreams(param);
+      });
+
+      selectStream.addEventListener('change', updateSubstream);
+
+      {% if not object %}
+
+        updateUniversity();
+      {% endif %}
+    });
+  </script>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

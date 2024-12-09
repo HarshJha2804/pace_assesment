@@ -1,0 +1,105 @@
+/* These styles are generated from project.scss. */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
+:host, :root {
+  font-size: 16px;
+  height: 100%;
+  --tblr-primary: #170fd5;
+}
+
+body {
+  font-family: "Noto Sans", sans-serif !important;
+}
+
+.alert-debug {
+  color: black;
+  background-color: white;
+  border-color: #d6e9c6;
+}
+
+.alert-error {
+  color: #b94a48;
+  background-color: #f2dede;
+  border-color: #eed3d7;
+}
+
+.asteriskField {
+  color: red !important;
+}
+
+.login-page-body {
+  height: 100vh !important;
+}
+
+.playfair-display {
+  font-family: "Playfair Display", serif;
+  font-size: 2rem;
+  line-height: 2rem;
+}
+
+.playfair-display-heading-login {
+  font-family: "Playfair Display", serif;
+  font-size: 3rem;
+  line-height: 3rem;
+}
+
+@media (min-width: 1100px) {
+  /* Large screens and up */
+  .playfair-display-heading-login {
+    font-size: 4rem;
+    line-height: 4rem;
+
+  }
+}
+
+a.dropdown-item.active {
+  background-color: #1A01CC !important;
+}
+
+.nav-item.active {
+  background-color: #296DFF !important;
+}
+
+.sidenavCard {
+  border-radius: 0.25rem;
+  margin: 0.5rem;
+  border: 1px solid #f2f8ff;
+  padding: 1rem;
+  background-color: white !important;
+  color: #e0e0e0 !important;
+}
+
+.navButton:hover {
+  background-color: white !important;
+  color: #1A01CC !important;
+}
+
+
+.footerA a {
+  text-decoration: none !important;
+}
+
+.iconDiv {
+  width: fit-content;
+  border: 1px solid white;
+  border-radius: 10rem;
+  min-width: 40px;
+  min-height: 40px
+
+}
+.iconSmallDiv{
+    width: fit-content;
+  border: 1px solid white;
+  border-radius: 10rem;
+  min-width: 32px;
+  min-height: 32px
+}
+
+.userDropDown>.dropdown-item:hover{
+  color: white !important;
+}
+
+.textLinkNav>a:hover{
+text-decoration: none;
+}

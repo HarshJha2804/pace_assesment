@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %} {% load static %}
+{% block title %} Partner Commission {% endblock title %}
+
+{% block main %}
+  <div class="row py-3">
+    <div class="col-md-6 m-auto">
+      <div class="card" id="commission_up_id">
+        <div class="card-header">
+          <h3 class="card-title fw-semibold">
+            Partner Commission
+          </h3>
+        </div>
+        <div class="card-body">
+          <form id="partner_commission_form_id" action="{% url 'partner:partner_commission_update' partner_id=partner_id %}"
+                method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div>
+              {% crispy form %}
+            </div>
+          </form>
+        </div>
+        <div class="card-footer">
+          <button type="submit" class="btn btn-danger float-start" up-dismiss>Cancel</button>
+          <button type="submit" class="btn btn-green float-end" form="partner_commission_form_id">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

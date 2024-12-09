@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %} {% load static %}
+{% block title %} Projects {% endblock title %}
+
+{% block main %}
+  <div class="row py-3">
+    <div class="col-md-12 m-auto">
+      <div class="card shadow">
+        <div class="card-header justify-content-between">
+          <h3 class="card-title fw-semibold">Projects</h3>
+          <a href="{% url 'paceapp:add_university' %}" class="btn btn-dark">Add New Project</a>
+        </div>
+        <div class="card-body border-bottom">
+{#          <form action="" method="get" up-autosubmit up-follow up-keep up-target="#university_list">#}
+{#            <div class="row">#}
+{#              <div class="col-sm-6 col-md-2">#}
+{#                <div class="mb-3">#}
+{#                  <input type="text" class="form-control" name="name"#}
+{#                         autocomplete="off" placeholder="Name">#}
+{#                </div>#}
+{#              </div>#}
+{#              <div class="col-sm-6 col-md-2">#}
+{#                <div class="mb-3">#}
+{#                  <select type="text" class="form-select" name="country_id" data-searchable="true">#}
+{#                    <option value="" selected>Filter By Country</option>#}
+{#                    {% for item in countries %}#}
+{#                      <option value="{{ item.id }}">{{ item }}</option>#}
+{#                    {% endfor %}#}
+{#                  </select>#}
+{#                </div>#}
+{#              </div>#}
+{#              <div class="col-sm-6 col-md-2">#}
+{#                <div class="mb-3">#}
+{#                  <select name="is_premium" class="form-select" required>#}
+{#                    <option value="" disabled selected>Filter by premium</option>#}
+{#                    <option value="True">Premium</option>#}
+{#                    <option value="False">Non Premium</option>#}
+{#                  </select>#}
+{#                </div>#}
+{#              </div>#}
+{#              <div class="col-sm-6 col-md-2">#}
+{#                <div class="mb-3">#}
+{#                  <select type="text" name="order_by" class="form-select" required>#}
+{#                    <option disabled selected value="">Filter order by</option>#}
+{#                    <option value="name">Name</option>#}
+{#                    <option value="-priority">Priority</option>#}
+{#                    <option value="priority">Highest Priority First</option>#}
+{#                  </select>#}
+{#                </div>#}
+{#              </div>#}
+{#              <div class="col-sm-6 col-md-2">#}
+{#                <div class="mb-3">#}
+{#                  <select type="text" name="status" class="form-select" required>#}
+{#                    <option disabled selected>Status</option>#}
+{#                    <option value="True">Active</option>#}
+{#                    <option value="False">Inactive</option>#}
+{#                  </select>#}
+{#                </div>#}
+{#              </div>#}
+{#              <div class="col-sm-6 col-md-1">#}
+{#                <div class="mb-3 d-flex justify-content-between">#}
+{#                  <a href="{% url 'paceapp:university_list' %}"#}
+{#                     class="btn btn-outline-yellow">#}
+{#                    Clear Filters#}
+{#                  </a>#}
+{#                </div>#}
+{#              </div>#}
+{#            </div>#}
+{#          </form>#}
+{#        </div>#}
+
+    <div class="row rounded p-md-3 p-1 mb-1">
+      {% for item in object_list %}
+        <div class="col-12 mb-3">
+          <!-- Country card -->
+          {% comment %}<div class="card shadow-sm bg-{% cycle 'teal' 'indigo' 'cyan' 'blue' 'rss' 'azure' %}-lt ">{% endcomment %}
+          <div class="card shadow-sm bg-indigo-lt ">  
+          <div class="card-header d-flex align-items-center">
+              <h2 class="card-title fw-bold">{{ item.country }}</h2>
+              {% if item.country.country_logo %}
+                <div class="object-cover">
+                  <img src="{{ item.country.get_logo_url }}" alt="{{ item.country }} logo"
+                       class="img-fluid country-logo ms-auto" style="max-width: 50px;">
+                </div>
+              {% endif %}
+            </div>
+            <div class="card-body">
+              <!-- University logos list -->
+              <div class="row">
+                {% for university in item.universities %}
+                  <div class="col-md-3 text-center mb-4">
+                    <div class="card shadow-sm">
+                      <div class="card-body imageHover">
+                        {% if university.get_logo_url %}
+                          <img src="{{ university.get_logo_url }}" alt="{{ university.name }} logo"
+                               class="img-fluid university-logo" style="height: 100px; object-fit: contain;">
+                        {% else %}
+                          <div class="no-logo py-4">
+                            <p>No logo available</p>
+                          </div>
+                        {% endif %}
+                      </div>
+                      <div class="card-footer d-flex gap-4 justify-content-between ">
+                        <span >{{ university.name }}
+                        </span>
+                        <div class="d-flex gap-2" >
+                            <a href="{% url 'paceapp:university_detail' pk=university.id %}">
+                          <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="green"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-eye"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" /></svg>
+
+                        </a>
+                        <a  href="{% url 'paceapp:update_university' pk=university.id %}">
+                        <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="blue"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-edit"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1" /><path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z" /><path d="M16 5l3 3" /></svg>
+                        </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

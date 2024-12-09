@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %} {% load static %}
+{% block title %} Project Wise Dashboard {% endblock title %}
+{% block main %}
+  <div class="row py-3">
+    <div class="col-md-12 m-auto">
+      <div class="card shadow-sm">
+        <div class="card-header">
+          <h3 class="card-title">Filters</h3>
+        </div>
+        <div class="card-body">
+          <form action="" method="get" up-autosubmit up-follow up-keep up-target="#dashboards">
+            <div class="row">
+              <div class="col-sm-6 col-md-2">
+                <div class="mb-0 mb-sm-2">
+                  <select name="intake" class="form-select" required>
+                    <option value="" disabled selected>Filter by Intake</option>
+                    {% for intake in intakes %}
+                      <option value="{{ intake.id }}">{{ intake }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-2">
+                <div class="mb-0 mb-sm-2">
+                  <select name="year" class="form-select" required>
+                    <option value="" disabled selected>Filter by Year</option>
+                    {% for year in years %}
+                      <option value="{{ year.id }}">{{ year }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-2">
+                <a href="{% url 'paceapp:project_wise_dashboard' %}" class="btn btn-outline-yellow">Clear Filters</a>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row" id="dashboards">
+    {% for country in country_wise_university_data %}
+      <div class="col-md-12 mb-4">
+        <div class="card shadow shadow-sm">
+          <div class="card-header">
+            <h3 class="card-title fw-bolder"><span class="text-dark">{{ country.country }}</span> Dashboard</h3>
+            {% if country.country.get_logo_url %}
+              <div class="object-cover ps-1">
+                <img src="{{ country.country.get_logo_url }}" alt=""
+                     class="img-fluid country-logo ms-auto" style="max-width: 50px;">
+              </div>
+            {% endif %}
+          </div>
+          <div class="table-responsive">
+            <table class="table table-vcenter card-table  table-striped  text-nowrap table-bordered">
+              <thead>
+              <tr>
+                <th>Status</th>
+                {% for university in country.universities %}
+                  <th class=" text-center">
+                    <a class="text-light" href="{{ university.get_absolute_url }}" target="_blank"
+                       data-bs-toggle="tooltip" title="{{ university }}" data-bs-placement="top">
+                      {{ university.get_alis }}</a>
+                  </th>
+                {% endfor %}
+              </tr>
+              </thead>
+              <tbody>
+              {% for status in country.statuses %}
+                <tr class="bg-{% cycle 'indigo' 'cyan' 'blue' 'teal' 'azure' 'purple' 'lime' 'green' %}-lt">
+                  <td>{{ status.status }}</td>
+                  {% for count in status.application_counts %}
+                    <td class="text-center">
+                      <a target="_blank"
+                         href="{% url 'core:application_list' %}?university_id={{ count.university.id }}&status={{ status.status.name }}&intake={{ request.GET.intake }}&year={{ request.GET.year }}">{{ count.count }}</a>
+                    </td>
+                  {% endfor %}
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          <div class="card-footer"></div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}

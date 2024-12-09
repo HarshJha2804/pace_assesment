@@ -1,0 +1,70 @@
+<div class="navbar-nav flex-row order-md-last">{% load notifications_tags %} {% load menu_generator %}
+  <div class="d-none d-md-flex">
+    <div class="nav-item dropdown d-none d-md-flex me-2">
+      <a href="#" class="nav-link px-0" data-bs-toggle="dropdown" id="notification-link">
+        <i class="ti ti-message-2 fs-2 text-info" id="notification-icon" title="View all notifications"
+           data-bs-toggle="tooltip" data-bs-placement="bottom"></i>
+        {% live_notify_badge badge_class="badge bg-red live_notify_badge d-none" %}
+      </a>
+      <div class="dropdown-menu dropdown-menu-arrow dropdown-menu-end dropdown-menu-card">
+        <div class="card overflow-hidden" style="height: 500px; width: 480px;">
+          <div class="card-header">
+            <h3 class="card-title">Notifications</h3>
+          </div>
+          <div class="list-group list-group-flush list-group-hoverable overflow-y-auto"
+               id="notifications-container">
+            <div class="list-group-item" id="notification-template">
+              <div class="row align-items-center">
+                <div class="col-auto"><span
+                  class="status-dot status-dot-animated d-block"></span>
+                </div>
+                <div class="col text-truncate">
+                  <a href="#"
+                     class="text-body d-block"></a>
+                  <div class="d-block text-secondary text-truncate mt-n1">
+                  </div>
+                  <small class="d-block text-muted"></small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <a href="#" class="nav-link px-0 hide-theme-dark" title=""
+       data-bs-toggle="tooltip"
+       data-bs-placement="bottom">
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" class="icon icon-tabler icons-tabler-filled icon-tabler-heart text-red">
+        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+        <path d="M6.979 3.074a6 6 0 0 1 4.988 1.425l.037 .033l.034 -.03a6 6 0 0 1 4.733 -1.44l.246 .036a6 6 0 0 1 3.364 10.008l-.18 .185l-.048 .041l-7.45 7.379a1 1 0 0 1 -1.313 .082l-.094 -.082l-7.493 -7.422a6 6 0 0 1 3.176 -10.215z" />
+      </svg>
+      &nbsp;&nbsp;
+    </a>
+  </div>
+  <div class="nav-item dropdown">
+    <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown"
+       aria-label="Open user menu">
+                    <span class="avatar avatar-sm"
+                          style="background-image: url({{ user_avatar_url }})">
+                      {% if not user_avatar_url %}
+                        {{ request.user.get_initials }}
+                      {% endif %}
+                    </span>
+   <span class="m-2"> {{ request.user.name }}</span>
+
+    </a>
+    <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow userDropDown text-black">
+      {% get_menu "NAV_MENU_RIGHT" as right_menu %}
+    <a class="dropdown-item" href="{% url 'users:detail' request.user.pk %}">Profile</a>
+      {% for item in right_menu %}
+        <a class="dropdown-item {% if item.selected %} active {% endif %}" href="{{ item.url }}">
+      <i class="{{ item.icon_class }}"></i> {{ item.name }}
+      </a>
+      {% endfor %}
+    <a class="dropdown-item" href="{% url 'account_logout' %}" up-target="#logout-div-id" up-layer="new" up-size="small">
+      <i class=""></i> Logout
+      </a>
+    </div>
+  </div>
+</div>

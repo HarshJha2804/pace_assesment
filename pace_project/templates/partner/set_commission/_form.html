@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %} {% load static %}
+{% block title %} Set Partner Commission{% endblock title %}
+
+{% block main %}
+  <div class="row py-3">
+    <div class="col-md-12 m-auto">
+      <div class="card shadow">
+        <div class="card-header">
+          <h3 class="card-title fw-semibold">
+            {% if object %}
+              Update Partner Commission
+            {% else %}
+              Add Partner Commission
+            {% endif %}
+          </h3>
+        </div>
+        <div class="card-body">
+          <form action="" method="post" enctype="multipart/form-data" action="{% url 'partner:set_commission_up' %}">
+            {% csrf_token %}
+            <div>
+              {% crispy form %}
+            </div>
+            <div class="">
+              <button type="submit" class="btn btn-green float-end">Save</button>
+            </div>
+          </form>
+        </div>
+        <div class="card-footer"></div>
+      </div>
+    </div>
+  </div>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const universityField = document.getElementById("id_university");
+      const intakeField = document.getElementById("id_intake");
+
+      universityField.addEventListener("change", function () {
+        const universityId = universityField.value;
+        if (!universityId) {
+          console.log("No university selected");
+          intakeField.innerHTML = '<option value="">Select Intake</option>';
+          return;
+        }
+
+        console.log(`Fetching intakes for university ID: ${universityId}`);
+
+        fetch(`/api/university/${universityId}/intakes/`)
+          .then(response => {
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+          })
+          .then(data => {
+            console.log("Intakes fetched:", data);
+
+            // Clear existing options
+            intakeField.innerHTML = '<option value="">Select Intake</option>';
+
+            // Append new options
+            data.forEach(intake => {
+              const option = document.createElement("option");
+              option.value = intake.id; // The ID of the intake
+              option.textContent = intake.intake_month; // The name of the intake
+              intakeField.appendChild(option);
+            });
+          })
+          .catch(error => {
+            console.error("Error fetching intakes:", error);
+          });
+      });
+    });
+  </script>
+{% endblock %}

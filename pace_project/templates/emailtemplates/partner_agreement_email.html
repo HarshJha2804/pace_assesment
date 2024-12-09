@@ -1,0 +1,165 @@
+{% load account %}
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Email Template</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+  <style>
+    /* General styles */
+    body {
+      font-family: "Poppins", sans-serif;
+      font-style: normal;
+      background-color: #b9cff8;
+      overflow: hidden;
+    }
+
+    img {
+      width: 20%;
+    }
+
+    .btn {
+      background-color: #161E4A;
+      color: white !important;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      text-decoration: none;
+      display: inline-block;
+      cursor: pointer;
+      border: none;
+      font-size: 1rem;
+    }
+
+    .btn:hover {
+      background-color: #0f1537;
+    }
+
+    /* Responsive container */
+    .custom-container {
+      width: 100%;
+      padding-right: 15px;
+      padding-left: 15px;
+      margin-right: auto;
+      margin-left: auto;
+      box-sizing: border-box;
+    }
+
+    /* Media queries for container */
+    @media (min-width: 576px) {
+      .container-custom {
+        max-width: 540px;
+      }
+    }
+
+    @media (min-width: 768px) {
+      .container-custom {
+        max-width: 720px;
+      }
+    }
+
+    @media (min-width: 992px) {
+      .container-custom {
+        max-width: 960px;
+      }
+    }
+
+    @media (min-width: 1200px) {
+      .container-custom {
+        max-width: 1140px;
+      }
+    }
+
+    @media (min-width: 1400px) {
+      .container-custom {
+        max-width: 1320px;
+      }
+    }
+
+    /* Content styles */
+    .content {
+      background-color: #f9fbfd;
+      padding: 2rem;
+      border-radius: 1rem;
+      border: 1px solid #f5f5f5;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .content img {
+      display: block;
+      margin: 0 auto;
+    }
+
+    .content h1 {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+    }
+
+    .content p {
+      margin-bottom: 1rem;
+      font-size: 1.5rem;
+      color: #333;
+    }
+
+    .content b {
+      font-weight: 600;
+    }
+
+
+    /* Responsive text adjustments */
+    @media (max-width: 767.98px) {
+      body {
+        font-size: 12px;
+      }
+
+      h1 {
+        font-size: 18px;
+        font-weight: 600;
+      }
+
+      img {
+        width: 45%;
+      }
+
+      .btn {
+        font-size: 0.9rem;
+      }
+    }
+
+  </style>
+</head>
+<body>
+{% blocktrans with site_name=current_site.name site_domain=current_site.domain %}
+  <div class="container-custom">
+    <div class="content">
+      <div style="border:none">
+        <img
+          src="http://cdn.mcauto-images-production.sendgrid.net/21cdfbe9406550aa/f883182e-6305-4188-afd7-5cc22859dec7/5743x1680.png"
+          alt="Infinite Group Logo">
+      </div>
+      <br><br>
+      <b>Dear Valued Partner,</b>
+      <br><br>
+      Hope this email finds you well.
+      <br><br>
+      Thank you for verifying your registration to our platform! We’re absolutely delighted to welcome you to the Infinite Group and look forward to a successful partnership.
+      <br><br>
+      Attached to this email, you’ll find the partnership contract. We believe this will be the beginning of a fruitful journey, working closely together to achieve shared goals and great outcomes with you to create incredible opportunities for students worldwide.
+      <br><br>
+      If you have any questions or need further assistance, feel free to reach out to us we’ll be more than happy to support you every step of the way.
+      <br><br>
+      Thank you once again for becoming a part of the Infinite Group, and we wish you all the very best on this new journey with us!
+      <br><br>
+      Best Regards,<br>
+      Infinite Group Team<br>
+    </div>
+  </div>
+{% endblocktrans %}
+</body>
+</html>
+

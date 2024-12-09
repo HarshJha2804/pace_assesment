@@ -1,0 +1,36 @@
+{% extends "base_2.html" %}{% load static %}
+
+{% load i18n %}
+{% load allauth %}
+{% block title %}
+  {% trans "Verify Your Email Address" %}
+{% endblock title %}
+{% block content %}
+  <div class="">
+    <div class="row scrollable"
+         style="background-image: url('{% static 'images/blue-page.jpg' %}'); background-position: center">
+      <div class="col-md-7 m-auto py-5">
+        <div class="card shadow">
+          <div class="card-header">
+            <h3 class="card-title fw-bold text-success">{% trans "Thank you for signing up!" %}
+            </h3>
+          </div>
+          <div class="card-body">
+            <p>We have sent a welcome email to your registered email address. Please check your inbox and click on
+              verify email button to complete your onboarding process. If you do not receive the email shortly, kindly
+              check your spam or junk folder.</p>
+            <p class="text-dark fw-semibold">If you still haven’t received it after a few minutes, please reach out to
+              us
+              for assistance at <a href="mailto:helpdesk@infinitegroup.org"
+                                   target="_blank">hepldesk@infinitegroup.org</a>. We're here to help!</p>
+          </div>
+          {#          <div class="card-footer justify-content-between d-flex">#}
+          {#            <a href="https://iuniteportal.com/contact-us/" target="_blank" class="btn btn-blue">Contact</a>#}
+          {#            <a href="mailto:helpdesk@infinitegroup.org" target="_blank">hepldesk@infinitegroup.org</a>#}
+          {#          </div>#}
+        </div>
+      </div>
+    </div>
+  </div>
+  {% include "layout/footer_2.html" %}
+{% endblock content %}

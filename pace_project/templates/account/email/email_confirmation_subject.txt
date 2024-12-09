@@ -1,0 +1,4 @@
+{% load i18n %}
+{% autoescape off %}
+{% blocktrans %}Welcome to the Infinite Group - Your Partner for Global Student Recruitment{% endblocktrans %}
+{% endautoescape %}

@@ -1,0 +1,254 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %} {% load static %}
+{% block title %} Applications {% endblock title %}
+
+{% block main %}
+  <div class="row py-3">
+    <div class="col-md-12 m-auto">
+      <div class="card shadow">
+        <div class="card-header d-flex justify-content-between">
+          <h3 class="card-title fw-semibold">Applications</h3>
+        </div>
+        <div class="card-body border-bottom">
+          <form action="" method="get" up-autosubmit up-follow up-keep up-target="#_application_list">
+            <div class="row">
+              <div class="col-sm-6 col-md-2">
+                <div class="mb-3">
+                  <input type="text" class="form-control" name="student"
+                         value="{{ request.GET.student|default_if_none:'' }}"
+                         placeholder="Search by student">
+                </div>
+
+              </div>
+              <div class="col-sm-6 col-md-2">
+                <div class="mb-3">
+                  <input type="text" class="form-control" name="passport_number"
+                         value="{{ request.GET.passport_number|default:'' }}" placeholder="Passport Number">
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-2">
+                <div class="mb-3">
+                  <input type="text" class="form-control" name="course" value="{{ request.GET.course|default:'' }}"
+                         placeholder="Search by course">
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-2">
+                <div class="mb-3">
+                  <select type="text" class="form-select" name="country" data-searchable="true">
+                    <option value="" {% if request.GET.country == "" %}selected{% endif %}>Filter by Country</option>
+                    {% for item in countries %}
+                      <option value="{{ item.id }}"
+                              {% if request.GET.country == item.id|stringformat:"s" %}selected{% endif %}>{{ item }}</option>
+                    {% endfor %}
+                  </select>
+
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-2">
+                <div class="mb-3">
+                  <select type="text" class="form-select" name="university" data-searchable="true">
+                    <option value="" {% if request.GET.university == "" %}selected{% endif %}>Filter by University
+                    </option>
+                    {% for item in university %}
+                      <option value="{{ item.id }}"
+                              {% if request.GET.university == item.id|stringformat:"s" %}selected{% endif %}>{{ item }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-2">
+                <div class="mb-3">
+                  <select class="form-select" name="agent_name" data-searchable="true">
+                    <option value="" {% if request.GET.agent_name == "" %}selected{% endif %}>Filter By Partner</option>
+                    {% for item in partners %}
+                      <option value="{{ item.id }}"
+                              {% if request.GET.agent_name == item.id|stringformat:"s" %}selected{% endif %}>{{ item }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-2">
+                <div class="mb-3">
+                  <input type="text" class="form-control" name="agent_city"
+                         value="{{ request.GET.agent_city|default:'' }}"
+                         autocomplete="off" placeholder="Search by City">
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-2">
+                <div class="mb-3">
+                  <select class="form-select" name="current_status" data-searchable="true">
+                    <option value="" {% if request.GET.current_status == "" %}selected{% endif %}>Filter By Status
+                    </option>
+                    {% for item in statuses %}
+                      <option value="{{ item.id }}"
+                              {% if request.GET.current_status == item.id|stringformat:"s" %}selected{% endif %}>{{ item }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-2">
+                <div class="mb-3">
+                  <select class="form-select" name="intake" data-searchable="true">
+                    <option value="" {% if request.GET.intake == "" %}selected{% endif %}>Filter By Intake</option>
+                    {% for item in intakes %}
+                      <option value="{{ item.id }}"
+                              {% if request.GET.intake == item.id|stringformat:"s" %}selected{% endif %}>{{ item }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-2">
+                <div class="mb-3">
+                  <select class="form-select" name="year" data-searchable="true">
+                    <option value="" {% if request.GET.year == "" %}selected{% endif %}>Filter By Year</option>
+                    {% for item in years %}
+                      <option value="{{ item.id }}"
+                              {% if request.GET.year == item.id|stringformat:"s" %}selected{% endif %}>{{ item }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-1">
+                <div class="mb-3 d-flex">
+                  <a href="{% url 'core:application_list' %}" class="btn btn-info me-2">Clear Filters</a>
+                  <a href="?{{ request.GET.urlencode }}&export_csv=true" class="btn btn-success">Export CSV</a>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="table-responsive" id="application_list">
+          <table class="table card-table table-vcenter text-nowrap datatable table-striped">
+            <thead>
+            <tr>
+              <th class="w-1">S.N.</th>
+              <th>Action</th>
+              <th>Application Status</th>
+              <th>Student</th>
+              <th>Offer Id</th>
+              <th>Passport Number</th>
+              <th>Date Of Birth</th>
+              <th>Country</th>
+              <th>University</th>
+              <th>Course</th>
+              <th>Intake</th>
+              <th>Year</th>
+              <th>Partner</th>
+              <th>Partner City</th>
+              <th>Application Manager</th>
+              <th>Regional Marketing Head</th>
+              <th>Level</th>
+              <th>Offer Status</th>
+              <th>Medical Status</th>
+              <th>Funds Status</th>
+              <th>Interview Status</th>
+              <th>Created At</th>
+              <th>Applied On</th>
+              <th>Created By</th>
+              <th>Remarks</th>
+              <th>Stream</th>
+              <th>12th English Marks</th>
+              <th>Passing Year</th>
+              <th>Overall Percentage</th>
+              <th>12th Board</th>
+              <th>English Language</th>
+              <th>Academic Pathway</th>
+              <th>Conditions</th>
+              <th>Pending From Partner</th>
+              <th>Pending From IG Date</th>
+              <th>Application Submitted Date</th>
+              <th>Conditional offer received Date</th>
+              <th>UnConditional offer received Date</th>
+              <th>Fee Paid Date</th>
+              <th>Cas Received Date</th>
+              <th>Cas Applied Date</th>
+              <th>Rejected By IG Date</th>
+              <th>Visa Lodged Date</th>
+              <th>Visa Grant Date</th>
+              <th>Visa Refused Date</th>
+              <th>PreScreening Rejected Date</th>
+              <th>PreScreening Approved Date</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for object in object_list %}
+              <tr>
+                <td>{{ forloop.counter0|add:page_obj.start_index }}.</td>
+                <td>
+                  <a href="{% url 'core:update_application' pk=object.pk %}" class="btn btn-primary btn-sm">Update
+                    Status</a>
+                </td>
+                <td><span class="status text-bg-primary">{{ object.current_status|default_if_none:"-" }}</span></td>
+                <td><a href="{{ object.get_absolute_url }}">{{ object.student|title }}</a></td>
+                <td>{{ object.offer_id|default_if_none:"-" }}</td>
+                <td>{{ object.student.passport_number|default_if_none:"-" }}</td>
+                <td>{{ object.student.date_of_birth|default_if_none:"-" }}</td>
+                <td>{{ object.course.country|default_if_none:"-" }}</td>
+                <td>{{ object.course.university|default_if_none:"-" }}</td>
+                <td>{{ object.course|default_if_none:"-" }}</td>
+                <td>{{ object.intake|default_if_none:"-" }}</td>
+                <td>{{ object.year|default_if_none:"-" }}</td>
+                <td>{{ object.student.partner|default_if_none:"-" }}</td>
+                <td>{{ object.student.partner.city|default_if_none:"-" }}</td>
+                <td>{{ object.application_manager|default_if_none:"-" }}</td>
+                <td>
+                  {% for rm_target in rms %}
+                    {% if rm_target.university.id == object.course.university.id and rm_target.intake.id == object.intake.id and rm_target.year.id == object.year.id %}
+                      {{ rm_target.rm.user.name|default_if_none:"-" }}
+                      {% if not forloop.last and forloop.counter0|add:1 < rms|length %}, {% endif %}
+                    {% endif %}
+                  {% empty %}
+                    -
+                  {% endfor %}
+                </td>
+                <td>{{ object.course.level|default_if_none:"-" }}</td>
+                <td>{{ object.offer_status|default_if_none:"-" }}</td>
+                <td>{{ object.medical_status|default_if_none:"-" }}</td>
+                <td>{{ object.funds_status|default_if_none:"-" }}</td>
+                <td>{{ object.interview_status|default_if_none:"-" }}</td>
+                <td>{{ object.created|date:"Y-m-d" }}</td>
+                <td>{{ object.modified|date:"Y-m-d" }}</td>
+                <td>{{ object.created_by|default_if_none:"-" }}</td>
+                <td>
+                  {% with latest_remark=object.remarks.latest %}
+                    {{ latest_remark.message|default_if_none:"-" }}
+                  {% endwith %}
+                </td>
+                <td>{{ object.course.stream|default_if_none:"-" }}</td>
+                <td>{{ object.student.get_academic_object.twelfth_english_marks|default_if_none:"-" }}</td>
+                <td>{{ object.student.get_academic_object.passing_year|default_if_none:"-" }}</td>
+                <td>{{ object.student.get_academic_object.overall_marks|default_if_none:"-" }}</td>
+                <td>{{ object.student.get_academic_object.board|default_if_none:"-" }}</td>
+                <td>{{ object.student.get_academic_object.english_test_type|default_if_none:"-" }}</td>
+                <td>{{ object.student.get_academic_object.academic_pathway|default_if_none:"-" }}</td>
+                <td>
+                  {% for condition in object.conditions.all %}
+                    {{ condition.name }}{% if not forloop.last %}, {% endif %}
+                  {% endfor %}
+                </td>
+                <td>{{ object.get_pending_from_partner_date|date:"d-m-Y"|default:"-" }}</td>
+                <td>{{ object.get_pending_from_ig_date|date:"d-m-Y"|default:"-" }}</td>
+                <td>{{ object.get_submitted_date|date:"d-m-Y"|default:"-" }}</td>
+                <td>{{ object.get_conditional_letter_date|date:"d-m-Y"|default:"-" }}</td>
+                <td>{{ object.get_unconditional_letter_date|date:"d-m-Y"|default:"-" }}</td>
+                <td>{{ object.get_fee_paid_date|date:"d-m-Y"|default:"-" }}</td>
+                <td>{{ object.get_cas_received_date|date:"d-m-Y"|default:"-" }}</td>
+                <td>{{ object.get_cas_applied_date|date:"d-m-Y"|default:"-" }}</td>
+                <td>{{ object.get_rejected_by_ig_date|date:"d-m-Y"|default:"-" }}</td>
+                <td>{{ object.get_visa_lodged_date|date:"d-m-Y"|default:"-" }}</td>
+                <td>{{ object.get_visa_granted_date|date:"d-m-Y"|default:"-" }}</td>
+                <td>{{ object.get_visa_refused_date|date:"d-m-Y"|default:"-" }}</td>
+                <td>{{ object.get_prescreening_rejected_date|date:"d-m-Y"|default:"-" }}</td>
+                <td>{{ object.get_prescreening_approved_date|date:"d-m-Y"|default:"-" }}</td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <div class="card-footer d-flex align-items-center" up-hungry>
+          {% include 'utils/pagination.html' %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

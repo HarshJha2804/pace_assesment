@@ -1,0 +1,19 @@
+# PRECAUTION: avoid production dependencies that aren't in development
+
+-r base.txt
+
+gunicorn==22.0.0  # https://github.com/benoitc/gunicorn
+psycopg[c]==3.1.18  # https://github.com/psycopg/psycopg
+
+# Django
+# ------------------------------------------------------------------------------
+django-anymail==10.3  # https://github.com/anymail/django-anymail
+
+# AWS SPACE
+boto3==1.34.145 # https://pypi.org/project/boto3/
+django-storages==1.14.4
+
+
+# Email
+# -------------------------------------------------------------------------------
+sendgrid==6.11.0

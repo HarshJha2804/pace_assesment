@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Application Message</title>
+</head>
+<body>
+    <p>Dear Partner,</p>
+
+    <p>We would like to inform you that a new message has been received to the application for <strong>{{ application.student }}</strong>.</p>
+
+    <p>
+        <strong>Passport Number:</strong> {{ application.student.passport_number }}<br>
+        <strong>University:</strong> {{ application.course.university }}<br>
+        <strong>Course:</strong> {{ application.course }}<br>
+    </p>
+
+    <p><strong>Message:</strong></p>
+    <blockquote style="margin: 10px 0; padding: 10px; border-left: 4px solid #ccc; background-color: #f9f9f9;">
+        {{ remark }}
+    </blockquote>
+
+    <p>Please visit the portal for more details.</p>
+
+    <p>Best regards,<br>The Team Infinite Group</p>
+</body>
+</html>

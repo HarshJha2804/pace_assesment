@@ -1,0 +1,255 @@
+{% extends "base.html" %}{% load static %}
+{% block title %} {{ object.name }}
+{% endblock title %}
+
+{% block content %}
+  <div class="row py-3">
+    {% if object.role.name == 'Partner' %}
+      <div class="col-md-12 m-auto">
+        <div class="card shadow">
+          <div class="card-header d-flex justify-content-between">
+            <h3 class="card-title fw-semibold">{{ object.name }}</h3>
+            {% if object == request.user %}
+              <div class="row">
+              </div>
+            {% endif %}
+          </div>
+          <div class="card-body">
+            <div class="datagrid">
+              <div class="datagrid-item">
+                <div class="datagrid-content">
+                  <div class="d-flex align-items-center">
+                    <span class="avatar" style="background-image: url({{ object.get_avatar_url }})">
+                        {% if not object.get_avatar_url %}
+                          {{ object.get_initials }}
+                        {% endif %}
+                    </span>
+                  </div>
+                </div>
+                <div class="datagrid-title">Profile</div>
+              </div>
+
+              <div class="datagrid-item">
+                <div class="datagrid-title"> name</div>
+                <div class="datagrid-content">{{ object.partner.contact_name }}</div>
+              </div>
+              <div class="datagrid-item">
+                <div class="datagrid-title">Email</div>
+                <div class="datagrid-content">{{ object.email|default_if_none:'-' }}</div>
+              </div>
+              <div class="datagrid-item">
+                <div class="datagrid-title">Mobile Number</div>
+                <div class="datagrid-content"> {{ object.partner.get_mobile_number|default_if_none:'-' }}</div>
+              </div>
+              <div class="datagrid-item">
+                <div class="datagrid-title">Whatsapp Number</div>
+                <div class="datagrid-content">{{ object.partner.get_whatsapp_number|default_if_none:'-' }}</div>
+              </div>
+              <div class="datagrid-item">
+                <div class="datagrid-title">Company Name</div>
+                <div class="datagrid-content">{{ object.partner.company_name|default_if_none:'-' }}</div>
+              </div>
+              <div class="datagrid-item">
+                <div class="datagrid-title">Registered Company Name</div>
+                <div class="datagrid-content">{{ object.partner.legal_name|default_if_none:'-' }}</div>
+              </div>
+              <div class="datagrid-item">
+                <div class="datagrid-title">Company type</div>
+                <div class="datagrid-content">{{ object.partner.company_type|default_if_none:'-' }}</div>
+              </div>
+              <div class="datagrid-item">
+                <div class="datagrid-title">Company Registered Address</div>
+                <div class="datagrid-content">
+                  {{ object.partner.address|default_if_none:"-"|title }}
+                </div>
+              </div>
+              <div class="datagrid-item">
+                <div class="datagrid-title">Country</div>
+                <div class="datagrid-content">
+                  {{ object.partner.country|default_if_none:"-"|title }}
+                </div>
+              </div>
+              <div class="datagrid-item">
+                <div class="datagrid-title">State</div>
+                <div class="datagrid-content">
+                  {{ object.partner.state|default_if_none:"-"|title }}
+                </div>
+              </div>
+              <div class="datagrid-item">
+                <div class="datagrid-title">City</div>
+                <div class="datagrid-content">
+                  {{ object.partner.city|default_if_none:"-"|title }}
+                </div>
+              </div>
+              <div class="datagrid-item">
+                <div class="datagrid-title">pincode</div>
+                <div class="datagrid-content">
+                  {{ object.partner.pincode|default_if_none:"-"|title }}
+                </div>
+              </div>
+              <div class="datagrid-item">
+                <div class="datagrid-title">Profile Picture</div>
+                <div class="datagrid-content">
+                  {% if object == request.user %}
+                    <a href="{% url 'users:upload_logo_view' %}" class="btn btn-primary">Update Logo</a>
+                  {% else %}
+                    <img src="{{ object.avatar.url }}" alt="User Avatar" class="img-thumbnail"/>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer">
+          </div>
+        </div>
+      </div>
+    {% else %}
+      <div class="col-md-10 m-auto">
+        <div class="card shadow">
+          <div class="card-header d-flex justify-content-between">
+            <h3 class="card-title fw-semibold">{{ object.name }}</h3>
+            {% if object == request.user %}
+              <div class="row">
+                <div class="col-sm-12">
+                  <a class="btn btn-primary" href="{% url 'users:update' %}" role="button">My Info</a>
+                  <a class="btn btn-primary"
+                     href="{% url 'account_email' %}"
+                     role="button">E-Mail</a>
+                  <a class="btn btn-primary"
+                     href="{% url 'mfa_index' %}"
+                     role="button">MFA</a>
+                </div>
+              </div>
+            {% endif %}
+          </div>
+          <div class="card-body">
+            <div class="datagrid">
+              <div class="datagrid-item">
+                <div class="datagrid-content">
+                  <div class="d-flex align-items-center">
+                  <span class="avatar avatar "
+                        style="background-image: url({{ request.user.get_avatar_url }})">
+                  {% if not object.get_avatar_url %}
+                    {{ object.get_initials }}
+                  {% endif %}
+                  </span>
+                  </div>
+                </div>
+                <div class="datagrid-title">Profile</div>
+
+              </div>
+              <div class="datagrid-item">
+                <div class="datagrid-title">name</div>
+                <div class="datagrid-content">{{ object.name }}</div>
+              </div>
+              <div class="datagrid-item">
+                <div class="datagrid-title">Role</div>
+                <div class="datagrid-content">{{ object.role|default_if_none:'-' }}</div>
+              </div>
+              <div class="datagrid-item">
+                <div class="datagrid-title">Email</div>
+                <div class="datagrid-content">{{ object.email|default_if_none:'-' }}</div>
+              </div>
+              <div class="datagrid-item">
+                <div class="datagrid-title">Mobile Number</div>
+                <div class="datagrid-content"> {{ object.employee.get_mobile_number|default_if_none:'-' }}</div>
+              </div>
+              <div class="datagrid-item">
+                <div class="datagrid-title">Whatsapp Number</div>
+                <div class="datagrid-content">{{ object.employee.get_whatsapp_number|default_if_none:'-' }}</div>
+              </div>
+              <div class="datagrid-item">
+                <div class="datagrid-title">Emergency Mobile Number</div>
+                <div class="datagrid-content">
+                  {% if object.employee.emergency_mobile_number %}
+                    {{ object.employee.emergency_mobile_number|default_if_none:"-" }}
+                  {% else %}
+                    -
+                  {% endif %}
+                </div>
+              </div>
+              <div class="datagrid-item">
+                <div class="datagrid-title">Emergency Contact Relation</div>
+                <div class="datagrid-content">
+                  {% if  object.employee.emergency_contact_relation %}
+                    {{ object.employee.emergency_contact_relation|title|default_if_none:'-' }}
+                  {% else %}
+                    -
+                  {% endif %}
+                </div>
+              </div>
+              <div class="datagrid-item">
+                <div class="datagrid-title">Assigned Country</div>
+                <div class="datagrid-content">
+                  {{ object.employee.assigned_country|default_if_none:"-" }}
+                </div>
+              </div>
+              {% if object.employee.is_application_manager %}
+                <div class="datagrid-item">
+                  <div class="datagrid-title">Is Head</div>
+                  <div class="datagrid-content">
+                    {% if object.employee.is_head %}
+                      <i class='bx bxs-check-circle text-success fs-2'></i>
+                    {% else %}
+                      <i class='bx bxs-x-circle text-red fs-2'></i>
+                    {% endif %}
+                  </div>
+                </div>
+                <div class="datagrid-item">
+                  <div class="datagrid-title">Will Process Application</div>
+                  <div class="datagrid-content">
+                    {% if object.employee.will_process_application %}
+                      <i class='bx bxs-check-circle text-success fs-2'></i>
+                    {% else %}
+                      <i class='bx bxs-x-circle text-red fs-2'></i>
+                    {% endif %}
+                  </div>
+                </div>
+              {% endif %}
+              <div class="datagrid-item">
+                <div class="datagrid-title">On Leave</div>
+                <div class="datagrid-content">
+                  {% if object.employee.is_on_leave %}
+                    <span class="status status-danger">Yes</span>
+                  {% else %}
+                    <span class="status status-success">No</span>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-header  d-flex justify-content-between">
+            <h3 class="card-title ">Assigned Universities</h3>
+          </div>
+
+
+          <div class="table-responsive">
+            <table class="table table-vcenter card-table shadow-sm">
+              <thead>
+              <tr>
+                <th>Name</th>
+                <th>Status</th>
+              </tr>
+              </thead>
+              {% for university in object.employee.assigned_universities.all %}
+                <tr>
+                  <td>{{ university.name }}</td>
+                  <td>
+                    {% if university.is_active %}
+                      <span class="status status-green">Active</span>
+                    {% else %}
+                      <span class="status status-red">Inactive</span>
+                    {% endif %}
+                  </td>
+                </tr>
+              {% endfor %}
+            </table>
+          </div>
+
+          <div class="card-footer">
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+{% endblock content %}

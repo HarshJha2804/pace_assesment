@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %} {% load static %}
+{% block title %} Delete confirmation item {% endblock title %}
+
+{% block main %}
+  <div class="row py-3">
+    <div class="col-md-10 m-auto">
+      <div class="card shadow">
+        <div class="card-header">
+          <h3 class="card-title fw-semibold">
+            Confirmation
+          </h3>
+        </div>
+        <div class="card-body">
+          <form action="" method="post">
+            {% csrf_token %}
+            <div>
+               <p class="text-red">Are you sure you want to delete <span class="fw-semibold">"{{ object }}"</span>?</p>
+              {{ form }}
+            </div>
+            <div class="">
+              <button type="submit" class="btn btn-danger float-end">Delete</button>
+            </div>
+          </form>
+        </div>
+        <div class="card-footer"></div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

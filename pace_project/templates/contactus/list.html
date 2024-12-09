@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %} {% load static %}
+{% block title %} Contact Us{% endblock title %}
+
+{% block main %}
+  <div class="row py-3">
+    <div class="col-md-12 m-auto">
+      <div class="card shadow">
+        <div class="card-header d-flex justify-content-between">
+          <h3 class="card-title fw-semibold">Contact Us</h3>
+          {% if not request.user.role.name == 'Partner Account Manager' %}
+            <a href="{% url 'core:contact_us' %}" class="btn btn-dark">Add Contact Us</a>
+          {% endif %}
+        </div>
+        <div class="table-responsive">
+          <table class="table card-table table-vcenter text-nowrap datatable" id="student_list">
+            <thead>
+            <tr>
+              <th class="w-1">S.N.</th>
+              <th>action</th>
+              <th>Send By</th>
+              <th>Subject</th>
+              <th>Descriptions</th>
+              <th>Created at</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for object in object_list %}
+              <tr>
+                <td>
+                  <span class="text-secondary">{{ forloop.counter0|add:page_obj.start_index }}</span>.
+                </td>
+                <td>
+                  {% if object.status == 'Replied' %}
+                    <button class="btn btn-primary" disabled>Replied</button>
+                  {% else %}
+                    <a href="{% url 'core:reply_view' contact_us_id=object.id %}" class="btn btn-primary">Reply</a>
+                  {% endif %}
+                </td>
+                <td>{{ object.send_by }}</td>
+                <td>
+                  {{ object.subject }}
+                </td>
+
+                <td>{{ object.description|safe|default_if_none:'-' }}</td>
+                <td>{{ object.created }}</td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <div class="card-footer d-flex align-items-center" up-hungry>
+          {% include 'utils/pagination.html' %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,399 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %} {% load static %}
+{% block title %} {{ object }} {% endblock title %}
+{% block main %}
+  <div class="row py-3">
+    <div class="col-md-12 m-auto">
+      <div class="card shadow">
+        <div class="card-header justify-content-between">
+          <a href="{{ object.get_list_url }}" class="btn btn-outline-dark">
+            <i class='bx bx-left-arrow-alt fs-2 me-1' ></i> Go Back
+          </a>
+          <h3 class="card-title">{{ object }}</h3>
+          <a href="{% url 'paceapp:update_partner' pk=object.pk %}" class="btn btn-dark">Update</a>
+        </div>
+        <div class="card-body">
+          <div class="datagrid">
+            <div class="datagrid-item">
+              <div class="datagrid-title">Company Name</div>
+              <div class="datagrid-content">{{ object }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Registered Company Name</div>
+              <div class="datagrid-content">{{ object.legal_name|default_if_none:'-' }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Owner Name</div>
+              <div class="datagrid-content">{{ object.owner_name|default_if_none:'-' }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Owner Email</div>
+              <div class="datagrid-content">{{ object.owner_email|default_if_none:'-' }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Owner Mobile Number</div>
+              <div class="datagrid-content">{{ object.owner_mobile_number|default_if_none:'-' }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Contact Person Name</div>
+              <div class="datagrid-content">{{ object.contact_name|default_if_none:'-' }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Email</div>
+              <div class="datagrid-content">{{ object.email|default_if_none:'-' }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Mobile No.</div>
+              <div class="datagrid-content">{{ object.get_mobile_number|default_if_none:'-' }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Whatsapp No.</div>
+              <div class="datagrid-content">{{ object.get_whatsapp_number|default_if_none:'-' }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Company Type</div>
+              <div class="datagrid-content">{{ object.company_type|default_if_none:'-' }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Office Type</div>
+              <div class="datagrid-content">{{ object.office_type|default_if_none:'-' }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Address</div>
+              <div class="datagrid-content">{{ object.address|default_if_none:'-' }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Country</div>
+              <div class="datagrid-content">{{ object.country|default_if_none:'-' }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">State</div>
+              <div class="datagrid-content">{{ object.state|default_if_none:'-' }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">City</div>
+              <div class="datagrid-content">{{ object.city|default_if_none:'-' }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Pincode</div>
+              <div class="datagrid-content">{{ object.pincode|default_if_none:'-' }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Date of Commencement</div>
+              <div class="datagrid-content">{{ object.date_of_commencement|default_if_none:'-' }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Logo</div>
+              <div class="datagrid-content"><a href="{{ object.get_logo_url }}" target="_blank">View Logo</a></div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Website</div>
+              <div class="datagrid-content">
+                <a href="{{ object.website|default_if_none:'#' }}" target="_blank">Visit</a>
+              </div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Onboarding Status</div>
+              <div class="datagrid-content">
+                <span class="status">{{ object.status|title }}</span>
+              </div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Onboarding Completed</div>
+              <div class="datagrid-content">
+                {% if object.onboarding_completed %}
+                  <i class='bx bxs-check-circle text-success fs-2'></i>
+                {% else %}
+                  <i class='bx bxs-x-circle text-red fs-2'></i>
+                {% endif %}
+              </div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Active Status</div>
+              <div class="datagrid-content">
+                {% if object.is_active %}
+                  <span class="status status-green">Active</span>
+                {% else %}
+                  <span class="status">Inactive</span>
+                {% endif %}
+              </div>
+            </div>
+           <div class="datagrid-item">
+              <div class="datagrid-title">Blacklisted</div>
+              <div class="datagrid-content">
+                {% if object.blacklisted %}
+                  <i class='bx bxs-check-circle text-success fs-2'></i>
+                {% else %}
+                  <i class='bx bxs-x-circle text-red fs-2'></i>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <div class="btn-list">
+            <a class="btn btn-primary" href="{% url 'users:set_partner_followup' pk=object.pk %}" up-layer="new"
+               up-target="#follow_up_id">Initiate Follow-Up</a>
+            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modal-confirmation">Mark as Not Interested</button>
+            <a class="btn btn-green" href="#" data-bs-toggle="modal" data-bs-target="#modal-interested-confirmation">Set as Interested</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-12">
+      <div class="card mt-2 shadow">
+        <div class="card-header">
+          <h3 class="card-title">Follow-Ups</h3>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-vcenter card-table">
+            <thead>
+            <tr>
+              <th>Date</th>
+              <th>Time</th>
+              <th>Contact Method</th>
+              <th>Note</th>
+              <th>Created By</th>
+              <th>Completion Status</th>
+              <th>Created At</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in follow_ups %}
+              <tr>
+                <td>{{ item.follow_up_date }}</td>
+                <td>{{ item.follow_up_time|default_if_none:"-" }}</td>
+                <td>{{ item.contact_method|default_if_none:"-" }}</td>
+                <td>{{ item.follow_up_note|default_if_none:"-" }}</td>
+                <td>
+                  <div class="d-flex align-items-center">
+                    {% if item.created_by %}
+                      <span class="avatar avatar-sm avatar-rounded me-2"
+                            style="background-image: url({{ item.created_by.get_avatar_url }})">
+                    {% if not item.created_by.get_avatar_url %}
+                      {{ item.created_by.get_initials }}
+                    {% endif %}
+                    </span>
+                      <span>
+                    {% if item.created_by == request.user %}
+                      You
+                    {% else %}
+                      {{ item.created_by.name }}
+                    {% endif %}
+                    </span>
+                    {% endif %}
+                  </div>
+                </td>
+                <td>
+                  {% if item.is_completed %}
+                    <span class="status status-green">Yes</span>
+                  {% else %}
+                    <span class="status">No</span>
+                  {% endif %}
+                </td>
+                <td>{{ item.created }}</td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      <div class="card-footer"></div>
+      </div>
+    </div>
+    <div class="col-lg-12">
+      <div class="card mt-2 shadow">
+        <div class="card-header justify-content-between">
+          <h3 class="card-title">Branches</h3>
+          <a href="#" class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#modal-simple">Add Branch</a>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-vcenter card-table">
+            <thead>
+            <tr>
+              <th>S.N.</th>
+              <th>Name</th>
+              <th>Country</th>
+              <th>State</th>
+              <th>City</th>
+              <th>Pincode</th>
+              <th>Address</th>
+              <th>Head Office</th>
+              <th>Status</th>
+              <th class="w-1" colspan="2">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for branch in object.partnerbranch_set.all %}
+              <tr>
+                <td>{{ forloop.counter }}.</td>
+                <td>{{ branch }}</td>
+                <td>{{ branch.country|default_if_none:'-' }}</td>
+                <td>{{ branch.state|default_if_none:'-' }}</td>
+                <td>{{ branch.city|default_if_none:'-' }}</td>
+                <td>{{ branch.pincode|default_if_none:'-' }}</td>
+                <td>{{ branch.address|default_if_none:'-' }}</td>
+                <td>
+                  {% if branch.is_head_office %}
+                    Yes
+                  {% else %}
+                    No
+                  {% endif %}
+                </td>
+                <td>
+                  {% if branch.is_active %}
+                    <span class="status status-green">Active</span>
+                  {% else %}
+                    <span class="status">Inactive</span>
+                  {% endif %}
+                </td>
+                <td>
+                  <a
+                    href="{% url 'paceapp:update_partner_branch' pk=branch.pk %}"
+                    class="btn btn-sm btn-primary" up-layer="new" up-target="#branch_update_id">Update</a>
+                </td>
+                <td>
+                  <a href="{% url 'paceapp:delete_partner_branch' pk=branch.pk %}"
+                     class="btn btn-danger btn-sm">Delete</a>
+                </td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <div class="card-footer"></div>
+      </div>
+    </div>
+    <div class="col-lg-12">
+      <div class="card mt-2 shadow">
+        <div class="card-header justify-content-between">
+          <h3 class="card-title">Contacts</h3>
+          <a href="#" class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#modal-Contact">Add
+            Contact</a>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-vcenter card-table">
+            <thead>
+            <tr>
+              <th>S.N.</th>
+              <th>Branch</th>
+              <th>Contact Type</th>
+              <th>Contact Value</th>
+              <th>Status</th>
+              <th class="w-1" colspan="2">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in object.partnercommunication_set.all %}
+              <tr>
+                <td>{{ forloop.counter }}.</td>
+                <td>{{ item.branch|default_if_none:"-" }}</td>
+                <td>{{ item.communication_type|title }}</td>
+                <td>{{ item.get_contact_value }}</td>
+                <td>
+                  {% if item.is_active %}
+                    <span class="status status-green">Active</span>
+                  {% else %}
+                    <span class="status">Inactive</span>
+                  {% endif %}
+                </td>
+                <td>
+                  <a
+                    href="{% url 'paceapp:update_partner_contact' pk=item.pk %}"
+                    class="btn btn-sm btn-primary" up-layer="new" up-target="#communication_card_id">Update</a>
+                </td>
+                <td>
+                  <a href="{% url 'paceapp:delete_partner_contact' pk=item.pk %}"
+                     class="btn btn-danger btn-sm">Delete</a>
+                </td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <div class="card-footer"></div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block modal %}
+  <div class="modal modal-blur fade" id="modal-simple" tabindex="-1" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog  modal-lg modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Add Branch</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form action="" method="post" id="partner_branch_form">
+            {% csrf_token %}
+            {% crispy form %}
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary" form="partner_branch_form">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--contact detail Modal-->
+
+  <div class="modal modal-blur fade" id="modal-Contact" tabindex="-1" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog  modal-lg modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Add Contact</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form action="{% url 'paceapp:save_partner_contact' pk=object.pk %}" method="post"
+                id="partner_communication_form">
+            {% csrf_token %}
+            {% crispy partner_communication_form %}
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary" form="partner_communication_form">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+<!--mark as Not Interested Modal-->
+  {% include 'utils/confirmation_modal.html' %}
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var communicationTypeField = document.querySelector('#id_communication_type');
+      var countryCodeDiv = document.querySelector('#div_id_country_code');
+      var communicationValueLabel = document.querySelector('label[for="id_communication_value"]');
+
+      function updateFields() {
+        var selectedValue = communicationTypeField.value;
+        if (selectedValue === 'whatsapp') {
+          countryCodeDiv.style.display = 'block';
+          communicationValueLabel.textContent = 'Contact WhatsApp';
+          communicationValueField.placeholder = 'Enter WhatsApp number';
+        } else if (selectedValue === 'mobile') {
+          countryCodeDiv.style.display = 'block';
+          communicationValueLabel.textContent = 'Contact Mobile';
+          communicationValueField.placeholder = 'Enter mobile number';
+        } else if (selectedValue === 'email') {
+          countryCodeDiv.style.display = 'none';
+          communicationValueLabel.textContent = 'Contact Email';
+          communicationValueField.placeholder = 'Enter email address';
+        } else {
+          countryCodeDiv.style.display = 'block';
+          communicationValueLabel.textContent = 'Communication Value';
+          communicationValueField.placeholder = '';
+        }
+      }
+
+      communicationTypeField.addEventListener('change', updateFields);
+
+      // Initial call to set the correct state on page load
+      updateFields();
+    });
+  </script>
+{% endblock %}

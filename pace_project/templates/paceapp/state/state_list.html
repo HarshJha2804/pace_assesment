@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %} {% load static %}
+{% block title %} States {% endblock title %}
+
+{% block main %}
+<div class="row py-3">
+  <div class="col-md-12 m-auto">
+    <div class="card shadow">
+      <div class="card-header d-flex justify-content-between">
+        <h3 class="card-title fw-semibold">All State</h3>
+        <a href="{% url 'paceapp:add_state' %}" class="btn btn-dark">Add State</a>
+      </div>
+      <div class="card-body border-bottom">
+        <form action="{% url 'paceapp:state_list' %}" method="get" up-autosubmit up-follow up-keep
+              up-target="#state_list">
+          <div class="row">
+            <div class="col-sm-6 col-md-2">
+              <div class="mb-3">
+                <input type="text" class="form-control" name="name"
+                       autocomplete="off" placeholder="Name">
+              </div>
+            </div>
+            <div class="col-sm-6 col-md-2">
+              <div class="mb-3">
+                <select type="text" class="form-select" name="country_id" data-searchable="true">
+                  <option value="" selected>Filter By Country</option>
+                  {% for item in countries %}
+                  <option value="{{ item.id }}">{{ item }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+          <div class="col-sm-6 col-md-2">
+              <div class="mb-3">
+                <select id="region-select" class="form-select" name="region_id" data-searchable="true">
+                  <option value="" selected>Filter By Region</option>
+                  {% for item in regions %}
+                  <option value="{{ item.id }}">{{ item }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+            </div>
+            <div class="col-sm-6 col-md-2">
+              <div class="mb-3">
+                <select type="text" name="status" class="form-select" required>
+                  <option disabled selected>Status</option>
+                  <option value="True">Active</option>
+                  <option value="False">Inactive</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-sm-6 col-md-1">
+              <div class="mb-3 d-flex justify-content-between">
+                <a href="{% url 'paceapp:state_list' %}"
+                   class="btn btn-outline-yellow">
+                  Clear Filters
+                </a>
+{#                <a id="export_user_data" class="btn btn-purple ms-1">Export CSV</a>#}
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="table-responsive">
+        <table class="table card-table table-vcenter text-nowrap datatable" id="state_list">
+          <thead>
+          <tr>
+            <th class="w-1">S.N.
+            </th>
+            <th>Name</th>
+            <th>Country</th>
+            <th>Region</th>
+            <th>Created</th>
+            <th>Modified</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+          </thead>
+          <tbody>
+          {% for object in object_list %}
+          <tr>
+            <td>
+              <span class="text-secondary">{{ forloop.counter0|add:page_obj.start_index }}</span>.
+            </td>
+            <td>{{ object }}</td>
+            <td>
+              {{ object.country }}
+            </td>
+            <td>
+              {{object.region|default_if_none:'-' }}
+
+            </td>
+            <td>
+              {{ object.created }}
+            </td>
+            <td>
+              {{ object.modified }}
+            </td>
+
+            <td>
+              {% if object.is_active %}
+              <span class="status status-green">Active</span>
+              {% else %}
+              <span class="status">Inactive</span>
+              {% endif %}
+            </td>
+            <td colspan="2">
+              <a href="{% url 'paceapp:update_state' pk=object.pk %}" class="btn btn-primary btn-sm">Update</a>
+{#              <a href="{% url 'paceapp:delete_state' pk=object.pk %}" class="btn btn-danger btn-sm">Delete</a>#}
+            </td>
+          </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div class="card-footer d-flex align-items-center" up-hungry>
+        {% include 'utils/pagination.html' %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

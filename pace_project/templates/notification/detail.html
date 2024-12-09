@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}
+  {{ notification.verb }}
+{% endblock title %}
+{{ notification.verb }}
+{% block main %}
+  <div class="row">
+    <div class="col-md-6 m-auto pt-3">
+      <div class="card shadow">
+        <div class="card-header">{{ notification.verb }}</div>
+        <div class="card-body">
+          <div>{{ notification.description|default_if_none:"" }}</div>
+          <div>
+            {% if notification.target %}
+              {{ notification.target_object_content_type }}
+              {% if notification.target_object.get_absolute_url %}
+                <a
+                  href="{{ notification.target_object.get_absolute_url }}">{{ notification.target_object|default_if_none:"" }}</a>
+              {% else %}
+                {{ notification.target_object|default_if_none:"" }}
+              {% endif %}
+            {% endif %}
+          </div>
+          <div>
+            {% if notification.action_object %}
+              {{ notification.action_object_content_type.model|title }} -
+              {% if notification.action_object.get_absolute_url %}
+                <a
+                  href="{{ notification.action_object.get_absolute_url }}">{{ notification.action_object|default_if_none:'' }}</a>
+              {% else %}
+                {{ notification.action_object|default_if_none:'' }}
+              {% endif %}
+            {% endif %}
+          </div>
+          <div>
+            {{ notification.data|default_if_none:"" }}
+          </div>
+        </div>
+        <div class="card-footer">{{ notification.timestamp }}</div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

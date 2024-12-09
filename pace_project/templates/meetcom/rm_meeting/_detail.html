@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block title %} {{ object.subject }} {% endblock title %}
+{% block main %}
+  <div class="row py-3">
+    <div class="col-md-10 m-auto">
+      <div class="card shadow mb-4">
+        <div class="card-body">
+          <a href="{% url 'meetcom:rm_meeting_update' pk=object.pk %}" class="btn btn-primary">Edit Meeting</a>
+          <a href="{% url 'meetcom:rm_meeting_list' %}" class="btn btn-secondary">Go Back</a>
+        </div>
+        <div class="card-body">
+          <div class="datagrid">
+            <div class="datagrid-item">
+              <div class="datagrid-title">Subject</div>
+              <div class="datagrid-content">{{ object.subject }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Description</div>
+              <div class="datagrid-content">{{ object.description|default:"No description" }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Scheduled Date</div>
+              <div class="datagrid-content">{{ object.scheduled_date|date:"F j, Y, g:i a" }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Status</div>
+              <div class="datagrid-content">
+                {% if object.status == 'scheduled' %}
+                  <span class="status status-blue">Scheduled</span>
+                {% elif object.status == 'completed' %}
+                  <span class="status status-green">Completed</span>
+                {% elif object.status == 'cancelled' %}
+                  <span class="status status-red">Cancelled</span>
+                {% elif object.status == 'postponed' %}
+                  <span class="status status-yellow">Postponed</span>
+                {% else %}
+                  <span class="status status-gray">Unknown</span>
+                {% endif %}
+              </div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Assigned To</div>
+              <div class="datagrid-content">
+                {% if object.assigned_to.all %}
+                  <ul>
+                    {% for user in object.assigned_to.all %}
+                      <li>{{ user.name }}</li>
+                    {% endfor %}
+                  </ul>
+                {% else %}
+                  <span>No team members assigned</span>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

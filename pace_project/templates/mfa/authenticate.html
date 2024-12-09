@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load allauth %}
+{% block head_title %}
+  {% trans "Sign In" %}
+{% endblock head_title %}
+{% block content %}
+  <div class="row mt-3">
+    <div class="col-md-5 m-auto">
+      <div class="card shadow">
+        <div class="card-header text-center">
+          {% element h2 %}
+            {% trans "Two-Factor Authentication" %}
+          {% endelement %}
+        </div>
+        <div class="card-body">
+          <p>
+            {% blocktranslate %}Your account is protected by two-factor authentication. Please enter an authenticator
+              code:{% endblocktranslate %}
+          </p>
+          {% url 'mfa_authenticate' as action_url %}
+          <form method="post" action="{{ action_url }}">
+            <div class="mb-3">
+              {% csrf_token %}
+              {% element fields form=form unlabeled=True %}
+              {% endelement %}
+            </div>
+            <div class="d-flex justify-content-between mt-4">
+              {% url "account_login" as login_url %}
+              <a href="{{ login_url }}" class="btn btn-secondary">
+                {% trans "Cancel" %}
+              </a>
+              <button type="submit" class="btn btn-primary">
+                {% trans "Continue" %}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}

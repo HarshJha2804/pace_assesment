@@ -1,0 +1,287 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %} {% load static %}
+{% block title %} Data Management Officer DashBoard {% endblock title %}
+{% block main %}
+  <div class="row rounded  mb-5  py-3">
+
+    <div class="col-md-12 mb-4">
+      <div class="card shadow shadow-sm" style="background-color: #38409a!important;">
+        <div class="card-header">
+          <h2 class="card-title fw-semibold text-light">Data Management Officer Dashboard</h2>
+        </div>
+        <div class="card-body">
+          <div class="row row-cards m-2 p-3 gx-4">
+            <div class="col-sm-6 col-lg-3 ">
+              <div style="border-width: 6px; border-radius: 10px"
+                   class="card card-sm border-3 border-start-5 border-top-0 border-end-0 border-bottom-0 border-primary">
+                <div class="py-3 px-3 rounded-5">
+                  <div class="row m-0">
+                    <div class="col d-flex flex-column gap-2">
+                      <div class="d-flex flex-row justify-content-between align-items-center">
+                        <div class="d-flex flex-column gap-2">
+                          <div class="fw-medium fs-4">
+                            Active Countries
+                          </div>
+                          <div class="text-primary-emphasis fs-1">
+                            <a
+                              href='{% url 'paceapp:active_country_list' %}?filter=active-country-for-university'>{{ active_country_for_university }}</a>
+                          </div>
+                        </div>
+                        <div class="p-3 bg-primary rounded-5">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                               stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"/> <!-- Globe outline -->
+                            <path d="M2 12h20"/> <!-- Equator line -->
+                            <path d="M12 2a10 10 0 0 1 0 20"/> <!-- Meridian line -->
+                            <path d="M12 2a10 10 0 0 0 0 20"/> <!-- Opposite Meridian -->
+                            <circle cx="12" cy="8" r="2" fill="currentColor"/> <!-- Map pin marker -->
+                            <path d="M12 10v4"/> <!-- Pin stem -->
+                          </svg>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6 col-lg-3 ">
+              <div style="border-width: 6px; border-radius: 10px"
+                   class="card card-sm border-3 border-start-5 border-top-0 border-end-0 border-bottom-0 border-teal ">
+                <div class="py-3 px-3 rounded-5">
+                  <div class="row m-0">
+                    <div class="col d-flex flex-column gap-2">
+                      <div class="d-flex flex-row justify-content-between align-items-center">
+                        <div class="d-flex flex-column gap-2">
+                          <div class="fw-medium fs-4">
+                            Total Projects
+                          </div>
+                          <div class="text-teal  fs-1">
+                            <a href="{% url 'paceapp:university_list' %}"
+                               class="text-teal">{{ total_project }}</a>
+                          </div>
+                        </div>
+                        <div class="p-3 bg-teal  rounded-5">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                               stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                               class="icon icon-tabler icons-tabler-outline icon-tabler-file-report">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                            <path d="M17 17m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"/>
+                            <path d="M17 13v4h4"/>
+                            <path d="M12 3v4a1 1 0 0 0 1 1h4"/>
+                            <path d="M11.5 21h-6.5a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v2m0 3v4"/>
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6 col-lg-3 ">
+              <div style="border-width: 6px; border-radius: 10px"
+                   class="card card-sm border-3 border-start-5 border-top-0 border-end-0 border-bottom-0 border-yellow">
+                <div class="py-3 px-3 rounded-5">
+                  <div class="row m-0">
+                    <div class="col d-flex flex-column gap-2">
+                      <div class="d-flex flex-row justify-content-between align-items-center">
+                        <div class="d-flex flex-column gap-2">
+                          <div class="fw-medium fs-4">
+                            Active Projects
+                          </div>
+                          <div class="text-yellow fs-1">
+                            <a href="{% url 'paceapp:university_list' %}"
+                               class="text-success">{{ active_project }}</a>
+                          </div>
+                        </div>
+                        <div class="p-3 bg-yellow rounded-5">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                               stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                               class="icon icon-tabler icons-tabler-outline icon-tabler-report">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                            <path d="M8 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h5.697"/>
+                            <path d="M18 14v4h4"/>
+                            <path d="M18 11v-4a2 2 0 0 0 -2 -2h-2"/>
+                            <path d="M8 3m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v0a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z"/>
+                            <path d="M18 18m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"/>
+                            <path d="M8 11h4"/>
+                            <path d="M8 15h3"/>
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6 col-lg-3 ">
+              <div style="border-width: 6px; border-radius: 10px"
+                   class="card card-sm border-3 border-start-5 border-top-0 border-end-0 border-bottom-0 border-success">
+                <div class="py-3 px-3 rounded-5">
+                  <div class="row m-0">
+                    <div class="col d-flex flex-column gap-2">
+                      <div class="d-flex flex-row justify-content-between align-items-center">
+                        <div class="d-flex flex-column gap-2">
+                          <div class="fw-medium fs-4">
+                            Inactive Projects
+                          </div>
+                          <div class="text-success fs-1">
+                            <a href="{% url 'paceapp:university_list' %}"
+                               class="text-success">{{ inactive_project }}</a>
+                          </div>
+                        </div>
+                        <div class="p-3 bg-success rounded-5">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                               stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                               class="icon icon-tabler icons-tabler-outline icon-tabler-file-check">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                            <path d="M14 3v4a1 1 0 0 0 1 1h4"/>
+                            <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"/>
+                            <path d="M9 15l2 2l4 -4"/>
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6 col-lg-3 ">
+              <div style="border-width: 6px; border-radius: 10px"
+                   class="card card-sm border-3 border-start-5 border-top-0 border-end-0 border-bottom-0 border-success">
+                <div class="py-3 px-3 rounded-5">
+                  <div class="row m-0">
+                    <div class="col d-flex flex-column gap-2">
+                      <div class="d-flex flex-row justify-content-between align-items-center">
+                        <div class="d-flex flex-column gap-2">
+                          <div class="fw-medium fs-4">
+                            Premium Projects
+                          </div>
+                          <div class="text-success fs-1">
+                            <a href="{% url 'paceapp:university_list' %}" class="text-success">{{ premium_project }}</a>
+                          </div>
+                        </div>
+                        <div class="p-3 bg-success rounded-5">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                               stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                               class="icon icon-tabler icons-tabler-outline icon-tabler-file-check">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                            <path d="M14 3v4a1 1 0 0 0 1 1h4"/>
+                            <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"/>
+                            <path d="M9 15l2 2l4 -4"/>
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6 col-lg-3 ">
+              <div style="border-width: 6px; border-radius: 10px"
+                   class="card card-sm border-3 border-start-5 border-top-0 border-end-0 border-bottom-0 border-purple">
+                <div class="py-3 px-3 rounded-5">
+                  <div class="row m-0">
+                    <div class="col d-flex flex-column gap-2">
+                      <div class="d-flex flex-row justify-content-between align-items-center">
+                        <div class="d-flex flex-column gap-2">
+                          <div class="fw-medium fs-4">
+                            Total Course
+                          </div>
+                          <div class="text-purple fs-1">
+                            <a href="{% url 'paceapp:active_course_list' %}"
+                               class="text-purple">{{ total_course }}</a>
+                          </div>
+                        </div>
+                        <div class="p-3 bg-purple rounded-5">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                               stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                               class="icon icon-tabler icons-tabler-outline icon-tabler-video">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                            <path
+                              d="M15 10l4.553 -2.276a1 1 0 0 1 1.447 .894v6.764a1 1 0 0 1 -1.447 .894l-4.553 -2.276v-4z"/>
+                            <path d="M3 6m0 2a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2z"/>
+                          </svg>
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6 col-lg-3 ">
+              <div style="border-width: 6px; border-radius: 10px"
+                   class="card card-sm border-3 border-start-5 border-top-0 border-end-0 border-bottom-0 border-green">
+                <div class="py-3 px-3 rounded-5">
+                  <div class="row m-0">
+                    <div class="col d-flex flex-column gap-2">
+                      <div class="d-flex flex-row justify-content-between align-items-center">
+                        <div class="d-flex flex-column gap-2">
+                          <div class="fw-medium fs-4">
+                            Active Courses
+                          </div>
+                          <div class="text-success fs-1">
+                            <a href="{% url 'paceapp:active_course_list' %}?filter=active-courses"
+                               class="text-success">{{ active_course }}</a>
+                          </div>
+                        </div>
+                        <div class="p-3 bg-success rounded-5">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                               stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                               class="icon icon-tabler icons-tabler-outline icon-tabler-photo-video">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                            <path d="M9 15h-3a3 3 0 0 1 -3 -3v-6a3 3 0 0 1 3 -3h6a3 3 0 0 1 3 3v3"/>
+                            <path d="M9 9m0 3a3 3 0 0 1 3 -3h6a3 3 0 0 1 3 3v6a3 3 0 0 1 -3 3h-6a3 3 0 0 1 -3 -3z"/>
+                            <path d="M3 12l2.296 -2.296a2.41 2.41 0 0 1 3.408 0l.296 .296"/>
+                            <path d="M14 13.5v3l2.5 -1.5z"/>
+                            <path d="M7 6v.01"/>
+                          </svg>
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6 col-lg-3 ">
+              <div style="border-width: 6px; border-radius: 10px"
+                   class="card card-sm border-3 border-start-5 border-top-0 border-end-0 border-bottom-0 border-danger">
+                <div class="py-3 px-3 rounded-5">
+                  <div class="row m-0">
+                    <div class="col d-flex flex-column gap-2">
+                      <div class="d-flex flex-row justify-content-between align-items-center">
+                        <div class="d-flex flex-column gap-2">
+                          <div class="fw-medium fs-4">
+                            Inactive Courses
+                          </div>
+                          <div class="text-danger fs-1">
+                            <a href="{% url 'paceapp:active_course_list' %}?filter=inactive-courses"
+                               class="text-danger">{{ inactive_course }}</a>
+                          </div>
+                        </div>
+                        <div class="p-3 bg-danger rounded-5">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                               stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                               class="icon icon-tabler icons-tabler-outline icon-tabler-video-minus">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                            <path
+                              d="M15 10l4.553 -2.276a1 1 0 0 1 1.447 .894v6.764a1 1 0 0 1 -1.447 .894l-4.553 -2.276v-4z"/>
+                            <path d="M3 6m0 2a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8a2 2 0 0 1 -2 2h-8a2 2 0 0 1 -2 -2z"/>
+                            <path d="M7 12l4 0"/>
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+

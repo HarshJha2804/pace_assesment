@@ -1,0 +1,217 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %} {% load static %}
+{% block title %} {{ object }} {% endblock title %}
+{% block main %}
+<div class="row py-3">
+  <div class="col-md-12 m-auto">
+    <div class="card shadow">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center">
+          <div class="avatar rounded-square me-3"
+               style="background-image: url('{{ object.get_logo_url }}'); background-size: cover; background-position: center; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; color: white; background-color: #6c757d;">
+            {% if not object.logo %}
+              {{ object.get_initials }}
+            {% endif %}
+          </div>
+          <h3 class="card-title fw-semibold mb-0">{{ object }}</h3>
+        </div>
+        <a class="btn btn-primary" href="{% url 'paceapp:update_university' pk=object.pk %}">Update</a>
+      </div>
+
+      <div class="card-body">
+        <div class="datagrid">
+          <div class="datagrid-item">
+            <div class="datagrid-title">Country</div>
+            <div class="datagrid-content">{{ object.country }}</div>
+          </div>
+          <div class="datagrid-item">
+            <div class="datagrid-title">Campus</div>
+            <div class="datagrid-content">
+              {% for campus in object.campus.all %}
+              {{ campus }},
+              {% endfor %}
+            </div>
+          </div>
+{#          <div class="datagrid-item">#}
+{#            <div class="datagrid-title">Application accepting from countries</div>#}
+{#            <a href="{% url 'paceapp:application_accept_country_detail' pk=object.pk %}">#}
+{#             View countries</a>#}
+{#          </div>#}
+          <div class="datagrid-item">
+            <div class="datagrid-title">Priority</div>
+            <div class="datagrid-content">
+              {{ object.priority|default_if_none:'-' }}
+            </div>
+          </div>
+          <div class="datagrid-item">
+            <div class="datagrid-title">Colour Code</div>
+            <div class="datagrid-content">
+              {{ object.color_code|default_if_none:'-' }}
+            </div>
+          </div>
+          <div class="datagrid-item">
+            <div class="datagrid-title">Premium</div>
+            <div class="datagrid-content">
+              {% if object.is_premium %}
+                <i class='bx bxs-check-circle text-success fs-2'></i>
+              {% else %}
+                <i class='bx bxs-x-circle text-red fs-2'></i>
+              {% endif %}
+            </div>
+          </div>
+
+          <div class="datagrid-item">
+            <div class="datagrid-title">Status</div>
+            <div class="datagrid-content">
+              {% if object.is_active %}
+              <span class="status status-success">Active</span>
+              {% else %}
+              <span class="status status-secondary">Inactive</span>
+              {% endif %}
+            </div>
+          </div>
+          <div class="datagrid-item">
+            <div class="datagrid-title">Link</div>
+            <div class="datagrid-content">
+              <a  href="{% url 'paceapp:course_list' %}?university={{object.id}}" target="_blank">View Course</a>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer border-bottom">
+        <div class="justify-content-between d-flex">
+          <h4 class="">Accepting Gap</h4>
+          <a class="btn btn-indigo" href="{% url 'paceapp:add_university_gap' pk=object.pk %}">Add University Gap</a>
+          <a class="btn btn-green" href="{% url 'paceapp:add_university_state' pk=object.pk %}">Add University
+            Mappings</a>
+        </div>
+      </div>
+{#      <div id="table-default" class="table-responsive">#}
+{#        <table class="table">#}
+{#          <thead>#}
+{#          <tr>#}
+{#            <th>#}
+{#              <button class="table-sort" data-sort="sort-name">S.N.</button>#}
+{#            </th>#}
+{#            <th>#}
+{#              <button class="table-sort" data-sort="sort-city">State</button>#}
+{#            </th>#}
+{#            <th>#}
+{#              <button class="table-sort" data-sort="sort-type">Board</button>#}
+{#            </th>#}
+{#            <th>#}
+{#              <button class="table-sort" data-sort="sort-score">Gap</button>#}
+{#            </th>#}
+{#            <th>#}
+{#              <button class="table-sort" data-sort="sort-date">Last Updated</button>#}
+{#            </th>#}
+{#            <th>#}
+{#              <button class="table-sort" data-sort="sort-quantity">Created</button>#}
+{#            </th>#}
+{#            <th>#}
+{#              <button class="table-sort" data-sort="sort-score">Status</button>#}
+{#            </th>#}
+{#            <th colspan="2">#}
+{#              <button class="table-sort" data-sort="sort-progress">Action</button>#}
+{#            </th>#}
+{#          </tr>#}
+{#          </thead>#}
+{#          <tbody class="table-tbody">#}
+{#          {% for item in object.uniboardgap_set.all %}#}
+{#          <tr>#}
+{#            <td>{{ forloop.counter }}.</td>#}
+{#            <td>{{ item.state }}</td>#}
+{#            <td>{{ item.board }}</td>#}
+{#            <td>{{ item.gap }}</td>#}
+{#            <td>{{ item.created }}</td>#}
+{#            <td>{{ item.modified }}</td>#}
+{#            <td>#}
+{#              {% if item.is_active %}#}
+{#              <span class="status status-green">Active</span>#}
+{#              {% else %}#}
+{#              <span class="status">Inactive</span>#}
+{#              {% endif %}#}
+{#            </td>#}
+{#            <td><a class="btn btn-primary btn-sm" href="{% url 'paceapp:update_university_gap' pk=item.pk %}"#}
+{#                   up-target="#university_gap_update_card" up-instant up-layer="new">Edit</a></td>#}
+{#            <td><a class="btn btn-danger btn-sm"#}
+{#                   href="{% url 'paceapp:delete_university_gap' pk=item.pk %}">Delete</a></td>#}
+{#          </tr>#}
+{#          {% endfor %}#}
+{#          </tbody>#}
+{#        </table>#}
+{#      </div>#}
+{#      <div class="bg-light-subtle border-bottom"><h3 class="h3 p-3">University Board State and Stream Mapping</h3>#}
+{#      </div>#}
+{#      <div id="table-default" class="table-responsive">#}
+{#        <table class="table">#}
+{#          <thead>#}
+{#          <tr>#}
+{#            <th>#}
+{#              <button class="table-sort" data-sort="sort-name">S.N.</button>#}
+{#            </th>#}
+{#            <th>#}
+{#              <button class="table-sort" data-sort="sort-city">Board</button>#}
+{#            </th>#}
+{#            <th>#}
+{#              <button class="table-sort" data-sort="sort-type">State</button>#}
+{#            </th>#}
+{#            <th>#}
+{#              <button class="table-sort" data-sort="sort-score">Stream</button>#}
+{#            </th>#}
+{#            <th>#}
+{#              <button class="table-sort" data-sort="sort-quantity">Created</button>#}
+{#            </th>#}
+{#            <th>#}
+{#              <button class="table-sort" data-sort="sort-date">Last Updated</button>#}
+{#            </th>#}
+{#            <th>#}
+{#              <button class="table-sort" data-sort="sort-date">Status</button>#}
+{#            </th>#}
+{#            <th colspan="2">#}
+{#              <button class="table-sort" data-sort="sort-progress">Action</button>#}
+{#            </th>#}
+{#          </tr>#}
+{#          </thead>#}
+{#          <tbody class="table-tbody">#}
+{#          {% for item in object.universitystatemapping_set.all %}#}
+{#          <tr>#}
+{#            <td>{{ forloop.counter }}.</td>#}
+{#            <td>{% for board in item.boards.all %}#}
+{#              {{ board }}{% if not forloop.last %}, {% endif %}#}
+{#              {% endfor %}#}
+{#            </td>#}
+{#            <td>#}
+{#              {% for state in item.states.all %}#}
+{#              {{ state.name }}{% if not forloop.last %}, {% endif %}#}
+{#              {% endfor %}#}
+{#            </td>#}
+{#            <td>#}
+{#              {% for stream in item.streams.all %}#}
+{#              {{ stream }} {% if not forloop.last %}, {% endif %}#}
+{#              {% endfor %}#}
+{#            </td>#}
+{#            <td>{{ item.created }}</td>#}
+{#            <td>{{ item.modified }}</td>#}
+{#            <td>#}
+{#              {% if item.is_active %}#}
+{#              <span class="status status-green">Active</span>#}
+{#              {% else %}#}
+{#              <span class="status">Inactive</span>#}
+{#              {% endif %}#}
+{#            </td>#}
+{#            <td><a class="btn btn-primary btn-sm"#}
+{#                   href="{% url 'paceapp:update_university_bss_mapping' pk=item.pk %}">Edit</a></td>#}
+{#            <td><a class="btn btn-danger btn-sm"#}
+{#                   href="{% url 'paceapp:delete_university_state_mapping' pk=item.pk %}">Delete</a></td>#}
+{#          </tr>#}
+{#          {% endfor %}#}
+{#          </tbody>#}
+{#        </table>#}
+{#      </div>#}
+      <div class="card-footer"></div>
+    </div>
+  </div>
+</div>
+{% endblock %}

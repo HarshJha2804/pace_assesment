@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %} {% load static %}
+{% block title %} Discover Assessment {% endblock %}
+{% block main %}
+  <div class="row py-3">
+    <div class="col-md-12">
+      <div class="card my-3 shadow">
+        <div class="row g-0">
+          <div class="col-12 col-lg-5 col-xl-3 border-end">
+            <div class="card-body p-0 scrollable">
+              <div class="nav flex-column nav-pills" role="tablist">
+                {% for university in universities %}
+                  <a href="#chat-1" class="nav-link text-start mw-100 p-3" id="chat-1-tab" data-bs-toggle="pill"
+                     role="tab"
+                     aria-selected="false" tabindex="-1">
+                    <div class="row align-items-center flex-fill">
+                      <div class="col-auto">
+                        <span class="avatar">{{ university.get_initials }}</span>
+                      </div>
+                      <div class="col text-body">
+                        <div>{{ university }}</div>
+                        <div class="text-secondary text-truncate w-100">
+                          <small>{{ university.country }}</small>
+                        </div>
+                      </div>
+                    </div>
+                  </a>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-lg-7 col-xl-9 d-flex flex-column">
+            <div class="card-body scrollable" style="height: 35rem">
+              <form action="{% url 'paceapp:save_assessment' %}" method="post" id="assessment-result-form">
+                <input type="text" hidden value="{{ student_id }}" name="student_id">
+                {% csrf_token %}
+                <div class="chat">
+                  <div class="chat-bubbles">
+                    {% for course in courses %}
+                      <div class="chat-item">
+                        <div class="row align-items-end">
+                          <div class="col-auto">
+                          </div>
+                          <div class="col col-lg-6">
+                            <div class="chat-bubble">
+                              <div class="chat-bubble-title d-flex">
+                                <div class="col-1">
+                                  {% if course in ass_discoveries.courses.all %}
+                                    <input type="checkbox" name="course_id" class="form-check-input" checked
+                                           value="{{ course.id }}">
+                                  {% else %}
+                                    <input type="checkbox" name="course_id" class="form-check-input"
+                                           value="{{ course.id }}">
+                                  {% endif %}
+                                </div>
+                                <div class="row">
+                                  <div class="col chat-bubble-author">
+                                    <a href="{{ course.get_absolute_url }}" class="fw-semibold" target="_blank"
+                                       data-bs-toggle="tooltip"
+                                       data-bs-placement="top" title="View Course Detail">{{ course }}</a>
+                                  </div>
+                                  <div class="col-auto chat-bubble-date">{{ course.country }}</div>
+                                </div>
+                              </div>
+                              <div class="chat-bubble-body">
+                                <span><a href="{{ course.university.get_absolute_url }}" target="_blank"
+                                         data-bs-toggle="tooltip"
+                                         data-bs-placement="top"
+                                         title="View University Detail">{{ course.university }}</a></span>,
+                                <span>{{ course.level }}</span>,
+                                <span>{{ course.stream }}</span>,
+                                <span>{{ course.substream }}</span>,
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="hr"></div>
+                    {% endfor %}
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="card-footer">
+              {% if student_id != 'None' %}
+                <button type="submit" class="btn btn-green float-end" form="assessment-result-form">Save</button>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

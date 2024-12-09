@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %} {% load static %}
+{% block title %} Partner Form {% endblock title %}
+
+{% block main %}
+  <div class="row py-3">
+    <div class="col-md-12 m-auto">
+      <div class="card shadow">
+        <div class="card-header justify-content-between">
+          <h3 class="card-title fw-semibold">
+            {% if object %}
+              Update Partner
+            {% else %}
+              Add Partner
+            {% endif %}
+          </h3>
+          <a class="btn btn-dark" href="{% url 'paceapp:onboarded_partner' %}">Partners</a>
+        </div>
+        <div class="card-body">
+          <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div>
+              {% crispy form %}
+            </div>
+            <div class="text-center">
+              <button type="submit" class="btn btn-primary float-xl">Save</button>
+            </div>
+
+          </form>
+        </div>
+        <div class="card-footer"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const countryField = document.getElementById('id_country');
+      const stateField = document.getElementById('id_state');
+      const states = {{ States|safe }};
+
+      const stateSelectInstance = new TomSelect(stateField);
+
+      countryField.addEventListener('change', function () {
+        const countryId = parseInt(this.value);
+
+        stateSelectInstance.clearOptions();
+        stateSelectInstance.addOption({value: '', text: 'Select a State', disabled: true});
+
+        if (countryId) {
+          const filteredStates = states.filter(state => state.country_id === countryId);
+          filteredStates.forEach(function (state) {
+            stateSelectInstance.addOption({value: state.id, text: state.name});
+          });
+          stateSelectInstance.refreshOptions(false);
+        } else {
+          stateSelectInstance.refreshOptions(false);
+        }
+      });
+    });
+  </script>
+
+{% endblock %}

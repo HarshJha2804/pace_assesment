@@ -1,0 +1,43 @@
+<div class="col-lg-12">
+  <div class="card mt-2 shadow">
+    <div class="card-header justify-content-between">
+      <h3 class="card-title">Documents</h3>
+      <a href="{{ object.get_document_upload_url }}" class="btn btn-dark" target="_blank">Upload Document</a>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-vcenter card-table">
+        <thead>
+        <tr>
+          <th>S.N.</th>
+          <th>Name</th>
+          <th>Preview</th>
+          <th>Uploaded On</th>
+          <th>Uploaded By</th>
+          <th>Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in object.get_documents %}
+          <tr>
+            <td>{{ forloop.counter }}.</td>
+            <td>{{ item.document_type }}</td>
+            <td><a href="{{ item.get_document_url }}" target="_blank">Preview</a></td>
+            <td>
+              {{ item.created|default_if_none:'-' }}
+            </td>
+            <td>{{ item.created_by.name|default_if_none:"-" }}</td>
+            <td>
+              {% if item.is_active %}
+                <span class="status status-green">Active</span>
+              {% else %}
+                <span class="status">Inactive</span>
+              {% endif %}
+            </td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="card-footer"></div>
+  </div>
+</div>

@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %} {% load static %}
+{% block title %} Application Manager Dashboard {% endblock title %}
+{% block main %}
+  <div class="row rounded  mb-5  py-3">
+    {#  Section for general data #}
+    <div class="col-md-12 mb-4">
+      <div class="card shadow shadow-sm" style="background-color: #170fd5!important;">
+        <div class="card-header">
+          <h3 class="card-title fw-semibold text-light">Application Manager Dashboard</h3>
+        </div>
+        <div class="card-body">
+          <div class="row mb-2 gy-3">
+            {% for item in status_data %}
+              <div class="col-sm-6 col-lg-4 ">
+                <div style="border-width: 6px; border-radius: 10px"
+                     class="card shadow shadow-sm card-sm border-3 border-start-5 border-top-0 border-end-0 border-bottom-0 border-{% cycle 'rss' 'cyan' 'github' 'green' %}">
+                  <div class="py-3 px-3 rounded-5">
+                    <div class="row m-0">
+                      <div class="col d-flex flex-column gap-2">
+                        <div class="d-flex flex-row justify-content-between align-items-center">
+                          <div class="d-flex flex-column gap-2">
+                            <div class="fw-bold fs-3 text-uppercase">
+                              {{ item.status }}
+                            </div>
+                            <div class="text-primary-emphasis fs-1 fw-semibold">
+                              {% if item.status == 'Unassigned Application Manager' %}
+{#                                <a#}
+{#                                  href="{% url 'paceapp:assign_application_manager_application_list' %}?unassigned_manager=true">#}
+{#                                  {{ item.count }}#}
+{#                                </a>#}
+                              {% else %}
+                                <a
+                                  href="{% url 'paceapp:application_manager_application_list' %}?current_status={{ item.status.name }}">
+                                  {{ item.count }}</a>
+                              {% endif %}
+                            </div>
+                          </div>
+                          <div class="p-3 bg-{% cycle 'rss' 'cyan' 'github' 'green' %} rounded-5">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                 fill="none"
+                                 stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                 class="icon icon-tabler icons-tabler-outline icon-tabler-users">
+                              <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                              <path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0"></path>
+                              <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path>
+                              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                              <path d="M21 21v-2a4 4 0 0 0 -3 -3.85"></path>
+                            </svg>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-12 mb-3">
+      <div class="card shadow shadow-sm">
+        <div class="card-header fw-bold">Last 3 Day Activity</div>
+        <div class="table-responsive">
+          <table class="table table-vcenter card-table table-striped">
+            <thead class="sticky-top">
+            <tr>
+              <th class="border-end ">Date</th>
+              {% for status in status_list %}
+                <th class="border-end">{{ status }}</th>
+              {% endfor %}
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in activities %}
+              <tr>
+                <td class="border-end text-nowrap">{{ item.date|date }}</td>
+                {% for status_count in item.status_counts %}
+                  <td class="border-end text-center">{{ status_count }}</td>
+                {% endfor %}
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <div class="card-footer"></div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

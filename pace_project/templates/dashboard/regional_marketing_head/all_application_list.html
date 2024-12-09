@@ -1,0 +1,154 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %} {% load static %}
+{% block title %}  All Applications{% endblock title %}
+
+{% block main %}
+  <div class="row py-3">
+    <div class="col-md-12 m-auto">
+      <div class="card shadow">
+        <div class="card-header d-flex justify-content-between">
+          <h3 class="card-title fw-semibold">Applications</h3>
+        </div>
+        <div class="card-body border-bottom">
+          <form action="" method="get" up-autosubmit up-follow up-keep up-target="#application_list">
+            <div class="row">
+              <div class="col-sm-6 col-md-2">
+                <div class="mb-3">
+                  <input type="text" class="form-control" name="student"
+                         autocomplete="off" placeholder="Search by student">
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-2">
+                <div class="mb-3">
+                  <input type="text" class="form-control" name="course"
+                         autocomplete="off" placeholder="Filter by course">
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-2">
+                <div class="mb-3">
+                  <input type="text" class="form-control" name="intake"
+                         autocomplete="off" placeholder="Search by Intake">
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-1">
+                <div class="mb-3 d-flex justify-content-between">
+                  <a href="{% url 'paceapp:rm_application_list' %}"
+                     class="btn btn-outline-yellow">
+                    Clear Filters
+                  </a>
+                  {#                  <a id="export_user_data" class="btn btn-purple ms-1">Export CSV</a>#}
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="table-responsive" id="application_list">
+          <table class="table card-table table-vcenter text-nowrap datatable">
+            <thead>
+            <tr>
+              <th class="w-1">S.N.</th>
+              <th>Student Name</th>
+              <th>passport no</th>
+              <th>application status</th>
+              <th>email</th>
+              <th>contact</th>
+              <th>agent name</th>
+              <th>agent city</th>
+              <th>university</th>
+              <th>course</th>
+              <th>intake</th>
+              <th>year</th>
+              <th>Applied on</th>
+              <th>Agent</th>
+              <th>Agent city</th>
+              <th>medical status</th>
+              <th>funds status</th>
+              <th>interview status</th>
+              <th>Created at</th>
+              <th>Created By</th>
+              <th>Remarks</th>
+              <th>Stream</th>
+              <th>Sub Stream</th>
+              <th>12th English Marks</th>
+              <th>Passing Year</th>
+              <th>Overall Percentage</th>
+              <th>12th Board</th>
+              <th>English Language</th>
+              <th>Academic Pathway</th>
+              <th>Conditions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for object in object_list %}
+              <tr>
+                <td>
+                  <span class="text-secondary">{{ forloop.counter }}</span>
+                </td>
+                <td><a href="{{ object.get_absolute_url }}">{{ object|title }}</a></td>
+                <td>
+                  {% if object.student.passport_number == '0' %}
+                    -
+                  {% else %}
+                    {{ object.student.passport_number }}
+                  {% endif %}
+                </td>
+                <td>
+                  <span class="status status">{{ object.current_status }}</span>
+                </td>
+                <td>{{ object.student.email|default_if_none:'-' }}</td>
+                <td>{{ object.student.mobile_number|default_if_none:'-' }}</td>
+                <td>{{ object.student.partner }}</td>
+                <td>{{ object.student.partner.city }}</td>
+                <td>{{ object.course.university }}</td>
+                <td>{{ object.course }}</td>
+                <td>{{ object.intake }}</td>
+                <td>{{ object.year }}</td>
+                <td>{{ object.created|date:"Y-m-d" }}</td>
+                <td>{{ object.student.partner|default_if_none:'-' }}</td>
+                <td>{{ object.student.partner.city|default_if_none:'-' }}</td>
+                <td>{{ object.medical_status|default_if_none:"-" }}</td>
+                <td>{{ object.funds_status|default_if_none:"-" }}</td>
+                <td>{{ object.interview_status|default_if_none:"-" }}</td>
+                <td>{{ object.created|date:"Y-m-d"|default_if_none:'-' }}</td>
+                <td>{{ object.created_by|default_if_none:"-" }}</td>
+                <td>
+                  {% with latest_remark=object.remarks.latest %}
+                    {% if latest_remark %}
+                      {{ latest_remark.message }}
+                    {% else %}
+                      -
+                    {% endif %}
+                  {% endwith %}
+                </td>
+                <td>{{ object.course.stream|default_if_none:'-' }}</td>
+                <td>{{ object.course.substream|default_if_none:'-' }}</td>
+                <td>{% if object.student.get_academic_object.twelfth_english_marks %}
+                  {{ object.student.get_academic_object.twelfth_english_marks }}{% else %}-{% endif %}</td>
+                <td>{% if object.student.get_academic_object.passing_year %}
+                  {{ object.student.get_academic_object.passing_year }}{% else %}-{% endif %}</td>
+                <td>{% if object.student.get_academic_object.overall_marks %}
+                  {{ object.student.get_academic_object.overall_marks }}{% else %}-{% endif %}</td>
+                <td>{% if object.student.get_academic_object.board %}
+                  {{ object.student.get_academic_object.board }}{% else %}-{% endif %}</td>
+                <td>{% if object.student.get_academic_object.english_test_type %}
+                  {{ object.student.get_academic_object.english_test_type }}{% else %}-{% endif %}</td>
+                <td>{% if object.student.get_academic_object.get_academic_pathway_display %}
+                  {{ object.student.get_academic_object.academic_pathway }}{% else %}-{% endif %}</td>
+
+                <td>
+                  {% for condition in object.conditions.all %}
+                    {{ condition.name }}{% if not forloop.last %}, {% endif %}
+                  {% endfor %}
+                </td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <div class="card-footer d-flex align-items-center" up-hungry>
+          {% include 'utils/pagination.html' %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

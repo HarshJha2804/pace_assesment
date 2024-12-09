@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block title %}
+  Update Application Manager
+{% endblock title %}
+
+{% block main %}
+  <div class="row py-3">
+    <div class="col-md-10 m-auto">
+      <div class="card shadow">
+        <div class="card-header justify-content-between">
+          <h3 class="card-title fw-semibold">Update Application Manager</h3>
+          <a class="btn btn-dark" href="{% url 'users:application_manager_list' %}">View Application Managers</a>
+        </div>
+        <div class="card-body">
+          <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <button type="submit" class="btn btn-green float-end">Save</button>
+          </form>
+        </div>
+        <div class="card-footer"></div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

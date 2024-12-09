@@ -1,0 +1,259 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %} {% load static %}
+{% block title %} Add PG course requirements {% endblock title %}
+
+{% block main %}
+  <div class="row py-3">
+    <div class="col-md-12 m-auto">
+      <div class="card shadow">
+        <div class="card-header">
+          <h3 class="card-title fw-semibold">Course Requirements</h3>
+        </div>
+        <div class="card-body">
+          <form action="{% url 'paceapp:add_pg_course_requirements' pk=course.pk %}" method="post">
+            {% csrf_token %}
+            <h3>Add Entry criteria</h3>
+            <div x-data="{
+                      rows: [{
+                          country: '',
+                          board: '',
+                          twelfth_english: '',
+                          diploma_overall_marks: '',
+                          ug_overall_marks: '',
+                          level_diploma_marks: ''
+                      }],
+                      addRow() {
+                          this.rows.push({
+                              country: '',
+                              board: '',
+                              twelfth_english: '',
+                              diploma_overall_marks: '',
+                              ug_overall_marks: '',
+                              level_diploma_marks: '',
+                              best_four: ''
+                          });
+                      },
+                      removeLastRow() {
+                          if (this.rows.length > 1) {
+                              this.rows.pop();
+                          }
+                      },
+                  }">
+              <template x-for="(row, index) in rows" :key="index">
+                <div class="row ec-item">
+                  <div class="col-md-2">
+                    <div class="mb-3">
+                      <div class="form-label">Country</div>
+                      <select class="form-select ec-country" x-model="row.country" name="country">
+                        <option value="">Select Country</option>
+                        {% for country in countries %}
+                          <option value="{{ country.id }}">{{ country }}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-md-2">
+                    <div class="mb-3">
+                      <div class="form-label">Board</div>
+                      <select class="form-select ec-board" x-model="row.board" name="board">
+                        <option value="">Select Board</option>
+                        {% for board in boards %}
+                          <option value="{{ board.id }}">{{ board }}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-md-2">
+                    <div class="mb-3">
+                      <label class="form-label" for="twelfth_english_id">Twelfth English Marks</label>
+                      <input type="number" class="form-control" name="twelfth_english" placeholder="Enter marks"
+                             x-model="row.twelfth_english">
+                    </div>
+                  </div>
+                  <div class="col-md-2">
+                    <div class="mb-3">
+                      <label class="form-label" for="diploma_overall_marks_id">Diploma Overall Marks</label>
+                      <input type="number" class="form-control" name="diploma_overall_marks" placeholder="Enter marks"
+                             x-model="row.diploma_overall_marks" id="diploma_overall_marks_id">
+                    </div>
+                  </div>
+                  <div class="col-md-2">
+                    <div class="mb-3">
+                      <label class="form-label" for="ug_overall_marks_id">UG Overall Marks</label>
+                      <input type="number" class="form-control" name="ug_overall_marks" placeholder="Enter marks"
+                             x-model="row.ug_overall_marks" id="ug_overall_marks_id">
+                    </div>
+                  </div>
+                  <div class="col-md-2">
+                    <div class="mb-3">
+                      <label class="form-label" for="level_diploma_marks_id">Level Diploma Marks</label>
+                      <input type="number" class="form-control" name="level_diploma_marks" placeholder="Enter marks"
+                             x-model="row.level_diploma_marks" id="level_diploma_marks_id">
+                    </div>
+                  </div>
+                  <hr>
+                </div>
+              </template>
+              <button type="button" class="btn btn-outline-dark" @click="addRow">Add More</button>
+              <button type="button" class="btn btn-danger" @click="removeLastRow" x-show="rows.length > 1">Remove
+              </button>
+            </div>
+
+            <div class="hr"></div>
+            {#        English test form block start here#}
+
+            <div x-data="{
+                      english_test_rows: [{
+                          country: '',
+                          test_type: '',
+                          tenth_math: '',
+                          twelfth_math: '',
+                          twelfth_english: '',
+                          overall: '',
+                          best_four: ''
+                      }],
+                      addRow() {
+                          this.english_test_rows.push({
+                              country: '',
+                              test_type: '',
+                              overall: '',
+                              speaking: '',
+                              listening: '',
+                              writing: '',
+                              reading: ''
+                          });
+                      },
+                      removeLastRow() {
+                          if (this.english_test_rows.length > 1) {
+                              this.english_test_rows.pop();
+                          }
+                      },
+                  }">
+              <h3 class="text-orange">Add English Test</h3>
+              <template x-for="(row, index) in english_test_rows" :key="index">
+                <div class="row">
+                  <div class="col-md-2">
+                    <div class="mb-3">
+                      <div class="form-label">Country</div>
+                      <select class="form-select" required name="test_country_id">
+                        <option value="">Select Country</option>
+                        {% for country in countries %}
+                          <option value="{{ country.id }}">{{ country }}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-md-2">
+                    <div class="mb-3">
+                      <div class="form-label">Test Type</div>
+                      <select class="form-select" name="test_type_id" x-model="row.test_type">
+                        <option value="">Select Test type</option>
+                        {% for test in test_types %}
+                          <option value="{{ test.id }}">{{ test }}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-md-2">
+                    <div class="mb-3">
+                      <label class="form-label" for="overall_id">Overall</label>
+                      <input type="text" class="form-control" name="english_test_overall" placeholder="Enter overall marks"
+                             id="overall_id" x-model="row.overall">
+                    </div>
+                  </div>
+                  <div class="col-md-2">
+                    <div class="mb-3">
+                      <label class="form-label" for="speaking_id">Speaking</label>
+                      <input type="text" class="form-control" name="speaking" placeholder="Enter Speaking marks"
+                             id="speaking_id" x-model="row.speaking">
+                    </div>
+                  </div>
+                  <div class="col-md-2">
+                    <div class="mb-3">
+                      <label class="form-label" for="listening_id">Listening</label>
+                      <input type="text" class="form-control" name="listening" placeholder="Enter Listening marks"
+                             id="listening_id" x-model="row.listening">
+                    </div>
+                  </div>
+                  <div class="col-md-1">
+                    <div class="mb-3">
+                      <label class="form-label" for="writing_id">Writing</label>
+                      <input type="text" class="form-control" name="writing" placeholder="Enter Writing marks"
+                             id="writing_id" x-model="row.writing">
+                    </div>
+                  </div>
+                  <div class="col-md-1">
+                    <div class="mb-3">
+                      <label class="form-label" for="reading_id">Reading</label>
+                      <input type="text" class="form-control" name="reading" placeholder="Enter Reading marks"
+                             id="reading_id" x-model="row.reading">
+                    </div>
+                  </div>
+                </div>
+              </template>
+              <button type="button" class="btn btn-outline-dark" @click="addRow">Add More</button>
+              <button type="button" class="btn btn-danger" @click="removeLastRow" x-show="english_test_rows.length > 1">
+                Remove
+              </button>
+            </div>
+
+            <div class="">
+              <button type="submit" class="btn btn-green float-end">Save</button>
+            </div>
+          </form>
+        </div>
+        <div class="card-footer"></div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+
+{% block inline_javascript %}
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+      function populateSelectField(selectElement, options) {
+        selectElement.innerHTML = '';
+        const defaultOption = document.createElement('option');
+        defaultOption.text = "Select Board"
+        selectElement.appendChild(defaultOption)
+        options.forEach(option => {
+          const newOption = document.createElement('option');
+          newOption.value = option.id;
+          newOption.text = option.name;
+          selectElement.appendChild(newOption);
+        });
+      }
+
+      function fetchBoards(api_endpoint, boardEl) {
+
+        fetch(api_endpoint).then(response => response.json())
+          .then(data => {
+            if (data.results) {
+              populateSelectField(boardEl, data.results);
+            } else {
+              boardEl.innerHTML = '<option>No boards found</option>';
+            }
+          });
+      }
+
+      const ecItems = document.querySelectorAll('.ec-item')
+      ecItems.forEach(function (ec) {
+
+        const countrySelect = ec.querySelector('.ec-country')
+        const boardSelect = ec.querySelector('.ec-board')
+        
+        countrySelect.addEventListener('change', function () {
+          const countryId = this.value;
+          if (countryId && boardSelect) {
+            const api_endpoint = "{% url 'paceapp:api_course_requirement_boards' course_id=course.id %}?country_id=" + countryId
+            fetchBoards(api_endpoint, boardSelect);
+          }
+        });
+
+      });
+
+    });
+  </script>
+{% endblock %}

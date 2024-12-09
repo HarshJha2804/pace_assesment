@@ -1,0 +1,67 @@
+{% extends "base_2.html" %}{% load static %}
+{% load i18n %}
+{% load account %}
+{% load allauth %}
+{% block title %}
+  {% trans "Confirm Email Address" %}
+{% endblock title %}
+{% block content %}
+  <div class=''>
+    <div class="row scrollable"
+         style="background-image: url('{% static 'images/blue-page.jpg' %}'); background-position: center">
+      <div class="col-md-7 m-auto py-5">
+        <div class="card shadow">
+          <div class="card-header">
+            <h3 class="card-title fw-bold">{% trans "Confirm Email Address" %}</h3>
+          </div>
+          <div class="card-body">
+            {% if confirmation %}
+              {% user_display confirmation.email_address.user.name as user_display %}
+              {% if can_confirm %}
+                <h3 class="text-success">You're Almost Done!</h3>
+                <br>
+                <p>
+                  {% blocktrans with confirmation.email_address.email as email %}To verify your email
+                    associated with the {{ user_display }} account (<a href="mailto:{{ email }}">{{ email }}</a>),
+                    please click the button below.{% endblocktrans %}
+                </p>
+                <p>Once verified, you'll be redirected to the login page to access your account. You will also receive
+                  your <span class="fw-semibold">agreement</span> via email at <span
+                    class="text-blue fw-semibold">{{ email }}</span>.
+                </p>
+                {% url 'account_confirm_email' confirmation.key as action_url %}
+                {% element form method="post" action=action_url %}
+                  {% slot actions %}
+                    {% csrf_token %}
+                    {{ redirect_field }}
+                    <div class="d-grid">
+                      {% element button type="submit" %}
+                        {% trans 'Confirm' %}
+                      {% endelement %}
+                    </div>
+                  {% endslot %}
+                {% endelement %}
+              {% else %}
+                <p>
+                  {% blocktrans %}Unable to confirm {{ email }} because it is already confirmed by a different
+                    account.{% endblocktrans %}
+                </p>
+              {% endif %}
+            {% else %}
+              {% url 'account_email' as email_url %}
+              <p class="text-yellow fw-semibold">
+                {% blocktrans %}This email confirmation link expired or is invalid. Please
+                  <a href="{{ email_url }}">issue a new email confirmation request</a>.{% endblocktrans %}
+              </p>
+            {% endif %}
+          </div>
+          <div class="card-footer">
+            <h4 class="text-info">If you need any assistance, feel free to contact us at <a
+              href="mailto:helpdesk@infinitegroup.org" target="_blank">hepldesk@infinitegroup.org</a>.</h4>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% include "layout/footer_2.html" %}
+{% endblock content %}

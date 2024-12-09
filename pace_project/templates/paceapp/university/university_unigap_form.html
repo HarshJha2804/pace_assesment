@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %} {% load static %}
+{% block title %}Update University Gap {% endblock title %}
+
+{% block main %}
+  <div class="row py-3">
+    <div class="col-md-10 m-auto">
+      <div class="card shadow" id="university_gap_update_card">
+        <div class="card-header">
+          <h3 class="card-title fw-semibold">Update University Gap</h3>
+        </div>
+        <div class="card-body">
+          <form action="{% url 'paceapp:update_university_gap' pk=object.pk %}" method="post" id="university_form">
+            {% csrf_token %}
+            {% crispy form %}
+          </form>
+        </div>
+        <div class="card-footer">
+          <button type="submit" class="btn btn-green float-end" form="university_form">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

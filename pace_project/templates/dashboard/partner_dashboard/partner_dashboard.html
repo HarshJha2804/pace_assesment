@@ -1,0 +1,751 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %} {% load static %}
+{% block title %} Dashboard {% endblock title %}
+{% block main %}
+  <div class="row rounded  mb-5  py-3 gy-2">
+    {#  Section for general data #}
+    <div class="col-md-12">
+      <div class="row gx-sm-1 gy-md-1">
+        <div class="col-sm-6 col-md-auto mb-1">
+          <a href="{% url 'partner:dashboard_partner' %}" class="btn btn-outline-blue ">All Countries</a>
+        </div>
+        {% for country in countries %}
+          <div class="col-sm-6 col-md-auto mb-1">
+            <a href="{% url 'partner:country_dashboard_partner' pk=country.pk %}"
+               class="btn btn-outline-blue">{{ country }}</a>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="col-md-9 mb-4">
+      <div class="row gy-3">
+        <div class="col-md-12">
+          <div class="card shadow shadow-sm" style="background-color: #170fd5 !important;">
+            <div class="card-body">
+              <div class="row mb-2 gy-3">
+                <div class="col-sm-12 col-lg-12 "></div>
+                <div class="col-sm-6 col-lg-3 ">
+                  <div style="border-width: 6px; border-radius: 10px"
+                       class="card shadow shadow-sm card-sm border-3 border-start-5 border-top-0 border-end-0 border-bottom-0 border-cyan">
+                    <div class="py-3 px-3 rounded-5">
+                      <div class="row m-0">
+                        <div class="col d-flex flex-column gap-2">
+                          <div class="d-flex flex-row justify-content-between align-items-center">
+                            <div class="d-flex flex-column gap-0" style="width: 100%">
+                              <div class="fw-bold" style="font-size: .8rem !important;">
+                                Total Students
+                              </div>
+                              <div class="text-primary-emphasis fs-2 fw-semibold text-right d-flex justify-content-end">
+                                <a href="{% url 'partner:list_student' %}">{{ total_student_count }}</a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-sm-6 col-lg-3 ">
+                  <div style="border-width: 6px; border-radius: 10px"
+                       class="card shadow shadow-sm card-sm border-3 border-start-5 border-top-0 border-end-0 border-bottom-0 border-cyan">
+                    <div class="py-3 px-3 rounded-5">
+                      <div class="row m-0">
+                        <div class="col d-flex flex-column gap-2">
+                          <div class="d-flex flex-row justify-content-between align-items-center">
+                            <div class="d-flex flex-column gap-0" style="width: 100%">
+                              <div class="fw-bold" style="font-size: .8rem !important;">
+                                Total Applications
+                              </div>
+                              <div class="text-primary-emphasis fs-2 fw-semibold d-flex justify-content-end">
+                                <a href="{% url 'partner:application_list' %}">{{ total_application }}</a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-lg-3 ">
+                  <div style="border-width: 6px; border-radius: 10px"
+                       class="card shadow shadow-sm card-sm border-3 border-start-5 border-top-0 border-end-0 border-bottom-0 border-cyan">
+                    <div class="py-3 px-3 rounded-5">
+                      <div class="row m-0">
+                        <div class="col d-flex flex-column gap-2">
+                          <div class="d-flex flex-row justify-content-between align-items-center">
+                            <div class="d-flex flex-column gap-2" style="width: 100%">
+                              <div class="fw-bold" style="font-size: .8rem !important;">
+                                Pending Assessments
+                              </div>
+                              <div class="text-primary-emphasis fs-2 fw-semibold d-flex justify-content-end">
+                                <a
+                                  href="{% url 'partner:partner_requested_assessment' %}?filter=pending-assessment">{{ total_pending_assessment }}</a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-lg-3 ">
+                  <div style="border-width: 6px; border-radius: 10px"
+                       class="card shadow shadow-sm card-sm border-3 border-start-5 border-top-0 border-end-0 border-bottom-0 border-cyan">
+                    <div class="py-3 px-3 rounded-5">
+                      <div class="row m-0">
+                        <div class="col d-flex flex-column gap-2">
+                          <div class="d-flex flex-row justify-content-between align-items-center">
+                            <div class="d-flex flex-column gap-0" style="width: 100%;">
+                              <div class="fw-bold" style="font-size: .8rem !important;">
+                                Received Assessments
+                              </div>
+                              <div class="text-primary-emphasis fs-2 fw-semibold d-flex justify-content-end">
+                                <a
+                                  href="{% url 'partner:partner_requested_assessment' %}?filter=receive-assessment">{{ total_received_assessment }}</a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-lg-3 ">
+                  <div style="border-width: 6px; border-radius: 10px"
+                       class="card shadow shadow-sm card-sm border-3 border-start-5 border-top-0 border-end-0 border-bottom-0 border-cyan">
+                    <div class="py-3 px-3 rounded-5">
+                      <div class="row m-0">
+                        <div class="col d-flex flex-column gap-2">
+                          <div class="d-flex flex-row justify-content-between align-items-center">
+                            <div class="d-flex flex-column gap-0" style="width: 100%;">
+                              <div class="fw-bold" style="font-size: .8rem !important;">
+                                Rejected Assessments
+                              </div>
+                              <div class="text-primary-emphasis fs-2 fw-semibold d-flex justify-content-end">
+                                <a
+                                  href="{% url 'partner:partner_assessment_list' %}?filter=rejected">{{ total_rejected_assessment }}</a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-lg-3 ">
+                  <div style="border-width: 6px; border-radius: 10px"
+                       class="card shadow shadow-sm card-sm border-3 border-start-5 border-top-0 border-end-0 border-bottom-0 border-cyan">
+                    <div class="py-3 px-3 rounded-5">
+                      <div class="row m-0">
+                        <div class="col d-flex flex-column gap-2">
+                          <div class="d-flex flex-row justify-content-between align-items-center">
+                            <div class="d-flex flex-column gap-0" style="width: 100%">
+                              <div class="fw-bold" style="font-size: .8rem !important;">
+                                Pending From IG
+                              </div>
+                              <div class="text-primary-emphasis fs-2 fw-semibold d-flex justify-content-end">
+                                <a
+                                  href="{% url 'partner:application_list' %}?filter=application-pending-from-ioa">{{ total_application_pending_from_ioa }}</a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-lg-3 ">
+                  <div style="border-width: 6px; border-radius: 10px"
+                       class="card shadow shadow-sm card-sm border-3 border-start-5 border-top-0 border-end-0 border-bottom-0 border-cyan">
+                    <div class="py-3 px-3 rounded-5">
+                      <div class="row m-0">
+                        <div class="col d-flex flex-column gap-2">
+                          <div class="d-flex flex-row justify-content-between align-items-center">
+                            <div class="d-flex flex-column gap-0" style="width: 100%;">
+                              <div class="fw-bold" style="font-size: .8rem !important;">
+                                Pending From Partner
+                              </div>
+                              <div class="text-primary-emphasis fs-2 fw-semibold d-flex justify-content-end">
+                                <a
+                                  href="{% url 'partner:application_list' %}?filter=application-pending-from-agent">{{ total_application_pending_from_agent }}</a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+                <div class="col-sm-6 col-lg-3 ">
+                  <div style="border-width: 6px; border-radius: 10px"
+                       class="card shadow shadow-sm card-sm border-3 border-start-5 border-top-0 border-end-0 border-bottom-0 border-cyan">
+                    <div class="py-3 px-3 rounded-5">
+                      <div class="row m-0">
+                        <div class="col d-flex flex-column gap-2">
+                          <div class="d-flex flex-row justify-content-between align-items-center">
+                            <div class="d-flex flex-column gap-0" style="width: 100%">
+                              <div class="fw-bold" style="font-size: .8rem !important;">
+                                Total Offers Awaited
+                              </div>
+                              <div class="text-primary-emphasis fs-2 fw-semibold d-flex justify-content-end">
+                                <a
+                                  href="{% url 'partner:application_list' %}?filter=awaited">{{ total_offer_awaited }}</a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-sm-6 col-lg-3 ">
+                  <div style="border-width: 6px; border-radius: 10px"
+                       class="card shadow shadow-sm card-sm border-3 border-start-5 border-top-0 border-end-0 border-bottom-0 border-cyan">
+                    <div class="py-3 px-3 rounded-5">
+                      <div class="row m-0">
+                        <div class="col d-flex flex-column gap-2">
+                          <div class="d-flex flex-row justify-content-between align-items-center">
+                            <div class="d-flex flex-column gap-0" style="width: 100%;">
+                              <div class="fw-bold" style="font-size: .8rem !important;">
+                                Conditional Offers
+                              </div>
+                              <div class="text-primary-emphasis fs-2 fw-semibold d-flex justify-content-end">
+                                <a
+                                  href="{% url 'partner:application_list' %}?filter=conditional-offer">{{ conditional_offer }}</a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-lg-3 ">
+                  <div style="border-width: 6px; border-radius: 10px"
+                       class="card shadow shadow-sm card-sm border-3 border-start-5 border-top-0 border-end-0 border-bottom-0 border-cyan">
+                    <div class="py-3 px-3 rounded-5">
+                      <div class="row m-0">
+                        <div class="col d-flex flex-column gap-2">
+                          <div class="d-flex flex-row justify-content-between align-items-center">
+                            <div class="d-flex flex-column gap-0" style="width: 100%;">
+                              <div class="fw-bold" style="font-size: .8rem !important;">
+                                Unconditional Offers
+                              </div>
+                              <div class="text-primary-emphasis fs-2 fw-semibold d-flex justify-content-end">
+                                <a
+                                  href="{% url 'partner:application_list' %}?filter=unconditional-offer">{{ unconditional_offer }}</a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-lg-3 ">
+                  <div style="border-width: 6px; border-radius: 10px"
+                       class="card shadow shadow-sm card-sm border-3 border-start-5 border-top-0 border-end-0 border-bottom-0 border-cyan">
+                    <div class="py-3 px-3 rounded-5">
+                      <div class="row m-0">
+                        <div class="col d-flex flex-column gap-2">
+                          <div class="d-flex flex-row justify-content-between align-items-center">
+                            <div class="d-flex flex-column gap-0" style="width: 100%;">
+                              <div class="fw-bold" style="font-size: .8rem !important;">
+                                Revised Offers
+                              </div>
+                              <div class="text-primary-emphasis fs-2 fw-semibold d-flex justify-content-end">
+                                <a
+                                  href="{% url 'partner:application_list' %}?filter=revised-offer-pending">{{ revised_offer }}</a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-lg-3 ">
+                  <div style="border-width: 6px; border-radius: 10px"
+                       class="card shadow shadow-sm card-sm border-3 border-start-5 border-top-0 border-end-0 border-bottom-0 border-cyan">
+                    <div class="py-3 px-3 rounded-5">
+                      <div class="row m-0">
+                        <div class="col d-flex flex-column gap-2">
+                          <div class="d-flex flex-row justify-content-between align-items-center">
+                            <div class="d-flex flex-column gap-0" style="width: 100%;">
+                              <div class="fw-bold" style="font-size: .8rem !important;">
+                                Total Fee Paid
+                              </div>
+                              <div class="text-primary-emphasis fs-2 fw-semibold d-flex justify-content-end">
+                                <a
+                                  href="{% url 'partner:application_list' %}?filter=fee-paid">{{ total_fee_paid }}</a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-sm-6 col-lg-3 ">
+                  <div style="border-width: 6px; border-radius: 10px"
+                       class="card shadow shadow-sm card-sm border-3 border-start-5 border-top-0 border-end-0 border-bottom-0 border-cyan">
+                    <div class="py-3 px-3 rounded-5">
+                      <div class="row m-0">
+                        <div class="col d-flex flex-column gap-2">
+                          <div class="d-flex flex-row justify-content-between align-items-center">
+                            <div class="d-flex flex-column gap-0" style="width: 100%;">
+                              <div class="fw-bold" style="font-size: .8rem !important;">
+                                Visa Lodged
+                              </div>
+                              <div class="text-primary-emphasis fs-2 fw-semibold d-flex justify-content-end">
+                                <a
+                                  href="{% url 'partner:application_list' %}?filter=visa-lodged">{{ total_visa_lodged }}</a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-sm-6 col-lg-3 ">
+                  <div style="border-width: 6px; border-radius: 10px"
+                       class="card shadow shadow-sm card-sm border-3 border-start-5 border-top-0 border-end-0 border-bottom-0 border-cyan">
+                    <div class="py-3 px-3 rounded-5">
+                      <div class="row m-0">
+                        <div class="col d-flex flex-column gap-2">
+                          <div class="d-flex flex-row justify-content-between align-items-center">
+                            <div class="d-flex flex-column gap-0" style="width: 100%;">
+                              <div class="fw-bold" style="font-size: .8rem !important;">
+                                Visa Grant
+                              </div>
+                              <div class="text-primary-emphasis fs-2 fw-semibold d-flex justify-content-end">
+                                <a
+                                  href="{% url 'partner:application_list' %}?filter=visa-grant">{{ total_visa_grant }}</a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-sm-6 col-lg-3 ">
+                  <div style="border-width: 6px; border-radius: 10px"
+                       class="card shadow shadow-sm card-sm border-3 border-start-5 border-top-0 border-end-0 border-bottom-0 border-cyan">
+                    <div class="py-3 px-3 rounded-5">
+                      <div class="row m-0">
+                        <div class="col d-flex flex-column gap-2">
+                          <div class="d-flex flex-row justify-content-between align-items-center">
+                            <div class="d-flex flex-column gap-0" style="width: 100%;">
+                              <div class="fw-bold" style="font-size: .8rem !important;">
+                                VISA Refused
+                              </div>
+                              <div class="text-primary-emphasis fs-2 fw-semibold d-flex justify-content-end">
+                                <a
+                                  href="{% url 'partner:application_list' %}?filter=visa-refused">{{ total_visa_refused }}</a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 mb-6">
+          <div id="chart-demo-pie"></div>
+        </div>
+        <div class="col-md-6 mb-6">
+          <div id="chart-line-stroke"></div>
+        </div>
+      </div>
+    </div>
+    {#  Right Side Universities component#}
+    <div class="col-md-3 mb-4">
+      <div class="row gy-3">
+        <div class="col-md-12">
+          <div class="card shadow shadow-sm bg-white">
+            <div class="card-header">
+              <h2 class="card-title">Universities</h2>
+            </div>
+            <div class="card-body p-0">
+              <div class="list-group list-group-flush list-group-hoverable">
+                {% for university in universities %}
+                  <div class="list-group-item ">
+                    <div class="row align-items-center">
+                      <div class="col-auto">
+                        <a href="#">
+                      <span class="avatar avatar-squire"
+                            style="background-image: url({{ university.get_mini_logo_url }})"></span>
+                        </a>
+                      </div>
+                      <div class="col text-truncate">
+                        <a href="#" class="text-reset d-block"><span class="fw-bold">{{ university }}</span></a>
+                        <div class="d-block text-secondary text-truncate mt-n1">
+                          <span>{{ university.country }}</span>
+                          <span class="float-end">
+                          <button data-bs-toggle="modal" type="button" class="btn btn-sm btn-blue"
+                                  data-university-logo="{{ university.get_logo_url }}"
+                                  data-bs-target="#coursesModal" data-university="{{ university.id }}">
+                            Apply
+                          </button>
+                        </span>
+                        </div>
+                      </div>
+                      <div class="col-auto">
+                        <a href="#" class="list-group-item-actions">
+                          <i class="ti ti-star"></i>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+            <div class="card-footer text-center">
+              <a class="fw-semibold" href="{% url 'partner:university_list' %}">Discover more</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="card shadow shadow-sm">
+            <div class="card-header">
+              <h3 class="card-title">Events & Webinars</h3>
+            </div>
+            <div class="card-body">
+              <div id="carousel-captions" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                  {% for item in webinars %}
+                    <div class="carousel-item {% if forloop.counter == 1 %} active {% endif %}">
+                      <img class="d-block w-100" alt="" src="{{ item.university.get_logo_url }}">
+                      <div class="carousel-caption-background d-none d-md-block"></div>
+                      <div class="carousel-caption d-none d-md-block">
+                        <a href="{{ item.meeting_link }}" target="_blank"><h3 class="text-black">{{ item.agenda }}</h3>
+                        </a>
+                        <p class="text-black">{{ item.remark }}</p>
+                      </div>
+                    </div>
+                  {% endfor %}
+                </div>
+                <a class="carousel-control-prev" href="#carousel-captions" role="button" data-bs-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#carousel-captions" role="button" data-bs-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Next</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {#  Last Three Days Activity#}
+  {#    {% include 'dashboard/partner_dashboard/partner_activity.html' %}#}
+{% endblock %}
+
+{% block modal %}
+  <!-- Modal for Course Level Selection -->
+  <div class="modal fade" id="coursesModal" tabindex="-1" aria-labelledby="coursesModalLabel" aria-hidden="true"
+       aria-modal="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="coursesModalLabel">Select Course</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form action="{% url 'partner:university_application_apply' %}" method="post">
+            {% csrf_token %}
+            <div class="row">
+              <div class="col-md-4">
+                <img src="" alt="{{ university.name }} logo" id="modal-university-logo"
+                     class="img-fluid university-logo shadow-lg" style="height: 150px; object-fit: contain;">
+              </div>
+              <div class="col-md-8">
+                <div class="mb-3 row">
+                  <div class="col-md-6">
+                    <select class="form-select" id="intake" name="intake" required>
+                      <option disabled selected>Select Intake</option>
+                    </select>
+                  </div>
+                  <div class="col-md-6">
+                    <select class="form-select" id="year" name="year" required>
+                      <option disabled selected>Select Year</option>
+                      {% for item in years %}
+                        <option value="{{ item.id }}">{{ item }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                </div>
+                <div class="mb-3">
+                  <select class="form-select" id="level" name="level" required>
+                    <option selected disabled>Select Level</option>
+                    {% for item in levels %}
+                      <option value="{{ item.id }}">{{ item }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                <div class="mb-2">
+                  <select class="form-select" id="course" name="course" required>
+                    <option selected disabled>Select course</option>
+                  </select>
+                </div>
+                <div class="mb-2">
+                  <input type="text" class="form-control" name="passport_number" id="passport_number" required
+                         placeholder="Enter Student Passport Number">
+                </div>
+              </div>
+            </div>
+            <div class="pt-3 justify-content-center d-flex">
+              <button type="submit" class="btn btn-success">Apply</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block inline_javascript %}
+  <script>
+    let selectedUniversityId = null;
+    let universityLogoURL = null;
+    const levelSelectEL = document.getElementById("level");
+    const courseEl = document.getElementById("course");
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const coursesModal = document.getElementById('coursesModal');
+
+      if (coursesModal) {
+        coursesModal.addEventListener('show.bs.modal', (event) => {
+          const button = event.relatedTarget;
+          selectedUniversityId = button?.getAttribute('data-university') || null;
+          universityLogoURL = button?.getAttribute('data-university-logo') || null;
+          updateModalAttributes();
+        });
+      }
+    });
+
+    function updateModalAttributes() {
+      const modalUniversityLogoEl = document.getElementById('modal-university-logo');
+      if (modalUniversityLogoEl && universityLogoURL) {
+        modalUniversityLogoEl.setAttribute('src', universityLogoURL);
+        fetchUniversityIntakes(selectedUniversityId)
+        courseEl.innerHTML = "";
+        levelSelectEL.selectedIndex = 0;
+      }
+    }
+
+    {#Intake module start here#}
+
+    function fetchUniversityIntakes(universityId) {
+      let endPoint = `{% url 'paceapp:ajax_get_university_intakes' %}?university_id=${universityId}`
+      fetch(endPoint).then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+          }
+          return response.json();
+        }
+      ).then(data => {
+        populateIntakeSelect(data)
+      }).catch(error => {
+        console.error('There was a problem with the fetch operation:', error);
+      })
+    }
+
+    function populateIntakeSelect(data) {
+      const intakeElement = document.getElementById('intake');
+      intakeElement.innerHTML = '';
+      const defaultOption = document.createElement('option');
+      defaultOption.text = 'Select Intake';
+      defaultOption.value = '';
+      intakeElement.appendChild(defaultOption);
+
+      // Iterate through the data to add each intake month
+      data.intakes.forEach(intake => {
+        const newOption = document.createElement('option');
+        newOption.value = intake.id;
+        newOption.text = intake.name;
+        intakeElement.appendChild(newOption);
+      });
+    }
+
+    {#Course module start here#}
+    levelSelectEL.addEventListener("change", (event) => {
+      const intakeId = document.getElementById('intake').value;
+      const levelId = document.getElementById('level').value;
+      const universityId = selectedUniversityId;
+      if (intakeId && levelId && universityId) {
+        const endPoint = `{% url 'partner:api_direct_apply_course' %}`
+        const requestData = {
+          university_id: universityId,
+          intake_id: intakeId,
+          level_id: levelId,
+        };
+        fetch(endPoint, {
+          method: "POST",
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': `{{ csrf_token }}`
+          },
+          body: JSON.stringify(requestData)
+        }).then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+          }
+          return response.json()
+        })
+          .then(data => {
+            console.log(data)
+            populateCourseSelect(data);
+          });
+      }
+    });
+
+    function populateCourseSelect(data) {
+      courseEl.innerHTML = "";
+      const defaultOption = document.createElement('option');
+      defaultOption.text = 'Select Course';
+      defaultOption.value = '';
+      courseEl.appendChild(defaultOption);
+
+      // Iterate through the data to add each intake month
+      data.forEach(course => {
+        const newOption = document.createElement('option');
+        newOption.value = course.id;
+        newOption.text = course.name;
+        courseEl.appendChild(newOption);
+      });
+    }
+  </script>
+
+  <script>
+    // @formatter:off
+      document.addEventListener("DOMContentLoaded", function () {
+      	window.ApexCharts && (new ApexCharts(document.getElementById('chart-demo-pie'), {
+      		chart: {
+      			type: "donut",
+      			fontFamily: 'inherit',
+      			height: 240,
+      			sparkline: {
+      				enabled: true
+      			},
+      			animations: {
+      				enabled: false
+      			},
+      		},
+      		fill: {
+      			opacity: 1,
+      		},
+      		series: [{{ total_offer_awaited }}, {{ total_fee_paid }}, {{ total_visa_grant }}, {{ total_visa_refused }}],
+      		labels: ["Offers", "Fee Paid", "Visa Grant", "Visa Refused"],
+      		tooltip: {
+      			theme: 'dark'
+      		},
+      		grid: {
+      			strokeDashArray: 4,
+      		},
+      		colors: [tabler.getColor("primary"), tabler.getColor("info", 0.8), tabler.getColor("success", 0.6), tabler.getColor("danger")],
+      		legend: {
+      			show: true,
+      			position: 'bottom',
+      			offsetY: 12,
+      			markers: {
+      				width: 10,
+      				height: 10,
+      				radius: 100,
+      			},
+      			itemMargin: {
+      				horizontal: 8,
+      				vertical: 8
+      			},
+      		},
+      		tooltip: {
+      			fillSeriesColor: false
+      		},
+      	})).render();
+      });
+      // @formatter:on
+  </script>
+  <script>
+    // @formatter:off
+      document.addEventListener("DOMContentLoaded", function () {
+      	window.ApexCharts && (new ApexCharts(document.getElementById('chart-line-stroke'), {
+      		chart: {
+      			type: "line",
+      			fontFamily: 'inherit',
+      			height: 240,
+      			parentHeightOffset: 0,
+      			toolbar: {
+      				show: false,
+      			},
+      			animations: {
+      				enabled: false
+      			},
+      		},
+      		fill: {
+      			opacity: 1,
+      		},
+      		stroke: {
+      			width: 2,
+      			lineCap: "round",
+      			curve: "straight",
+      		},
+      		series: [{
+      			name: "Visa Grant",
+      			data: [{{ total_visa_grant }}, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+      		}],
+      		tooltip: {
+      			theme: 'dark'
+      		},
+      		grid: {
+      			padding: {
+      				top: -20,
+      				right: 0,
+      				left: -4,
+      				bottom: -4
+      			},
+      			strokeDashArray: 4,
+      		},
+      		xaxis: {
+      			labels: {
+      				padding: 0,
+      			},
+      			tooltip: {
+      				enabled: false
+      			},
+      			categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+      		},
+      		yaxis: {
+      			labels: {
+      				padding: 4
+      			},
+      		},
+      		colors: [tabler.getColor("green"), tabler.getColor("primary"), tabler.getColor("orange")],
+      		legend: {
+      			show: false,
+      		},
+      	})).render();
+      });
+      // @formatter:on
+  </script>
+{% endblock %}
+
+

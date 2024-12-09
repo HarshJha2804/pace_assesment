@@ -1,0 +1,131 @@
+{% load account %}
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Email</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<style>
+    body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+  font-size:14px
+
+}
+
+.email-container {
+  max-width: 700px;
+  margin: 20px auto;
+  background: #fff;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+p {
+  margin: 10px 0;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+}
+
+table th,
+table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+}
+
+table th {
+  background-color: #f4f4f4;
+  color: #333;
+}
+
+.status-details td {
+  vertical-align: center;
+  padding: 1rem;
+}
+
+.footer-text {
+  color:rgb(223, 3, 3);
+  font-weight: 600;
+  margin-top: 20px;
+}
+
+.footer-text a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.footer-text a:hover {
+  text-decoration: underline;
+}
+
+</style>
+<body>
+  <div class="email-container">
+ 
+    <div class="email-content">
+      <p><b>Dear Valued Partner,</b></p>
+      <p>Greetings from Infinite Group!</p>
+      <p>The application of the below student which you have submitted has been updated with the following Status.</p>
+      <table class="status-table">
+        <tr>
+          <th>Student ID</th>
+          <th>Student Name</th>
+          <th>Passport No.</th>
+          <th>University Name</th>
+          <th>Course Applied</th>
+          <th>Remark</th>
+        </tr>
+        <tr>
+          <td>{{ application.offer_id }}</td>
+          <td>{{ application.student }}</td>
+          <td>{{ application.student.passport_number }}</td>
+          <td>{{ application.course.university }}</td>
+          <td>{{ application.course }}</td>
+          <td>{{ remark }}</td>
+        </tr>
+      </table>
+      <table class="status-details">
+        <tr>
+          <th>Application New Status</th>
+          <th>Comment for this Status</th>
+        </tr>
+        <tr>
+          <td>{{ application.current_status }}</td>
+          <td>
+            Dear Team,<br>
+            
+          </td>
+        </tr>
+      </table>
+      <p class="footer-text">
+        In order for us to serve you better, please do not reply to this mail. For any communication regarding this application, please put a comment on the portal by logging into your online portal <a href="https://infinitegroup.org/">https://infinitegroup.org</a>.
+        We look forward to converting this student.
+      </p>
+      <p>Regards,</p>
+      <p><strong>Team Infinite Group</strong>
+        <img src="http://cdn.mcauto-images-production.sendgrid.net/21cdfbe9406550aa/5cdca710-f346-4eda-a25c-d5262bf6a56a/273x66.png">
+      </p>
+    </div>
+  </div>
+</body>
+</html>

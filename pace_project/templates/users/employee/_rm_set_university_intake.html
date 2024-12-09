@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %} {% load static %}
+{% block title %} University Intake Form{% endblock title %}
+{% block main %}
+  <div class="row py-3">
+    <div class="col-md-10 m-auto">
+      <div class="card shadow">
+        <div class="card-header justify-content-between">
+          <h3 class="card-title fw-semibold">
+            University Intake
+          </h3>
+          <a class="btn btn-dark" href="{{ object.get_rm_list_url }}">Regional Marketing Heads</a>
+        </div>
+        <div class="card-body">
+          <form action="{{ object.get_set_rm_university_intake_url }}" method="post">
+            {% csrf_token %}
+            <div class="row">
+              <div class="col-md-4">
+                <div class="mb-3">
+                  <div class="form-label required">University</div>
+                  <select class="form-select" name="university_id" id="universitySelect" data-searchable="true"
+                          required>
+                    <option selected value="" disabled>Select University</option>
+                    {% for university in object.get_assigned_universities %}
+                      <option value="{{ university.id }}">{{ university }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="mb-3">
+                  <div class="form-label required">Intake</div>
+                  <select class="form-select" name="intake_id" id="intakeSelect">
+                    <option selected value="" disabled>Select university</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="mb-3">
+                  <div class="form-label required">Year</div>
+                  <select class="form-select" name="year_id" required>
+                    <option selected value="" disabled>Select Year</option>
+                    {% for year in years %}
+                      <option value="{{ year.id }}">{{ year }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="table-responsive" id="partners_row_id">
+              <div class="mt-3 float-end">
+                <input type="submit" class="btn btn-green" value="Save">
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="card-footer"></div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block inline_javascript %}
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const universitySelect = document.getElementById('universitySelect');
+      const intakeSelectEl = document.getElementById('intakeSelect');
+
+      universitySelect.addEventListener('change', function () {
+        const universityId = universitySelect.value;
+
+        if (universityId) {
+          fetch(`/api/university/${universityId}/intakes/`)
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('Network response was not ok');
+              }
+              return response.json();
+            })
+            .then(data => {
+              if (data.length === 0) {
+                intakeSelectEl.innerHTML = '<option value="">No intakes available</option>';
+              } else {
+                // Clear previous options
+                intakeSelectEl.innerHTML = '<option value="">Select an intake</option>';
+              }
+              // Populate new options
+              data.forEach(intake => {
+                const option = document.createElement('option');
+                option.value = intake.id;
+                option.textContent = intake.intake_month;
+                intakeSelectEl.appendChild(option);
+              });
+            })
+            .catch(error => {
+              console.error('Error fetching intakes:', error);
+            });
+        } else {
+          // Clear intake options if no university is selected
+          intakeSelectEl.innerHTML = '<option value="">Select an university</option>';
+        }
+      });
+    });
+
+  </script>
+{% endblock %}

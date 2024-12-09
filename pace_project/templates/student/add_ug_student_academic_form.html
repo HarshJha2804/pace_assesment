@@ -1,0 +1,286 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %} {% load static %}
+{% block title %} Add UG Student Academics {% endblock %}
+{% block main %}
+  <div class="row py-3">
+    <div class="col-md-10 m-auto">
+      <div class="card shadow">
+        <div class="card-header d-flex justify-content-between">
+          <h3 class="card-title">Add <a href="{{ student.get_absolute_url }}" target="_blank" data-bs-toggle="tooltip" data-bs-placement="top" title="View Student">
+            <b class="text-success">{{ student }}</b></a> Academics</h3>
+          <a class="btn btn-dark" href="{{ student.get_absolute_url }}">Go Back</a>
+        </div>
+        <div class="card-body">
+          <form action="" method="post" id="student_academic_form">
+            {% csrf_token %}
+
+            <div class="row pb-3">
+              <div class="col-md-4">
+                <div class="mb-3">
+                  <div class="form-label required">Country of Citizenship</div>
+                  <select class="form-select" name="country_id" id="country_id" required>
+                  </select>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="mb-3">
+                  <div class="form-label required">Student Passing Board</div>
+                  <select class="form-select" name="board_id" id="id_boards" required>
+                    <!-- Options will be populated dynamically -->
+                  </select>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="mb-3">
+                  <div class="form-label required">Stream</div>
+                  <select class="form-select" name="stream_id" id="id_streams" required>
+                    <!-- Options will be populated dynamically -->
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="mb-3">
+                  <div class="form-label required">SubStream</div>
+                  <select class="form-select" name="sub_stream_id" id="id_substreams" required>
+                    <!-- Options will be populated dynamically -->
+                  </select>
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="mb-3">
+                  <div class="form-label required">Passing Year</div>
+                  <select class="form-select" name="year_id" id="id_passing_year" required>
+                    <option value="">Select Year</option>
+                    {% for item in years %}
+                      <option value="{{ item.id }}">{{ item }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="mb-3">
+                  <label class="form-label" for="id_tenth_marks">10th Math %</label>
+                  <input type="text" class="form-control" name="tenth_marks" id="id_tenth_marks"
+                         placeholder="Enter 10th Marks">
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="mb-3">
+                  <label class="form-label" for="work_experience">Work Experience</label>
+                  <input type="text" class="form-control" name="work_experience" id="work_experience"
+                         placeholder="Enter work experience">
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="mb-3">
+                  <div class="form-label required">Academic Pathway</div>
+                  <select class="form-select" name="academic_pathway" id="id_academic_pathway" required>
+                    <option value="" selected disabled>Select Academic Pathway</option>
+                    <option value="intermediate">Intermediate</option>
+                    <option value="diploma">Diploma</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-4 diploma_inputs d-none">
+                <div class="mb-3">
+                  <label class="form-label required" for="id_diploma_overall">Overall Diploma %</label>
+                  <input type="number" class="form-control" name="diploma_overall" id="id_diploma_overall"
+                         placeholder="Overall Diploma %">
+                </div>
+              </div>
+              <div class="col-md-4 intermediate_inputs d-none">
+                <div class="mb-3">
+                  <label class="form-label required" for="id_twelfth_overall_marks">12th Overall Marks</label>
+                  <input type="number" class="form-control" name="twelfth_overall" id="id_twelfth_overall_marks"
+                         placeholder="Enter 12th Overall Marks">
+                </div>
+              </div>
+              <div class="col-md-4 intermediate_inputs d-none">
+                <div class="mb-3">
+                  <label class="form-label required" for="id_twelfth_math_marks">12th Math Marks</label>
+                  <input type="number" class="form-control" name="twelfth_math_marks" id="id_twelfth_math_marks"
+                         placeholder="Enter 12th Math Marks">
+                </div>
+              </div>
+              <div class="col-md-4 intermediate_inputs d-none">
+                <div class="mb-3">
+                  <label class="form-label required" for="id_twelfth_eng_marks">12th English Marks</label>
+                  <input type="number" class="form-control" name="twelfth_eng_marks" id="id_twelfth_eng_marks"
+                         placeholder="Enter 12th English Marks">
+                </div>
+              </div>
+              <div class="col-md-4 intermediate_inputs d-none">
+                <div class="mb-3">
+                  <label class="form-label required" for="id_best_four_marks">Best Four Marks</label>
+                  <input type="number" class="form-control" name="best_four_marks" id="id_best_four_marks"
+                         placeholder="Enter 12th best four marks">
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="mb-3">
+                  <div class="form-label required">English Test</div>
+                  <select class="form-select" name="english_test_id" id="id_english_test" required>
+                    <!-- Options will be populated dynamically -->
+                  </select>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="mb-3">
+                  <label class="form-label required" for="id_eng_test_overall">English Test Overall</label>
+                  <input type="number" class="form-control" name="eng_test_overall" id="id_eng_test_overall" required
+                         placeholder="Enter Overall">
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="mb-3">
+                  <label class="form-label required" for="id_speaking">Speaking</label>
+                  <input type="number" class="form-control" name="speaking" id="id_speaking" required
+                         placeholder="Enter Speaking">
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="mb-3">
+                  <label class="form-label required" for="id_writing">Writing</label>
+                  <input type="number" class="form-control" name="writing" id="id_writing" required
+                         placeholder="Enter Writing">
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="mb-3">
+                  <label class="form-label required" for="id_reading">Reading</label>
+                  <input type="number" class="form-control" name="reading" id="id_reading" required
+                         placeholder="Enter Reading">
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="mb-3">
+                  <label class="form-label required" for="id_listening">Listening</label>
+                  <input type="number" class="form-control" name="listening" id="id_listening" required
+                         placeholder="Enter Listening">
+                </div>
+              </div>
+
+            </div>
+            <div class="float-end mb-3">
+              <button type="submit" class="btn btn-green">Save</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
+{% block inline_javascript %}
+  <script>
+    const studentStudyLevel = "{{ student.study_level.id }}";
+
+    document.addEventListener('DOMContentLoaded', function () {
+      // Fetch initial data and populate the form
+      let endpoint = "{% url 'paceapp:api_recommend_course' %}";
+      let levelEndPoint = "{% url 'paceapp:api_streams_by_level' %}"
+      if(studentStudyLevel){
+        levelEndPoint = levelEndPoint+"?level_id="+studentStudyLevel
+      }
+
+      fetch(endpoint)
+        .then(response => response.json())
+        .then(data => {
+          populateSelect(document.getElementById('country_id'), data.countries, 'country_name', 'Select Country');
+          populateSelect(document.getElementById('id_english_test'), data.english_test_types, 'english_test_name', 'Select English Test');
+        })
+        .catch(error => console.error('Error fetching initial data:', error));
+
+      // Update Streams
+      fetch(levelEndPoint).then(response => response.json()).then(data => {
+        populateSelect(document.getElementById('id_streams'), data, 'stream', 'Select Stream');
+      })
+
+      // Event listener for country change
+      document.getElementById('country_id').addEventListener('change', function () {
+        if (studentStudyLevel) {
+          updateBoards(studentStudyLevel);
+        } else {
+          alert("Set Student study level from update student!")
+        }
+      });
+
+
+      // Event listener for stream change
+      document.getElementById('id_streams').addEventListener('change', function () {
+        const streamId = this.value;
+        updateSubstreams(streamId);
+      })
+
+    });
+
+    // Update Boards
+
+    function updateBoards(levelId) {
+      let countryId = document.getElementById('country_id').value
+
+      let endpoint = `{% url 'paceapp:api_boards_by_country' %}?country_id=${countryId}&level_id=${levelId}`
+      fetch(endpoint)
+        .then(response => response.json())
+        .then(data => populateSelect(document.getElementById('id_boards'), data, 'name', 'Select Board'))
+        .catch(error => console.error('Error fetching boards:', error));
+    }
+
+    //Update substreams
+    function updateSubstreams(streamId) {
+      let endpoint = `{% url 'paceapp:api_substreams_by_stream' %}?stream_id=${streamId}`
+      fetch(endpoint)
+        .then(response => response.json())
+        .then(data => populateSelect(document.getElementById('id_substreams'), data, 'sub_stream_name', 'Select SubStream'))
+        .catch(error => console.error('Error fetching substreams:', error));
+    }
+
+    function populateSelect(selectElement, data, textField, defaultOption) {
+      selectElement.innerHTML = '';
+      const defaultOpt = document.createElement('option');
+      defaultOpt.value = '';
+      defaultOpt.text = defaultOption;
+      selectElement.appendChild(defaultOpt);
+
+      data.forEach(item => {
+        const option = document.createElement('option');
+        option.value = item.id;
+        option.text = item[textField];
+        selectElement.appendChild(option);
+      });
+    }
+
+
+    //Academic Pathways values.
+    let academicPathways = document.getElementById('id_academic_pathway');
+    let intermediateInputsEl = document.querySelectorAll('.intermediate_inputs');
+    let diplomaInputsEl = document.querySelectorAll('.diploma_inputs');
+
+    function toggleClass(elements, action, className = 'd-none') {
+      elements.forEach(element => element.classList[action](className));
+    }
+
+    // Listen to event for academic pathways.
+    academicPathways.addEventListener('change', (e) => {
+      const apValue = e.target.value;
+
+      switch (apValue) {
+        case "intermediate":
+          toggleClass(intermediateInputsEl, 'remove');
+          toggleClass(diplomaInputsEl, 'add');
+          break;
+        case "diploma":
+          toggleClass(intermediateInputsEl, 'add');
+          toggleClass(diplomaInputsEl, 'remove');
+          break;
+        default:
+          toggleClass(intermediateInputsEl, 'add');
+          toggleClass(diplomaInputsEl, 'add');
+      }
+    });
+  </script>
+{% endblock %}

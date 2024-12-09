@@ -1,0 +1,62 @@
+
+    <div class="col-md-12 mb-3">
+      <div class="card shadow shadow-sm">
+        <div class="card-header fw-bold">Last 3 Day Activity</div>
+              <div class="table-responsive ">
+                <table class="table text-center card-table table-vcenter text-nowrap table-striped">
+                  <thead class="sticky-top">
+                  <tr class="bg-color">
+                    <th class="border-end ">Date</th>
+                    <th class="border-end ">Total Applications</th>
+                    <th class="border-end ">Application Submitted</th>
+                    <th class="border-end ">Rejected By IG</th>
+                    <th class="border-end ">Conditional Offer Received</th>
+                    <th class="border-end ">Unconditional Offer Received</th>
+                    <th class="border-end ">Fee Paid</th>
+                    <th class="border-end ">VISA Lodged</th>
+                    <th class="border-end ">VISA Grant</th>
+                    <th class="border-end ">VISA Refused</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr>
+                    <td class="border-end text-nowrap">{{ today_1 }}</td>
+                    <td class="border-end text-center">{{ today.total_applications }}</td>
+                    <td class="border-end text-center">{{ today.submitted_status }}</td>
+                    <td class="border-end text-center">{{ today.rejected_status }}</td>
+                    <td class="border-end text-center">{{ today.conditional_offer_letter_status }}</td>
+                    <td class="border-end text-center">{{ today.unconditional_offer_letter_status }}</td>
+                    <td class="border-end text-center">{{ today.fee_paid_status }}</td>
+                    <td class="border-end text-center">{{ today.visa_lodged_status }}</td>
+                    <td class="border-end text-center">{{ today.visa_grant_status }}</td>
+                    <td class="border-end text-center">{{ today.visa_refused_status }}</td>
+                  </tr>
+                  <tr>
+                    <td class="border-end text-nowrap">{{ yesterday_1 }}</td>
+                    <td class="border-end text-center">{{ yesterday.total_applications }}</td>
+                    <td class="border-end text-center">{{ yesterday.submitted_status }}</td>
+                    <td class="border-end text-center">{{ yesterday.rejected_status }}</td>
+                    <td class="border-end text-center">{{ yesterday.conditional_offer_letter_status }}</td>
+                    <td class="border-end text-center">{{ yesterday.unconditional_offer_letter_status }}</td>
+                    <td class="border-end text-center">{{ yesterday.fee_paid_status }}</td>
+                    <td class="border-end text-center">{{ yesterday.visa_lodged_status }}</td>
+                    <td class="border-end text-center">{{ yesterday.visa_grant_status }}</td>
+                    <td class="border-end text-center">{{ yesterday.visa_refused_status }}</td>
+                  </tr>
+                  <tr>
+                    <td class="border-end text-nowrap">{{ yesterday_2 }}</td>
+                    <td class="border-end text-center">{{ day_before_yesterday.total_applications }}</td>
+                    <td class="border-end text-center">{{ day_before_yesterday.submitted_status }}</td>
+                    <td class="border-end text-center">{{ day_before_yesterday.rejected_status }}</td>
+                    <td class="border-end text-center">{{ day_before_yesterday.conditional_offer_letter_status }}</td>
+                    <td class="border-end text-center">{{ day_before_yesterday.unconditional_offer_letter_status }}</td>
+                    <td class="border-end text-center">{{ day_before_yesterday.fee_paid_status }}</td>
+                    <td class="border-end text-center">{{ day_before_yesterday.visa_lodged_status }}</td>
+                    <td class="border-end text-center">{{ day_before_yesterday.visa_grant_status }}</td>
+                    <td class="border-end text-center">{{ day_before_yesterday.visa_refused_status }}</td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+      </div>
+    </div>

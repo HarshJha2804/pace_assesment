@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %} {% load static %}
+{% block title %} {{ object }} {% endblock title %}
+{% block main %}
+  <div class="row py-3">
+    <div class="col-md-12 m-auto">
+      <div class="card shadow">
+        <div class="card-header justify-content-between">
+          <a href="{% url 'paceapp:onboarded_partner' %}" class="btn btn-outline-dark">
+            <i class='bx bx-left-arrow-alt fs-2 me-1'></i> Go Back
+          </a>
+          <h3 class="card-title">{{ object }}</h3>
+          <a href="{% url 'paceapp:onboarded_partner_update' pk=object.pk %}" class="btn btn-dark">Update</a>
+        </div>
+        <div class="card-body">
+          <div class="datagrid">
+            <div class="datagrid-item">
+              <div class="datagrid-title">Company Name</div>
+              <div class="datagrid-content">{{ object|title }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Registered Company Name</div>
+              <div class="datagrid-content">{{ object.legal_name|default_if_none:'-'|title }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Owner Name</div>
+              <div class="datagrid-content">{{ object.owner_name|default_if_none:'-'|title }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Owner Email</div>
+              <div class="datagrid-content">{{ object.owner_email|default_if_none:'-' }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Owner Mobile Number</div>
+              <div class="datagrid-content">{{ object.owner_mobile_number|default_if_none:'-' }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Contact Person Name</div>
+              <div class="datagrid-content">{{ object.contact_name|default_if_none:'-'|title }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Email</div>
+              <div class="datagrid-content">{{ object.email|default_if_none:'-' }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Mobile No.</div>
+              <div class="datagrid-content">{{ object.get_mobile_number|default_if_none:'-' }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Whatsapp No.</div>
+              <div class="datagrid-content">{{ object.get_whatsapp_number|default_if_none:'-' }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Company Type</div>
+              <div class="datagrid-content">{{ object.company_type|default_if_none:'-' }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Office Type</div>
+              <div class="datagrid-content">{{ object.office_type|default_if_none:'-' }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Address</div>
+              <div class="datagrid-content">{{ object.address|default_if_none:'-' }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Country</div>
+              <div class="datagrid-content">{{ object.country|default_if_none:'-' }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">State</div>
+              <div class="datagrid-content">{{ object.state|default_if_none:'-' }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">City</div>
+              <div class="datagrid-content">{{ object.city|default_if_none:'-'|title }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Pincode</div>
+              <div class="datagrid-content">{{ object.pincode|default_if_none:'-' }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Is Any Branch</div>
+              <div class="datagrid-content">
+                {% if object.is_any_branch %}
+                  Yes
+                {% else %}
+                  No
+                {% endif %}
+              </div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">No of Branch</div>
+              <div class="datagrid-content">{{ object.number_of_branch }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">target for next intake</div>
+              <div class="datagrid-content">{{ object.target_for_next_intake|default_if_none:"-" }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Logo</div>
+              <div class="datagrid-content"><a href="{{ object.get_logo_url }}" target="_blank">View Logo</a></div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Website</div>
+              <div class="datagrid-content">
+                <a href="{{ object.website|default_if_none:'#' }}" target="_blank">Visit</a>
+              </div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Onboarding Status</div>
+              <div class="datagrid-content">
+                <span class="status">{{ object.status|title }}</span>
+              </div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Onboarding Completed</div>
+              <div class="datagrid-content">
+                {% if object.onboarding_completed %}
+                  <i class='bx bxs-check-circle text-success fs-2'></i>
+                {% else %}
+                  <i class='bx bxs-x-circle text-red fs-2'></i>
+                {% endif %}
+              </div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Active Status</div>
+              <div class="datagrid-content">
+                {% if object.is_active %}
+                  <span class="status status-green">Active</span>
+                {% else %}
+                  <span class="status">Inactive</span>
+                {% endif %}
+              </div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Blacklisted</div>
+              <div class="datagrid-content">
+                {% if object.blacklisted %}
+                  <i class='bx bxs-check-circle text-success fs-2'></i>
+                {% else %}
+                  <i class='bx bxs-x-circle text-red fs-2'></i>
+                {% endif %}
+              </div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">remark</div>
+              <div class="datagrid-content">
+                {{ object.remark }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock main %}

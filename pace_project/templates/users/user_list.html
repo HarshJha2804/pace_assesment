@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %} {% load static %}
+{% block title %} All Users {% endblock title %}
+
+{% block main %}
+  <div class="row py-3">
+    <div class="col-md-12 m-auto">
+      <div class="card shadow">
+        <div class="card-header d-flex justify-content-between">
+          <h3 class="card-title fw-semibold">All Users</h3>
+          <a href="{% url 'users:add_user' %}" class="btn btn-dark">Add User</a>
+        </div>
+        <div class="card-body border-bottom">
+          <form action="" method="get" up-autosubmit up-follow up-keep up-target="#user_list">
+            <div class="row">
+              <div class="col-sm-6 col-md-2">
+                <div class="mb-3">
+                  <input type="text" class="form-control" name="name"
+                         autocomplete="off" placeholder="Name">
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-2">
+                <div class="mb-3">
+                  <input type="text" class="form-control" name="email"
+                         autocomplete="off" placeholder="Email">
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-2">
+                <div class="mb-3">
+                  <select type="text" class="form-select" name="role" data-searchable="true">
+                    <option value="" selected>Filter By Role</option>
+                    {% for item in roles %}
+                      <option value="{{ item.id }}">{{ item }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+
+              <div class="col-sm-6 col-md-2">
+                <div class="mb-3">
+                  <select type="text" name="status" class="form-select" required>
+                    <option disabled selected>Status</option>
+                    <option value="True">Active</option>
+                    <option value="False">Inactive</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-1">
+                <div class="mb-3">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="True" id="isStaffCheck" name="staff">
+                    <label class="form-check-label" for="isStaffCheck">
+                      Staff
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-1">
+                <div class="mb-3 d-flex justify-content-between">
+                  <a href="{% url 'users:user_list' %}"
+                     class="btn btn-outline-yellow">
+                    Clear Filters
+                  </a>
+{#                  <a id="export_user_data" class="btn btn-purple ms-1">Export CSV</a>#}
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="table-responsive">
+          <table class="table card-table table-vcenter text-nowrap datatable" id="user_list">
+            <thead>
+            <tr>
+              <th class="w-1">S.N.
+              </th>
+              <th>Avatar</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>role</th>
+{#              <th>Staff status</th>#}
+{#              <th>SuperUser Status</th>#}
+              <th>Status</th>
+              <th>Joined At</th>
+              <th>update</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for object in object_list %}
+              <tr>
+                <td>{{ forloop.counter0|add:page_obj.start_index }}.</td>
+                <td>
+                    <span class="avatar rounded-circle" style="background-image: url({{ object.get_avatar_url }})">
+                      {% if not object.avatar %}
+                        {{ object.get_initials }}
+                      {% endif %}
+                    </span>
+                </td>
+                <td>{{ object.name }}</td>
+                <td>
+                  {{ object.email }}
+                </td>
+                <td>
+                  {{ object.role|default_if_none:'-' }}
+                </td>
+{#                <td class="field-is_superuser">#}
+{#                  {% if object.is_staff %}#}
+{#                    <i class='bx bxs-check-circle text-success fs-2'></i>#}
+{#                  {% else %}#}
+{#                    <i class='bx bxs-x-circle text-red fs-2'></i>#}
+{#                  {% endif %}#}
+{#                </td>#}
+{#                <td>#}
+{#                  {% if object.is_superuser and object.is_staff %}#}
+{#                    <i class='bx bxs-check-circle text-success fs-2'></i>#}
+{#                  {% else %}#}
+{#                    <i class='bx bxs-x-circle text-red fs-2'></i>#}
+{#                  {% endif %}#}
+{#                </td>#}
+                <td>
+                  {% if object.is_active %}
+                    <span class="status status-green">Active</span>
+                  {% else %}
+                    <span class="status">Inactive</span>
+                  {% endif %}
+                </td>
+                <td>
+                  {{ object.date_joined }}
+                </td>
+                <td><a class="btn btn-primary btn-sm"
+                       href="{% url 'users:update_user' pk=object.pk %}">Update</a></td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <div class="card-footer d-flex align-items-center" up-hungry>
+          {% include 'utils/pagination.html' %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

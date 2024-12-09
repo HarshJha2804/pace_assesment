@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %} {% load static %}
+{% block title %} Application Managers {% endblock title %}
+
+{% block main %}
+  <div class="row py-3">
+    <div class="col-md-12 m-auto">
+      <div class="card shadow">
+        <div class="card-header d-flex justify-content-between">
+          <h3 class="card-title fw-semibold">Application Managers</h3>
+        </div>
+        <div class="card-body border-bottom">
+          <form action="" method="get" up-autosubmit up-follow up-keep up-target="#employee_list">
+            <div class="row">
+              <div class="col-sm-6 col-md-2">
+                <div class="mb-3">
+                  <input type="text" class="form-control" name="name"
+                         autocomplete="off" placeholder="Name">
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-2">
+                <div class="mb-3">
+                  <input type="text" class="form-control" name="email"
+                         autocomplete="off" placeholder="Email">
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-2">
+                <div class="mb-3">
+                  <input type="text" class="form-control" name="mobile_number"
+                         autocomplete="off" placeholder="Mobile Number">
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-2">
+                <div class="mb-3">
+                  <select type="text" name="status" class="form-select" data-searchable="true" required>
+                    <option value="" disabled selected>Status</option>
+                    <option value="True">Active</option>
+                    <option value="False">Inactive</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-1">
+                <div class="mb-3 d-flex justify-content-between">
+                  <a href="{% url 'users:application_manager_list' %}"
+                     class="btn btn-outline-yellow">
+                    Clear Filters
+                  </a>
+{#                  <a id="export_user_data" class="btn btn-purple ms-1">Export CSV</a>#}
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="table-responsive">
+          <table class="table card-table table-vcenter text-nowrap datatable" id="employee_list">
+            <thead>
+            <tr>
+              <th class="w-1">S.N.
+              </th>
+              <th>Avatar</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Mobile Number</th>
+              <th>Whatsapp Number</th>
+              <th>Assigned Country</th>
+              <th>Is head</th>
+              <th>Will Process Application</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for object in object_list %}
+              <tr>
+                <td><span class="text-secondary">{{ forloop.counter0|add:page_obj.start_index }}.</span></td>
+                <td>
+                  <span class="avatar rounded-circle" style="background-image: url({{ object.user.get_avatar_url }})">
+                    {% if not object.employee.user.avatar %}
+                      {{ object.employee.user.get_initials }}
+                    {% endif %}
+                  </span>
+                </td>
+                <td><a href="{{ object.employee.get_absolute_url }}">{{ object.employee.user.name }}</a></td>
+                <td>{{ object.employee.user.email }}</td>
+                <td>
+                  {{ object.employee.get_mobile_number|default_if_none:'-' }}
+                </td>
+                <td>
+                  {{ object.employee.get_whatsapp_number|default_if_none:'-' }}
+                </td>
+                <td>
+                  {{ object.employee.assigned_country|default_if_none:'-' }}
+                </td>
+                <td class="field-is_superuser">
+                  {% if object.is_head %}
+                    <i class='bx bxs-check-circle text-success fs-2'></i>
+                  {% else %}
+                    <i class='bx bxs-x-circle text-red fs-2'></i>
+                  {% endif %}
+                </td>
+                <td>
+                  {% if object.will_process_application %}
+                    <i class='bx bxs-check-circle text-success fs-2'></i>
+                  {% else %}
+                    <i class='bx bxs-x-circle text-red fs-2'></i>
+                  {% endif %}
+                </td>
+                <td>
+                  {% if object.employee.user.is_active %}
+                    <span class="status status-green">Active</span>
+                  {% else %}
+                    <span class="status status-secondary">Inactive</span>
+                  {% endif %}
+                </td>
+
+                <td>
+                  <a class="btn btn-dark btn-sm"
+                     href="{% url 'users:update_application_manager' pk=object.pk %}">Update</a>
+                </td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <div class="card-footer d-flex align-items-center" up-hungry>
+          {% include 'utils/pagination.html' %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+

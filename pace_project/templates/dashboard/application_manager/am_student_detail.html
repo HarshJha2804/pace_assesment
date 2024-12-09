@@ -1,0 +1,246 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %} {% load static %}
+{% block title %} {{ object|title }} {% endblock title %}
+{% block main %}
+  <div class="row py-3" xmlns="http://www.w3.org/1999/html">
+    <div class="col-md-12 m-auto">
+      <div class="card shadow">
+        <div class="card-header justify-content-between">
+          {% if request.user.employee.applicationmanager %}
+            <a href="{% url 'paceapp:am_student_list' %}" class="btn btn-dark">Go Back</a>
+          {% else %}
+            <a href="{% url 'paceapp:student_list' %}" class="btn btn-dark">Go Back</a>
+          {% endif %}
+        </div>
+        <div class="card-body">
+          <div class="datagrid">
+            <div class="datagrid-item">
+              <div class="datagrid-title">Name</div>
+              <div class="datagrid-content">{{ object.student.get_full_name|title }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Date of Birth</div>
+              <div class="datagrid-content">{{ object.student.date_of_birth|default_if_none:'-' }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Passport Number</div>
+              <div class="datagrid-content">
+                {% if object.student.passport_number ==  '0' %}
+                  -
+                {% else %}
+                  {{ object.student.passport_number|default_if_none:'-' }}
+                {% endif %}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Email</div>
+              <div class="datagrid-content">{{ object.student.email|default_if_none:'-' }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Mobile Number</div>
+              <div class="datagrid-content">{{ object.student.mobile_number|default_if_none:'-' }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Student Type</div>
+              <div class="datagrid-content">{{ object.student.get_type_display|default_if_none:'-' }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Level</div>
+              <div class="datagrid-content">{{ object.student.study_level|default_if_none:'-' }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Study country</div>
+              <div class="datagrid-content">{{ object.student.study_country|default_if_none:'-' }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Applied University</div>
+              <div class="datagrid-content">{{ object.course.university|default_if_none:'-' }}</div>
+            </div>
+            {% if not request.user.partner %}
+              <div class="datagrid-item">
+                <div class="datagrid-title">Partner</div>
+                <div class="datagrid-content">
+                  <a href="{{ object.student.partner.get_absolute_url }}" target="_blank">
+                    {{ object.student.partner|default_if_none:'-' }}
+                  </a>
+                </div>
+              </div>
+            {% endif %}
+            <div class="datagrid-item">
+              <div class="datagrid-title">Created At</div>
+              <div class="datagrid-content">{{ object.created|default_if_none:'-' }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Last updated</div>
+              <div class="datagrid-content">{{ object.modified|default_if_none:'-' }}</div>
+            </div>
+
+            <div class="datagrid-item">
+              <div class="datagrid-title">Status</div>
+              <div class="datagrid-content">
+                {% if object.is_active %}
+                  <span class="status status-green">Active</span>
+                {% else %}
+                  <span class="status">Inactive</span>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          {% if not object.get_academic_object %}
+            <a class="btn btn-indigo" href="{{ object.get_add_academic_url }}" target="_blank">Add Academic</a>
+            <button class="btn btn-cyan" data-bs-toggle="modal" data-bs-target="#assignManagerModal">
+              Assign Application Manager
+            </button>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    {% include "components/partner_documents.html" %}
+    {#  application#}
+    <div class="col-lg-12">
+      <div class="card mt-2 shadow">
+        <div class="card-header justify-content-between">
+          <h3 class="card-title">Applications</h3>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-vcenter card-table">
+            <thead>
+            <tr>
+              <th>S.N.</th>
+              <th>University</th>
+              <th> Course Name</th>
+              <th>Country</th>
+              <th>Stream</th>
+              <th>Substream</th>
+              <th>Intake</th>
+              <th>Campus</th>
+              <th>Current Status</th>
+              <th>Applied On</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in applications %}
+              <tr>
+                <td><span class="text-secondary">{{ forloop.counter }}.</span>
+                </td>
+                <td>
+                  <a href="{{ item.get_absolute_url }}">{{ item.course.university|default_if_none:'-' }}</a>
+                </td>
+                <td>{{ item.course }}</td>
+                <td>
+                  {{ item.course.country|default_if_none:'-' }}
+                </td>
+                <td>{{ item.course.stream|default_if_none:'-' }}</td>
+                <td>{{ item.course.substream|default_if_none:'-' }}</td>
+                <td>
+                  {{ item.intake }}
+                </td>
+                <td>
+                  {% for campus in item.course.campus.all %}
+                    {{ campus|default_if_none:"-" }}
+                  {% endfor %}
+                </td>
+                <td>
+                  {{ item.current_status }}
+                </td>
+                <td>{{ object.created|date:"Y-m-d" }}
+                </td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <div class="card-footer"></div>
+      </div>
+    </div>
+    {% if object.get_remarks %}
+      <div class="col-lg-12">
+        <div class="card mt-2 shadow">
+          <div class="card-header">
+            <h3 class="card-title">Remarks</h3>
+          </div>
+          <div class="list-group list-group-flush list-group-hoverable">
+            {% for remark in object.get_remarks %}
+              <div class="list-group-item">
+                <div class="row align-items-center">
+                  <div class="col-auto">
+                    {% if remark.is_active %}
+                      <span class="badge bg-success"></span>
+                    {% else %}
+                      <span class="badge bg-red"></span>
+                    {% endif %}
+                  </div>
+                  <div class="col-auto">
+                    <a href="#">
+                      {% with remark.created_by as user %}
+                        <span class="avatar" style="background-image: url({{ user.get_avatar_url }})">
+                        {% if not user.get_avatar_url %}
+                          {{ user.get_initials }}
+                        {% endif %}
+                      </span>
+                      {% endwith %}
+                    </a>
+                  </div>
+                  <div class="col text-truncate">
+                    <a href="#" class="text-reset d-block">{{ remark.created_by.name }}
+                      ({{ remark.created_by.role|default_if_none:'Role Not Assigned' }})</a>
+                    <div class="d-block text-purple text-truncate mt-n1">{{ remark.remark }}
+                    </div>
+                    <small class="text-muted">Created on: {{ remark.created }}</small>
+                  </div>
+                  <div class="col-auto">
+                    <a href="#" class="list-group-item-actions">
+                      <i class="ti ti-star"></i>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+
+  <!-- Modal for Assigning Application Manager -->
+  <div class="modal fade" id="assignManagerModal" tabindex="-1" aria-labelledby="assignManagerModalLabel"
+       aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        {% if object.pk %}
+          <form method="post" action="{% url 'paceapp:am_student_detail' object.pk %}">
+        {% else %}
+        {% endif %}
+        {% csrf_token %}
+        <div class="modal-header">
+          <h5 class="modal-title" id="assignManagerModalLabel">Assign Application Manager</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" name="application_id" value="{{ object.id }}">
+          <div class="mb-3">
+            <label for="am" class="form-label">Select Application Manager</label>
+            <select class="form-select" name="am" id="am" required>
+              <option value="">Select Application Manager</option>
+              {% for manager in available_managers %}
+                <option value="{{ manager.user.id }}">{{ manager}}</option>
+              {% endfor %}
+            </select>
+
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Assign Manager</button>
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+
+  
+
+

@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %} {% load static %}
+{% block title %} Pace Courses {% endblock title %}
+
+{% block main %}
+  <div class="row py-3">
+    <div class="col-md-12 m-auto">
+      <div class="card shadow">
+        <div class="card-header justify-content-between">
+          <h3 class="card-title fw-semibold">Courses</h3>
+        </div>
+        <div class="table-responsive">
+          <table class="table card-table table-vcenter text-nowrap datatable" id="course_list">
+            <thead>
+            <tr>
+              <th>S.N.</th>
+              <th>Course</th>
+              <th>Country</th>
+              <th>University</th>
+              <th>Level</th>
+              <th>Stream</th>
+              <th>Substream</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for object in object_list %}
+              <tr>
+                <td>{{ forloop.counter0|add:page_obj.start_index }}.</td>
+                <td><a href="{{ object.get_absolute_url }}">{{ object }}</a></td>
+                <td>{{ object.country }}</td>
+                <td>{{ object.university }}</td>
+                <td>{{ object.level }}</td>
+                <td>{{ object.stream }}</td>
+                <td>{{ object.substream }}</td>
+                <td>
+                  {% if object.is_active %}
+                    <span class="status status-green">Active</span>
+                  {% else %}
+                    <span class="status status-secondary">Inactive</span>
+                  {% endif %}
+                </td>
+                <td>
+                  <a href="{% url 'paceapp:update_course' pk=object.pk %}" target="_blank" class="btn btn-outline-dark">Update</a>
+                </td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <div class="card-footer d-flex align-items-center" up-hungry>
+          {% include 'utils/pagination.html' %}
+        </div>
+        <div class="card-footer">
+
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

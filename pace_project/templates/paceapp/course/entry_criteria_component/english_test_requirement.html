@@ -1,0 +1,70 @@
+<div class="bg-light-subtle border-bottom"><h3 class="h3 p-3">English Test Requirements</h3>
+</div>
+<div id="table-default" class="table-responsive">
+  <table class="table">
+    <thead>
+    <tr>
+      <th>
+        <button class="table-sort" data-sort="sort-name">S.N.</button>
+      </th>
+      <th>
+        <button class="table-sort" data-sort="sort-city">Country</button>
+      </th>
+      <th>
+        <button class="table-sort" data-sort="sort-type">Type</button>
+      </th>
+      <th>
+        <button class="table-sort" data-sort="sort-score">Overall</button>
+      </th>
+      <th>
+        <button class="table-sort" data-sort="sort-quantity">Speaking</button>
+      </th>
+      <th>
+        <button class="table-sort" data-sort="sort-quantity">Listening</button>
+      </th>
+      <th>
+        <button class="table-sort" data-sort="sort-quantity">Writing</button>
+      </th>
+      <th>
+        <button class="table-sort" data-sort="sort-quantity">Reading</button>
+      </th>
+      <th>
+        <button class="table-sort" data-sort="sort-date">Last Updated</button>
+      </th>
+      <th>
+        <button class="table-sort" data-sort="sort-date">Created</button>
+      </th>
+      <th>
+        <button class="table-sort" data-sort="sort-date">Status</button>
+      </th>
+      <th colspan="2">
+        <button class="table-sort" data-sort="sort-progress">Action</button>
+      </th>
+    </tr>
+    </thead>
+    <tbody class="table-tbody">
+    {% for item in object.englishtest_set.all %}
+      <tr>
+        <td>{{ forloop.counter }}.</td>
+        <td>{{ item.country }}</td>
+        <td>{{ item.type }}</td>
+        <td>{{ item.overall }}</td>
+        <td>{{ item.speaking }}</td>
+        <td>{{ item.listening }}</td>
+        <td>{{ item.writing }}</td>
+        <td>{{ item.reading }}</td>
+        <td>{{ item.modified|date }}</td>
+        <td>{{ item.created|date }}</td>
+        <td>{% if item.is_active %}
+          <span class="status status-green">Active</span>
+        {% else %}
+          <span class="status status-secondary">Inactive</span>
+        {% endif %}
+        </td>
+        <td><a class="btn btn-primary btn-sm" href="{% url 'paceapp:update_english_test' pk=item.pk %}">Edit</a></td>
+        <td><a class="btn btn-danger btn-sm" href="{% url 'paceapp:delete_english_test' pk=item.pk %}">Delete</a></td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>

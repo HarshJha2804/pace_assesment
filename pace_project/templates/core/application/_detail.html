@@ -1,0 +1,276 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %} {% load users_filters %} {% load static %}
+{% block title %} {{ object }} {% endblock title %}
+{% block main %}
+  <div class="row py-3">
+    <div class="col-md-12 m-auto">
+      <div class="card shadow">
+        <div class="card-header justify-content-between">
+          <h3 class="card-title text-primary">{{ object }}</h3>
+          <a href="{{ request.META.HTTP_REFERER }}" class="btn btn-dark">Go Back</a>
+        </div>
+        <div class="card-body">
+          <div class="datagrid">
+            <div class="datagrid-item">
+              <div class="datagrid-title">Student Name</div>
+              <div class="datagrid-content">
+                {% if request.user.partner %}
+                  <a href="{{ object.student.get_student_absolute_url }}">
+                    {{ object.student.get_full_name }}
+                  </a>
+                {% else %}
+                  <a href="{{ object.student.get_absolute_url }}">
+                    {{ object.student.get_full_name }}
+                  </a>
+                {% endif %}
+              </div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Email</div>
+              <div class="datagrid-content">{{ object.student.email|default_if_none:'-' }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Mobile Number</div>
+              <div class="datagrid-content">{{ object.student.mobile_number|default_if_none:'-' }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Student Type</div>
+              <div class="datagrid-content">{{ object.student.get_type_display|default_if_none:'-' }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Level</div>
+              <div class="datagrid-content">{{ object.student.study_level|default_if_none:'-' }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Study country</div>
+              <div class="datagrid-content">{{ object.student.study_country|default_if_none:'-' }}</div>
+            </div>
+
+            <div class="datagrid-item">
+              <div class="datagrid-title">University</div>
+              <div class="datagrid-content">
+                <a href="{{ object.course.university.get_absolute_url }}">
+                  {{ object.course.university|default_if_none:'-' }}
+                </a>
+              </div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Course</div>
+              <div class="datagrid-content">
+                <a href="{{ object.course.get_absolute_url }}" target="_blank">
+                  {#                  {{ object.course|default_if_none:'-' }}#}
+                  View
+                </a>
+              </div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Partner</div>
+              <div class="datagrid-content">
+                {{ object.student.partner }}
+              </div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">City</div>
+              <div class="datagrid-content">
+                {{ object.student.partner.city }}
+              </div>
+            </div>
+            {% if object.get_attributes %}
+              {% for item in object.get_attributes %}
+                <div class="datagrid-item">
+                  <div class="datagrid-title">{{ item.field|remove_underscore }}</div>
+                  <div class="datagrid-content">{{ item.value|remove_underscore|title }}</div>
+                </div>
+              {% endfor %}
+            {% endif %}
+            <div class="datagrid-item">
+              <div class="datagrid-title">Created At</div>
+              <div class="datagrid-content">{{ object.created|default_if_none:'-' }}</div>
+            </div>
+            <div class="datagrid-item">
+              <div class="datagrid-title">Last updated</div>
+              <div class="datagrid-content">{{ object.modified|default_if_none:'-' }}</div>
+            </div>
+
+            <div class="datagrid-item">
+              <div class="datagrid-title">Status</div>
+              <div class="datagrid-content">
+                <span class="status text-bg-primary">{{ object.current_status }}</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="card-footer">
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-12">
+      <div class="card mt-2 shadow">
+        <div class="card-header justify-content-between">
+          <h3 class="card-title">Documents</h3>
+          <a href="{{ object.student.get_document_upload_url }}" class="btn btn-dark" target="_blank">Upload
+            Document</a>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-vcenter card-table">
+            <thead>
+            <tr>
+              <th>S.N.</th>
+              <th>Name</th>
+              <th>Preview</th>
+              <th>Uploaded On</th>
+              <th>Uploaded By</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in documents %}
+              <tr>
+                <td>{{ forloop.counter }}.</td>
+                <td>{{ item.document_type }}</td>
+                <td><a href="{{ item.get_document_url }}" target="_blank">Preview</a></td>
+                <td>
+                  {{ item.created|default_if_none:'-' }}
+                </td>
+                <td>{{ item.created_by.name|default_if_none:"-" }}</td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <div class="card-footer"></div>
+      </div>
+    </div>
+
+    <div class="col-lg-8">
+      <div class="card mt-2 shadow">
+        <div class="card-header">
+          <h3 class="card-title">Remarks Timeline</h3>
+        </div>
+
+        <div class="col p-2">
+          <br>
+          <ul class="timeline">
+            <li class="timeline-event">
+              <div class="timeline-event-icon bg-twitter-lt">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"
+                     class="icon icon-tabler icons-tabler-filled icon-tabler-square">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                  <path d="M19 2h-14a3 3 0 0 0 -3 3v14a3 3 0 0 0 3 3h14a3 3 0 0 0 3 -3v-14a3 3 0 0 0 -3 -3z"/>
+                </svg>
+              </div>
+              <div class=" timeline-event-card">
+                <div class="flex flex-col gap-2">
+                  <form method="post" action="{% url 'paceapp:chat_with_partner' pk=object.pk %}">
+                    <div class="modal-body">
+                      {% csrf_token %}
+                      <div class="row">
+                        <div class="col-lg-12">
+                          <textarea class="form-control" rows="2" name="message" required
+                                    placeholder="Leave a remark..."></textarea>
+
+                        </div>
+                      </div>
+                    </div>
+                    <div class="modal-footer mt-2">
+                      <button class="btn btn-primary ms-auto" type="submit">
+                        Post
+                      </button>
+                    </div>
+                  </form>
+                  <div class="text-muted float-end"></div>
+
+                </div>
+              </div>
+
+            </li>
+            {% for remark in object.get_remarks %}
+              <li class="timeline-event">
+                <div class="timeline-event-icon bg-twitter-lt">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"
+                       class="icon icon-tabler icons-tabler-filled icon-tabler-square">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                    <path d="M19 2h-14a3 3 0 0 0 -3 3v14a3 3 0 0 0 3 3h14a3 3 0 0 0 3 -3v-14a3 3 0 0 0 -3 -3z"/>
+                  </svg>
+                </div>
+                <div class="card timeline-event-card">
+                  <div class="card-body">
+                    <div class="text-muted float-end"> {{ remark.created|timesince }} ago</div>
+
+                    <div class="d-flex justify-content-between gap-3">
+                      <a href="#">
+                        {% with remark.author as user %}
+                          <span class="avatar" style="background-image: url({{ user.get_avatar_url }})">
+                        {% if not user.get_avatar_url %}
+                          {{ user.get_initials }}
+                        {% endif %}
+                      </span>
+                        {% endwith %}
+                      </a>
+                      <div class="col">
+                        <a href="#" class="text-reset fw-bold d-block">{{ remark.author.name|title }}
+                          ({{ remark.author.role|default_if_none:'Role Not Assigned' }})</a>
+                        <div class="d-block mt-n1">{{ remark.message }}
+                        </div>
+                        <small class="text-muted">Created on: {{ remark.created }}</small>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    {% if object.get_status_logs %}
+      <div class="col-lg-4">
+        <div class="card mt-2 shadow">
+          <div class="card-header">
+            <h3 class="card-title">Application Status Logs</h3>
+          </div>
+          <div class="list-group list-group-flush list-group-hoverable">
+            {% for item in object.get_status_logs %}
+              <div class="list-group-item">
+                <div class="row align-items-center">
+                  <div class="col-auto">
+                    {% if item.is_active %}
+                      <span class="badge bg-success"></span>
+                    {% else %}
+                      <span class="badge bg-red"></span>
+                    {% endif %}
+                  </div>
+                  <div class="col-auto">
+                    <a href="#">
+                      {% with item.created_by as user %}
+                        <span class="avatar" style="background-image: url({{ user.get_avatar_url }})">
+                        {% if not user.get_avatar_url %}
+                          {{ user.get_initials }}
+                        {% endif %}
+                      </span>
+                      {% endwith %}
+                    </a>
+                  </div>
+                  <div class="col text-truncate">
+                    <a href="#" class="text-reset d-block">{{ item.created_by.name|title }}
+                      ({{ item.created_by.role|default_if_none:'Role Not Assigned' }})</a>
+                    <div class="d-block text-purple text-truncate mt-n1">
+                      <span class="status">{{ item.status }}</span>
+                    </div>
+                    <small class="text-muted">Created on: {{ item.created }}</small>
+                  </div>
+                  <div class="col-auto">
+                    <a href="#" class="list-group-item-actions">
+                      <i class="ti ti-star"></i>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}

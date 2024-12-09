@@ -1,0 +1,220 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %} {% load static %}
+{% block title %} Compliance Officer Applications{% endblock title %}
+
+{% block main %}
+  <div class="row py-3">
+    <div class="col-md-12 m-auto">
+      <div class="card shadow">
+        <div class="card-header d-flex justify-content-between">
+          <h3 class="card-title fw-semibold">Applications</h3>
+        </div>
+        <div class="card-body border-bottom">
+          <form action="" method="get" up-autosubmit up-follow up-keep up-target="#compliance_application_list">
+
+            <div class="row">
+              <div class="col-sm-6 col-md-2">
+                <div class="mb-3">
+                  <input type="text" class="form-control" name="student"
+                         autocomplete="off" placeholder="Search by student">
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-2">
+                <div class="mb-3">
+                  <input type="text" class="form-control" name="passport_number"
+                         autocomplete="off" placeholder="Passport Number">
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-2">
+                <div class="mb-3">
+                  <input type="text" class="form-control" name="course"
+                         autocomplete="off" placeholder="Filter by course">
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-2">
+                <div class="mb-3">
+                  <select type="text" class="form-select" name="country" data-searchable="true">
+                    <option value="" selected>Filter by Country</option>
+                    {% for item in countries %}
+                      <option value="{{ item.id }}">{{ item }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-2">
+                <div class="mb-3">
+                  <select type="text" class="form-select" name="university" data-searchable="true">
+                    <option value="" selected>Filter by University</option>
+                    {% for item in university %}
+                      <option value="{{ item.id }}">{{ item }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-2">
+                <div class="mb-3">
+                  <select type="text" class="form-select" name="agent_name" data-searchable="true">
+                    <option value="" selected>Filter By Partner</option>
+                    {% for item in partners %}
+                      <option value="{{ item.id }}">{{ item }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-2">
+                <div class="mb-3">
+                  <input type="text" class="form-control" name="agent_city"
+                         autocomplete="off" placeholder="Search by City">
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-2">
+                <div class="mb-3">
+                  <select type="text" class="form-select" name="current_status" data-searchable="true">
+                    <option value="" selected>Filter By status</option>
+                    {% for item in statuses %}
+                      <option value="{{ item.id }}">{{ item }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-2">
+                <div class="mb-3">
+                  <select type="text" class="form-select" name="intake" data-searchable="true">
+                    <option value="" selected>Filter By Intake</option>
+                    {% for item in intakes %}
+                      <option value="{{ item.id }}">{{ item }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-2">
+                <div class="mb-3">
+                  <select type="text" class="form-select" name="year" data-searchable="true">
+                    <option value="" selected>Filter By Year</option>
+                    {% for item in years %}
+                      <option value="{{ item.id }}">{{ item }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-1">
+                <div class="mb-3 d-flex justify-content-between">
+                  <a href="{% url 'paceapp:compliance_application_list' %}"
+                     class="btn btn-outline-info">
+                    Clear Filters
+                  </a>
+                  {#                  <a id="export_user_data" class="btn btn-purple ms-1">Export CSV</a>#}
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="table-responsive" id="compliance_application_list">
+          <table class="table card-table table-vcenter text-nowrap datatable">
+            <thead>
+            <tr>
+              <th class="w-1">S.N.</th>
+              <th>Action</th>
+              <th>Application Status</th>
+              <th>Student</th>
+              <th>Passport Number</th>
+              <th>Country</th>
+              <th>Applied university</th>
+              <th>Course</th>
+              <th>Regional marketing head</th>
+              <th>Agent</th>
+              <th>Agent city</th>
+              <th>Level</th>
+              <th>Intake</th>
+              <th>Year</th>
+              <th>Applied on</th>
+              <th>Submitted By</th>
+              <th>Remarks</th>
+              <th>Stream</th>
+              <th>12th English Marks</th>
+              <th>Passing Year</th>
+              <th>Overall Percentage</th>
+              <th>12th Board</th>
+              <th>English Language</th>
+              <th>Academic Pathway</th>
+              <th>Conditions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for object in object_list %}
+              <tr>
+                <td>
+                  <span class="text-secondary">{{ forloop.counter0|add:page_obj.start_index }}.</span>
+                </td>
+                <td>
+                  <a href="{% url 'paceapp:update_compliance_application' pk=object.pk %}"
+                     class="btn btn-primary btn-sm">Update Status</a>
+                </td>
+                <td>{{ object.current_status }}</td>
+                <td><a href="{{ object.get_absolute_url }}">{{ object|title }}</a></td>
+                <td>
+                  {% if object.student.passport_number == '0' %}
+                    -
+                  {% else %}
+                    {{ object.student.passport_number|default_if_none:'-' }}
+                  {% endif %}
+                </td>
+                <td>{{ object.course.country|default_if_none:'-' }}</td>
+                <td>{{ object.course.university|default_if_none:'-' }}</td>
+                <td>{{ object.course|default_if_none:'-' }}</td>
+                <td>
+                  {% for rm_target in rms %}
+                    {% if rm_target.university.id == object.course.university.id and rm_target.intake.id == object.intake.id and rm_target.year.id == object.year.id %}
+                      {{ rm_target.rm.user.name|default_if_none:"-" }}
+                      {% if not forloop.last and forloop.counter0|add:1 < rms|length %}, {% endif %}
+                    {% endif %}
+                  {% empty %}
+                    -
+                  {% endfor %}
+                </td>
+                <td>{{ object.student.partner|default_if_none:'-' }}</td>
+                <td>{{ object.student.partner.city|default_if_none:'-' }}</td>
+                <td>{{ object.course.level|default_if_none:'-' }}</td>
+                <td>{{ object.intake|default_if_none:'-' }}</td>
+                <td>{{ object.year|default_if_none:'-' }}</td>
+                <td>{{ object.created|date:"Y-m-d"|default_if_none:'-' }}</td>
+                <td>{{ object.get_application_submitted_by }}</td>
+                <td>
+                  {% with latest_remark=object.remarks.latest %}
+                    {% if latest_remark %}
+                      {{ latest_remark.message }}
+                    {% else %}
+                      -
+                    {% endif %}
+                  {% endwith %}
+                </td>
+                <td>{{ object.course.stream|default_if_none:'-' }}</td>
+                <td>{% if object.student.get_academic_object.twelfth_english_marks %}
+                  {{ object.student.get_academic_object.twelfth_english_marks }}{% else %}-{% endif %}</td>
+                <td>{% if object.student.get_academic_object.passing_year %}
+                  {{ object.student.get_academic_object.passing_year }}{% else %}-{% endif %}</td>
+                <td>{% if object.student.get_academic_object.overall_marks %}
+                  {{ object.student.get_academic_object.overall_marks }}{% else %}-{% endif %}</td>
+                <td>{% if object.student.get_academic_object.board %}
+                  {{ object.student.get_academic_object.board }}{% else %}-{% endif %}</td>
+                <td>{% if object.student.get_academic_object.english_test_type %}
+                  {{ object.student.get_academic_object.english_test_type }}{% else %}-{% endif %}</td>
+                <td>{% if object.student.get_academic_object.get_academic_pathway_display %}
+                  {{ object.student.get_academic_object.academic_pathway }}{% else %}-{% endif %}</td>
+                <td>
+                  {% for condition in object.conditions.all %}
+                    {{ condition.name }}{% if not forloop.last %}, {% endif %}
+                  {% endfor %}
+                </td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <div class="card-footer d-flex align-items-center" up-hungry>
+          {% include 'utils/pagination.html' %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

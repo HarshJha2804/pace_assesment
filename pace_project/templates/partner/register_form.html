@@ -1,0 +1,98 @@
+{% extends 'base_2.html' %}
+{% load crispy_forms_tags %} {% load static %}
+{% block title %} Become Partner {% endblock title %}
+
+{% block main %}
+  <div class="py-3"
+       style="background-image: url('{% static 'images/handshake.jpg' %}'); background-position: center">
+    <div class="col-md-10 m-auto mb-3">
+      <form class="card shadow" action="" method="post" enctype="multipart/form-data">
+        <div class="card-header">
+          <h3 class="card-title fw-bolder fs-3">
+            Register As Partner
+          </h3>
+        </div>
+        <div class="card-body">
+          {% csrf_token %}
+          <div>
+            {% crispy form %}
+          </div>
+          <div class="row">
+            <div class="g-recaptcha" data-sitekey="{{ RECAPTCHA_PUBLIC_KEY }}"></div>
+            {% if form.captcha.errors %}
+              <div class="alert alert-danger col-md-4">
+                {% for error in form.captcha.errors %}
+                  <p>{{ error }}</p>
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+        </div>
+        <div class="card-footer text-center">
+          <button type="submit" class="btn btn-blue">Register</button>
+        </div>
+      </form>
+    </div>
+
+  </div>
+  <div class="card-footer">
+    {% include "layout/footer_2.html" %}
+  </div>
+  <script>
+    let countryEl = document.getElementById("id_country");
+    let stateEl = document.getElementById("id_state");  // Assuming your state field has this ID
+
+    stateEl.innerHTML = '';
+    countryEl.addEventListener('change', (event) => {
+      let countryId = event.target.value;
+      if (countryId) {
+        fetchStates(countryId);
+      }
+    });
+
+    function fetchStates(countryId) {
+      let endPoint = `{% url 'partner:ajax_state_by_country' %}?country_id=${countryId}`;
+
+      fetch(endPoint)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error ${response.status}`);
+          }
+          return response.json();
+        })
+        .then(data => {
+          stateEl.innerHTML = '';
+
+          if (data.status === 'success') {
+            let defaultOption = document.createElement("option");
+            defaultOption.value = "";
+            defaultOption.text = "Select a state";
+
+            stateEl.appendChild(defaultOption);
+            data.states.forEach(state => {
+              let option = document.createElement("option");
+              option.value = state.pk;
+              option.text = state.fields.name;
+              stateEl.appendChild(option);
+            });
+          } else if (data.status === 'no_states') {
+            // Append "No states available" option if no states are found
+            let noOption = document.createElement("option");
+            noOption.value = "";
+            noOption.text = "No states available";
+            stateEl.appendChild(noOption);
+
+          } else if (data.status === 'error') {
+            let errorOption = document.createElement("option");
+            errorOption.value = "";
+            errorOption.text = "Error: " + data.message;
+            stateEl.appendChild(errorOption);
+          }
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    }
+  </script>
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+{% endblock %}
