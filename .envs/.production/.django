@@ -1,1 +1,67 @@
 
+# Docker
+#-------------------------------------------------------------------------------
+#USE_DOCKER=yes
+
+
+# General
+# ------------------------------------------------------------------------------
+DJANGO_READ_DOT_ENV_FILE=True
+DJANGO_SETTINGS_MODULE=config.settings.production
+DJANGO_SECRET_KEY=E3MlKHVfzWrzRjJilovxBEKIn7uCux9jPkXBq05Sg1ReTZVBe6VheHfmXLna3acg
+
+DJANGO_ALLOWED_HOSTS=infinitegroup.info,www.infinitegroup.info
+DJANGO_ADMIN_URL=admin/
+DJANGO_DEBUG=False
+DJANGO_SECURE_SSL_REDIRECT=True
+CONN_MAX_AGE=100
+
+# Security
+# ------------------------------------------------------------------------------
+# TIP: better off using DNS, however, redirect is OK too
+DJANGO_SECURE_SSL_REDIRECT=False
+
+
+
+# Email
+# ------------------------------------------------------------------------------
+DJANGO_SERVER_EMAIL=anymail.backends.sendgrid.EmailBackend
+DJANGO_EMAIL_SUBJECT_PREFIX=Infinite Group
+EMAIL_HOST=smtp.gmail.com
+EMAIL_HOST_USER=no-reply@infinitegroup.org
+EMAIL_HOST_PASSWORD=kkqjbfnkmphbfbho
+
+DJANGO_EMAIL_SUBJECT_PREFIX=Infinite Group
+DJANGO_DEFAULT_FROM_EMAIL=Infinite Group <no-reply@infinitegroup.org>
+SENDGRID_API_KEY=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
+
+
+# Send Grid Email Templates
+# -----------------------------------------------------------------------------
+
+CONFIRMATION_MAIL_TEMPLATE_ID=d-d4ce97706d3b416cb8777418c61c94cf
+
+
+# Django AllAuth
+# ------------------------------------------------------------------------------
+DJANGO_ACCOUNT_ALLOW_REGISTRATION=True
+DJANGO_ADMIN_FORCE_ALLAUTH=True
+
+
+
+# Google ReCAPTCHA:
+# -------------------------------------------------------------------------------
+RECAPTCHA_PUBLIC_KEY=6Lfx0WsqAAAAAIFWxQDkhQe39Km2JfEBjOnkzJlD
+RECAPTCHA_PRIVATE_KEY=6Lfx0WsqAAAAADLampLIODfH0BvtIUTvCVYug4_N
+
+
+# Gunicorn
+# ------------------------------------------------------------------------------
+WEB_CONCURRENCY=4
+
+
+# Redis
+# ------------------------------------------------------------------------------
+REDIS_URL=redis://redis:6379/0
+
+
